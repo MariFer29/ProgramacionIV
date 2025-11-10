@@ -1,0 +1,17 @@
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.csproj.AssemblyReference.cache
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.AssemblyInfoInputs.cache
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.AssemblyInfo.cs
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.csproj.CoreCompileInputs.cache
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.deps.json
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.runtimeconfig.json
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnl.F6336EEE.Up2Date
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\refint\BancaOnline.DA.dll
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.genruntimeconfig.cache
+C:\Users\dklei\Source\Repos\BancaOnline.API\BancaOnline.DA\obj\Debug\net8.0\ref\BancaOnline.DA.dll
