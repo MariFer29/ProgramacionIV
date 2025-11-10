@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancaOnline.API", "BancaOnline.API\BancaOnline.API.csproj", "{9BBD43AA-5936-49BB-90E8-5BBF869B2CD8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{346E8D26-9783-4D53-9387-6ECD4F939D86} = {346E8D26-9783-4D53-9387-6ECD4F939D86}
+		{C5F81472-D2E5-455E-B731-8F2807EBC7C8} = {C5F81472-D2E5-455E-B731-8F2807EBC7C8}
+		{D5019011-6882-44ED-B15C-F7DFAF63194E} = {D5019011-6882-44ED-B15C-F7DFAF63194E}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancaOnline.BC", "BancaOnline.BC\BancaOnline.BC.csproj", "{346E8D26-9783-4D53-9387-6ECD4F939D86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancaOnline.BW", "BancaOnline.BW\BancaOnline.BW.csproj", "{D5019011-6882-44ED-B15C-F7DFAF63194E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BancaOnline.DA", "BancaOnline.DA\BancaOnline.DA.csproj", "{C5F81472-D2E5-455E-B731-8F2807EBC7C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BBD43AA-5936-49BB-90E8-5BBF869B2CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BBD43AA-5936-49BB-90E8-5BBF869B2CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BBD43AA-5936-49BB-90E8-5BBF869B2CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BBD43AA-5936-49BB-90E8-5BBF869B2CD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{346E8D26-9783-4D53-9387-6ECD4F939D86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{346E8D26-9783-4D53-9387-6ECD4F939D86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{346E8D26-9783-4D53-9387-6ECD4F939D86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{346E8D26-9783-4D53-9387-6ECD4F939D86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5019011-6882-44ED-B15C-F7DFAF63194E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5019011-6882-44ED-B15C-F7DFAF63194E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5019011-6882-44ED-B15C-F7DFAF63194E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5019011-6882-44ED-B15C-F7DFAF63194E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5F81472-D2E5-455E-B731-8F2807EBC7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F81472-D2E5-455E-B731-8F2807EBC7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F81472-D2E5-455E-B731-8F2807EBC7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F81472-D2E5-455E-B731-8F2807EBC7C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E82A44A1-F1A4-41C6-AF94-3042B1300F5F}
+	EndGlobalSection
+EndGlobal
