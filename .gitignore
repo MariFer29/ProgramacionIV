@@ -1,0 +1,48 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.wsuo
+*.cache
+*.ldb
+*.pdb
+*.obj
+*.exe
+*.dll
+*.mdb
+*.log
+*.tlog
+*.lastcodeanalysissucceeded
+*.binlog
+*.cachefile
+
+# Backup files
+*_i.c
+*_p.c
+*.tmp
+*.bak
+*.swp
+*.orig
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+
+# VS Code
+.vscode/
+
+# Dotnet
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# Others
+ProjectEvaluation/
+.vsconfig
