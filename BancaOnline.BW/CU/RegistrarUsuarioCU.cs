@@ -1,6 +1,7 @@
 ﻿using BancaOnline.BC.Entidades;
 using BancaOnline.BW.DTOs;
 using BancaOnline.DA.Interfaces;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace BancaOnline.BW.CU
