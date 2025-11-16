@@ -1,4 +1,6 @@
+# ---------------------------
 # Visual Studio
+# ---------------------------
 .vs/
 *.user
 *.suo
@@ -16,7 +18,49 @@
 *.binlog
 *.cachefile
 
-# Backup files
+# ---------------------------
+# Build results
+# ---------------------------
+bin/
+obj/
+Debug/
+Release/
+
+# ---------------------------
+# VS Code
+# ---------------------------
+.vscode/
+
+# ---------------------------
+# Dotnet
+# ---------------------------
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# ---------------------------
+# Rider / JetBrains
+# ---------------------------
+.idea/
+*.sln.iml
+
+# ---------------------------
+# Others
+# ---------------------------
+ProjectEvaluation/
+.vsconfig
+
+# ---------------------------
+# NuGet packages
+# ---------------------------
+*.nupkg
+*.snupkg
+packages/
+
+# ---------------------------
+# Backup / temp files
+# ---------------------------
 *_i.c
 *_p.c
 *.tmp
@@ -24,25 +68,10 @@
 *.swp
 *.orig
 
-# Build results
-bin/
-obj/
-Debug/
-Release/
+# ---------------------------
+# Sensitive / local config files
+# ---------------------------
+appsettings.Development.json
+launchSettings.json
 
-# VS Code
-.vscode/
 
-# Dotnet
-*.db
-*.db-shm
-*.db-wal
-*.sqlite
-
-# Rider / JetBrains
-.idea/
-*.sln.iml
-
-# Others
-ProjectEvaluation/
-.vsconfig

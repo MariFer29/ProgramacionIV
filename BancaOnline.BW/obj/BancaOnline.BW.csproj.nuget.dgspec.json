@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BW\\BancaOnline.BW.csproj": {}
+    "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BW\\BancaOnline.BW.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\BancaOnline.BC.csproj": {
+    "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\BancaOnline.BC.csproj",
+        "projectUniqueName": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
         "projectName": "BancaOnline.BC",
-        "projectPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\BancaOnline.BC.csproj",
-        "packagesPath": "C:\\Users\\dklei\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\obj\\",
+        "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
+        "packagesPath": "C:\\Users\\Maria Fernanda\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dklei\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Maria Fernanda\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -65,24 +65,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BW\\BancaOnline.BW.csproj": {
+    "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BW\\BancaOnline.BW.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BW\\BancaOnline.BW.csproj",
+        "projectUniqueName": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BW\\BancaOnline.BW.csproj",
         "projectName": "BancaOnline.BW",
-        "projectPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BW\\BancaOnline.BW.csproj",
-        "packagesPath": "C:\\Users\\dklei\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BW\\obj\\",
+        "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BW\\BancaOnline.BW.csproj",
+        "packagesPath": "C:\\Users\\Maria Fernanda\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BW\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dklei\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Maria Fernanda\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -97,11 +97,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\BancaOnline.BC.csproj": {
-                "projectPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\BancaOnline.BC.csproj"
+              "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj": {
+                "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj"
               },
-              "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.DA\\BancaOnline.DA.csproj": {
-                "projectPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.DA\\BancaOnline.DA.csproj"
+              "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj": {
+                "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj"
               }
             }
           }
@@ -122,6 +122,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.3.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.10, )"
@@ -143,24 +151,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.DA\\BancaOnline.DA.csproj": {
+    "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.DA\\BancaOnline.DA.csproj",
+        "projectUniqueName": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj",
         "projectName": "BancaOnline.DA",
-        "projectPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.DA\\BancaOnline.DA.csproj",
-        "packagesPath": "C:\\Users\\dklei\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.DA\\obj\\",
+        "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj",
+        "packagesPath": "C:\\Users\\Maria Fernanda\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dklei\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Maria Fernanda\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -175,8 +183,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\BancaOnline.BC.csproj": {
-                "projectPath": "C:\\Users\\dklei\\Source\\Repos\\BancaOnline.API\\BancaOnline.BC\\BancaOnline.BC.csproj"
+              "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj": {
+                "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj"
               }
             }
           }
@@ -228,7 +236,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
