@@ -2,7 +2,7 @@
 
 namespace BancaOnline.BW.Interfaces
 {
-    public interface IGestionClientesCU
+    public interface IGestionClientesBW
     {
         Task<(bool Exito, string Mensaje)> CrearClienteAsync(Cliente cliente);
         Task<Cliente?> ObtenerClientePorIdentificacionAsync(string identificacion);

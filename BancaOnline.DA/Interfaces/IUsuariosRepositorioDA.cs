@@ -2,7 +2,7 @@
 
 namespace BancaOnline.DA.Interfaces
 {
-    public interface IUsuariosRepositorio
+    public interface IUsuariosRepositorioDA
     {
         Task<Usuario> CrearAsync(Usuario usuario);
         Task<Usuario> ObtenerPorEmailAsync(string email);

@@ -11,5 +11,7 @@ namespace BancaOnline.BW.Interfaces
     {
         Task<List<TransferenciaProgramada>> ObtenerTransferenciasProgramadasAsync();
         Task CrearTransferenciaProgramadaAsync(TransferenciaProgramada tp);
+        Task CancelarTransferenciaProgramadaAsync(Guid id);
+
     }
 }

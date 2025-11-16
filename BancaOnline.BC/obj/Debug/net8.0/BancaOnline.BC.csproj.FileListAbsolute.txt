@@ -21,3 +21,15 @@ C:\Users\Maria Fernanda\Documents\Visual Studio 2022\Proyectos\ProgramacionIV\Ba
 C:\Users\Maria Fernanda\Documents\Visual Studio 2022\Proyectos\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\refint\BancaOnline.BC.dll
 C:\Users\Maria Fernanda\Documents\Visual Studio 2022\Proyectos\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.pdb
 C:\Users\Maria Fernanda\Documents\Visual Studio 2022\Proyectos\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\ref\BancaOnline.BC.dll
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\bin\Debug\net8.0\BancaOnline.BC.deps.json
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\bin\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\bin\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.AssemblyInfoInputs.cache
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.AssemblyInfo.cs
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.csproj.CoreCompileInputs.cache
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.sourcelink.json
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\refint\BancaOnline.BC.dll
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\ref\BancaOnline.BC.dll

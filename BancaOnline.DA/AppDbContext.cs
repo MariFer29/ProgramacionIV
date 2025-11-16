@@ -1,6 +1,11 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using BancaOnline.BC.Entidades;
+using Microsoft.EntityFrameworkCore;
 
 namespace BancaOnline.DA
 {
@@ -95,5 +100,3 @@ namespace BancaOnline.DA
         }
     }
 }
-
-

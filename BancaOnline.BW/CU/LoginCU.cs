@@ -7,11 +7,11 @@ namespace BancaOnline.BW.CU
 {
     public class LoginCU
     {
-        private readonly IUsuariosRepositorio _usuariosRepo;
+        private readonly IUsuariosRepositorioDA _usuariosRepo;
         private readonly JwtService _jwtService;
         private readonly PasswordHasher<Usuario> _passwordHasher = new PasswordHasher<Usuario>();
 
-        public LoginCU(IUsuariosRepositorio usuariosRepo, JwtService jwtService)
+        public LoginCU(IUsuariosRepositorioDA usuariosRepo, JwtService jwtService)
         {
             _usuariosRepo = usuariosRepo;
             _jwtService = jwtService;

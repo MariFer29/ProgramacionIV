@@ -10,8 +10,10 @@ namespace BancaOnline.BC.Entidades
     {
         public Guid Id { get; set; }
         public string Nombre { get; set; } = default!;
+
         public int MinContrato { get; set; } = 8;
         public int MaxContrato { get; set; } = 12;
+
         public string MonedasAceptadas { get; set; } = "CRC,USD";
         public bool Activo { get; set; } = true;
     }

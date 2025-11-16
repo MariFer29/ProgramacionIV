@@ -1,5 +1,3 @@
-
-using BancaOnline.BC.Entidades;
 using BancaOnline.BW.CU;
 using BancaOnline.BW.Interfaces;
 using BancaOnline.DA;
@@ -22,9 +20,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // ---------------------------------------------------------------------
 // Repositorios (DA)
 // ---------------------------------------------------------------------
-builder.Services.AddScoped<IUsuariosRepositorio, UsuariosRepositorio>();
-builder.Services.AddScoped<IClientesRepositorio, ClientesRepositorio>();
+// Módulo A: Usuarios / Clientes
+builder.Services.AddScoped<IUsuariosRepositorioDA, UsuariosRepositorio>();
+builder.Services.AddScoped<IClientesRepositorioDA, ClientesRepositorio>();
 
+// Módulos D y E
 builder.Services.AddScoped<ITransferenciaDA, TransferenciaDA>();
 builder.Services.AddScoped<ITransferenciaProgramadaDA, TransferenciaProgramadaDA>();
 builder.Services.AddScoped<IPagoServicioDA, PagoServicioDA>();
@@ -33,12 +33,13 @@ builder.Services.AddScoped<IProveedorServicioDA, ProveedorServicioDA>();
 // ---------------------------------------------------------------------
 // Casos de uso (BW)
 // ---------------------------------------------------------------------
+// Módulo D/E
 builder.Services.AddScoped<ITransferenciaBW, TransferenciaCU>();
 builder.Services.AddScoped<ITransferenciaProgramadaBW, TransferenciaProgramadaCU>();
 builder.Services.AddScoped<IPagoServicioBW, PagoServicioCU>();
 builder.Services.AddScoped<IProveedorServicioBW, ProveedorServicioCU>();
 
-// Módulo A: Usuarios y Clientes
+// Módulo A
 builder.Services.AddScoped<RegistrarUsuarioCU>();
 builder.Services.AddScoped<LoginCU>();
 builder.Services.AddScoped<GestionClientesCU>();
@@ -66,11 +67,12 @@ builder.Services.AddAuthentication(options =>
 
         ValidIssuer = configuration["Jwt:Issuer"],
         ValidAudience = configuration["Jwt:Audience"],
-
         IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
     };
 });
 
+// ---------------------------------------------------------------------
+// MVC + Swagger
 // ---------------------------------------------------------------------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

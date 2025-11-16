@@ -6,10 +6,10 @@ namespace BancaOnline.BW.CU
 {
     public class GestionClientesCU
     {
-        private readonly IClientesRepositorio _clientesRepo;
-        private readonly IUsuariosRepositorio _usuariosRepo;
+        private readonly IClientesRepositorioDA _clientesRepo;
+        private readonly IUsuariosRepositorioDA _usuariosRepo;
 
-        public GestionClientesCU(IClientesRepositorio clientesRepo, IUsuariosRepositorio usuariosRepo)
+        public GestionClientesCU(IClientesRepositorioDA clientesRepo, IUsuariosRepositorioDA usuariosRepo)
         {
             _clientesRepo = clientesRepo;
             _usuariosRepo = usuariosRepo;

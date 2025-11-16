@@ -2,7 +2,7 @@
 
 namespace BancaOnline.BW.Interfaces
 {
-    public interface ILoginCU
+    public interface ILoginBW
     {
         Task<(bool Exito, string Mensaje, string Token)> LoginAsync(string email, string password);
     }

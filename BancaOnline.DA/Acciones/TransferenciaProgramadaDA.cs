@@ -15,7 +15,9 @@ namespace BancaOnline.DA.Acciones
         public TransferenciaProgramadaDA(AppDbContext db) => _db = db;
 
         public Task<List<TransferenciaProgramada>> ListarAsync()
-            => _db.TransferenciasProgramadas.OrderByDescending(x => x.FechaCreacion).ToListAsync();
+            => _db.TransferenciasProgramadas
+                  .OrderByDescending(x => x.FechaCreacion)
+                  .ToListAsync();
 
         public Task<TransferenciaProgramada?> ObtenerAsync(Guid id)
             => _db.TransferenciasProgramadas.FirstOrDefaultAsync(x => x.Id == id);
@@ -30,7 +32,10 @@ namespace BancaOnline.DA.Acciones
         {
             var tp = await _db.TransferenciasProgramadas.FindAsync(id);
             if (tp is null) return;
-            tp.Estado = 4; // Cancelada
+
+
+            tp.Estado = 3;
+
             await _db.SaveChangesAsync();
         }
     }

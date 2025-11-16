@@ -15,7 +15,9 @@ namespace BancaOnline.DA.Acciones
         public PagoServicioDA(AppDbContext db) => _db = db;
 
         public Task<List<PagoServicio>> ListarAsync()
-            => _db.PagosServicios.OrderByDescending(x => x.Fecha).ToListAsync();
+            => _db.PagosServicios
+                  .OrderByDescending(x => x.FechaCreacion)
+                  .ToListAsync();
 
         public Task<PagoServicio?> ObtenerAsync(Guid id)
             => _db.PagosServicios.FirstOrDefaultAsync(x => x.Id == id);

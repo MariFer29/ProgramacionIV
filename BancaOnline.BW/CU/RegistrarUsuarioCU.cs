@@ -8,12 +8,12 @@ namespace BancaOnline.BW.CU
 {
     public class RegistrarUsuarioCU
     {
-        private readonly IUsuariosRepositorio _usuariosRepo;
-        private readonly IClientesRepositorio _clientesRepo;
+        private readonly IUsuariosRepositorioDA _usuariosRepo;
+        private readonly IClientesRepositorioDA _clientesRepo;
 
         private readonly PasswordHasher<Usuario> _passwordHasher = new PasswordHasher<Usuario>();
 
-        public RegistrarUsuarioCU(IUsuariosRepositorio usuariosRepo, IClientesRepositorio clientesRepo)
+        public RegistrarUsuarioCU(IUsuariosRepositorioDA usuariosRepo, IClientesRepositorioDA clientesRepo)
         {
             _usuariosRepo = usuariosRepo;
             _clientesRepo = clientesRepo;

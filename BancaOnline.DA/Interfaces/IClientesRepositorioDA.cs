@@ -2,7 +2,7 @@
 
 namespace BancaOnline.DA.Interfaces
 {
-    public interface IClientesRepositorio
+    public interface IClientesRepositorioDA
     {
         Task<Cliente> CrearAsync(Cliente cliente);
         Task<List<Cliente>> ListarTodosAsync();
