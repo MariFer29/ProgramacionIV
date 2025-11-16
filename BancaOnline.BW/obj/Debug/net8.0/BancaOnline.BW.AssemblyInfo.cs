@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BancaOnline.BW")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f14cb36ad2a0d9d4c0eaefd7c4ea0b08bd4ccc5c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b3ee1de1c5eb6a6558f454214ac9e5b1b6abb0c")]
 [assembly: System.Reflection.AssemblyProductAttribute("BancaOnline.BW")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BancaOnline.BW")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
