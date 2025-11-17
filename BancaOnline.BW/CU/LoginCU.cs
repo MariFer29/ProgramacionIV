@@ -20,17 +20,18 @@ namespace BancaOnline.BW.CU
         public async Task<string?> Ejecutar(LoginDTO dto)
         {
             var usuario = await _usuariosRepo.ObtenerPorEmailAsync(dto.Email);
+
             if (usuario == null)
                 return null;
 
-            // Si está bloqueado
+            // Usuario bloqueado
             if (usuario.FechaBloqueoHasta != null &&
                 usuario.FechaBloqueoHasta > DateTime.UtcNow)
             {
-                return "Usuario bloqueado temporalmente por múltiples intentos fallidos.";
+                return null; // <-- NO devolver string
             }
 
-            // Comparar contraseña
+            // Verificar contraseña
             var resultado = _passwordHasher.VerifyHashedPassword(
                 usuario,
                 usuario.ContrasenaHash,
@@ -41,23 +42,19 @@ namespace BancaOnline.BW.CU
             {
                 usuario.IntentosFallidos++;
 
-                // Bloqueo por 15 minutos
                 if (usuario.IntentosFallidos >= 5)
-                {
                     usuario.FechaBloqueoHasta = DateTime.UtcNow.AddMinutes(15);
-                }
 
                 await _usuariosRepo.ActualizarAsync(usuario);
-                return null;
+                return null; // <-- ERROR, devuelve null siempre
             }
 
-            // Si el login es correcto: resetear intentos y desbloquear
+            // Login exitoso
             usuario.IntentosFallidos = 0;
             usuario.FechaBloqueoHasta = null;
 
             await _usuariosRepo.ActualizarAsync(usuario);
 
-            // Generar token JWT
             return _jwtService.GenerarToken(usuario);
         }
     }

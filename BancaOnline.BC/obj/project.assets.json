@@ -8,23 +8,23 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Klein01\\.nuget\\packages\\": {},
+    "C:\\Users\\Maria Fernanda\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Klein01\\Source\\Repos\\BancaOnline\\BancaOnline.BC\\BancaOnline.BC.csproj",
+      "projectUniqueName": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
       "projectName": "BancaOnline.BC",
-      "projectPath": "C:\\Users\\Klein01\\Source\\Repos\\BancaOnline\\BancaOnline.BC\\BancaOnline.BC.csproj",
-      "packagesPath": "C:\\Users\\Klein01\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Klein01\\Source\\Repos\\BancaOnline\\BancaOnline.BC\\obj\\",
+      "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
+      "packagesPath": "C:\\Users\\Maria Fernanda\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Klein01\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Maria Fernanda\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
