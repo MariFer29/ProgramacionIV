@@ -9,6 +9,20 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowIonic",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:8100", "https://localhost:8100")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
 var configuration = builder.Configuration;
 
 // ---------------------------------------------------------------------
@@ -124,6 +138,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// Activar CORS
+app.UseCors("AllowIonic");
 
 app.UseAuthentication();
 app.UseAuthorization();
