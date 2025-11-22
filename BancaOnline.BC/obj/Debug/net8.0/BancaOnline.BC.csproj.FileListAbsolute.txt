@@ -33,3 +33,15 @@ C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaO
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\refint\BancaOnline.BC.dll
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.pdb
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\ref\BancaOnline.BC.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\bin\Debug\net8.0\BancaOnline.BC.deps.json
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\bin\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\bin\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.AssemblyInfoInputs.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.AssemblyInfo.cs
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.csproj.CoreCompileInputs.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.sourcelink.json
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\refint\BancaOnline.BC.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\ref\BancaOnline.BC.dll

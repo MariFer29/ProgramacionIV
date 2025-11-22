@@ -44,6 +44,13 @@ builder.Services.AddScoped<ITransferenciaProgramadaDA, TransferenciaProgramadaDA
 builder.Services.AddScoped<IPagoServicioDA, PagoServicioDA>();
 builder.Services.AddScoped<IProveedorServicioDA, ProveedorServicioDA>();
 
+// Módulo B – Cuentas
+builder.Services.AddScoped<IAccountCU, AccountCU>();
+
+// Módulo C – Beneficiarios
+builder.Services.AddScoped<IBeneficiaryCU, BeneficiaryCU>();
+
+
 // ---------------------------------------------------------------------
 // Casos de uso (BW)
 // ---------------------------------------------------------------------

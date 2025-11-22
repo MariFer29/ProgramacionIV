@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BancaOnline.BC.Entidades;
+using BancaOnline.BC.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using BancaOnline.BC.Entidades;
-using Microsoft.EntityFrameworkCore;
 
 namespace BancaOnline.DA
 {
@@ -28,6 +29,13 @@ namespace BancaOnline.DA
         // -----------------------------
         public DbSet<Usuario> Usuarios => Set<Usuario>();
         public DbSet<Cliente> Clientes => Set<Cliente>();
+
+        // -----------------------------
+        // Módulo B & C – Cuentas y Beneficiarios
+        // -----------------------------
+        public DbSet<Account> Accounts => Set<Account>();
+        public DbSet<Beneficiary> Beneficiaries => Set<Beneficiary>();
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -97,6 +105,54 @@ namespace BancaOnline.DA
                       .HasForeignKey<Cliente>(c => c.UsuarioId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
+
+            // -----------------------------
+            // Account
+            // -----------------------------
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.ToTable("Account");
+
+                entity.HasKey(a => a.Id);
+
+                entity.Property(a => a.AccountNumber)
+                      .IsRequired()
+                      .HasMaxLength(12);
+
+                entity.HasIndex(a => a.AccountNumber)
+                      .IsUnique();
+
+                entity.Property(a => a.Balance)
+                      .HasColumnType("decimal(18,2)");
+
+                entity.Property(a => a.CreatedAt)
+                      .HasDefaultValueSql("GETUTCDATE()");
+            });
+
+            // -----------------------------
+            // Beneficiary
+            // -----------------------------
+            modelBuilder.Entity<Beneficiary>(entity =>
+            {
+                entity.ToTable("Beneficiary");
+
+                entity.HasKey(b => b.Id);
+
+                entity.Property(b => b.Alias)
+                      .IsRequired()
+                      .HasMaxLength(30);
+
+                entity.HasIndex(b => new { b.ClientId, b.Alias })
+                      .IsUnique();
+
+                entity.Property(b => b.AccountNumber)
+                      .IsRequired()
+                      .HasMaxLength(20);
+
+                entity.Property(b => b.CreatedAt)
+                      .HasDefaultValueSql("GETUTCDATE()");
+            });
+
         }
     }
 }
