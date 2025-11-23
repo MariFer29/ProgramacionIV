@@ -61,27 +61,6 @@ namespace BancaOnline.API.Controllers
 
             return Ok(resultado);
         }
-
-        // ============================
-        // PUT: api/clientes/{id}/asignar-usuario
-        // ============================
-        [HttpPut("{id}/asignar-usuario")]
-        [Authorize(Roles = "Administrador,Gestor")]
-        public async Task<IActionResult> AsignarUsuario(int id, [FromBody] AsignarUsuarioDTO dto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var resultado = await _gestionClientesCU.AsignarUsuario(id, dto.IdUsuario);
-
-            if (resultado.Contains("no encontrado"))
-                return NotFound(resultado);
-
-            if (resultado.Contains("ya tiene") || resultado.Contains("rol"))
-                return Conflict(resultado);
-
-            return Ok(resultado);
-        }
     }
 }
 
