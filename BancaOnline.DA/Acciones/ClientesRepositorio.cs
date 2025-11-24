@@ -40,6 +40,12 @@ namespace BancaOnline.DA.Acciones
                 .FirstOrDefaultAsync(c => c.Identificacion == identificacion);
         }
 
+        public async Task<Cliente> ObtenerPorCorreoAsync(string correo)
+        {
+            return await _context.Clientes
+                .FirstOrDefaultAsync(c => c.Correo == correo);
+        }
+
         public async Task ActualizarAsync(Cliente cliente)
         {
             _context.Clientes.Update(cliente);
@@ -47,5 +53,4 @@ namespace BancaOnline.DA.Acciones
         }
     }
 }
-
 

@@ -9,6 +9,20 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowIonic",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:8100", "https://localhost:8100")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
 var configuration = builder.Configuration;
 
 // ---------------------------------------------------------------------
@@ -29,6 +43,13 @@ builder.Services.AddScoped<ITransferenciaDA, TransferenciaDA>();
 builder.Services.AddScoped<ITransferenciaProgramadaDA, TransferenciaProgramadaDA>();
 builder.Services.AddScoped<IPagoServicioDA, PagoServicioDA>();
 builder.Services.AddScoped<IProveedorServicioDA, ProveedorServicioDA>();
+
+// Módulo B – Cuentas
+builder.Services.AddScoped<IAccountCU, AccountCU>();
+
+// Módulo C – Beneficiarios
+builder.Services.AddScoped<IBeneficiaryCU, BeneficiaryCU>();
+
 
 // ---------------------------------------------------------------------
 // Casos de uso (BW)
@@ -76,7 +97,40 @@ builder.Services.AddAuthentication(options =>
 // ---------------------------------------------------------------------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Banca Online API",
+        Version = "v1"
+    });
+
+    // ==== ESTO AGREGA EL BOTÓN AUTHORIZE ====
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "Autorización JWT usando Bearer. Ejemplo: Bearer {token}",
+        Name = "Authorization",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 // ---------------------------------------------------------------------
 // App
@@ -91,6 +145,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// Activar CORS
+app.UseCors("AllowIonic");
 
 app.UseAuthentication();
 app.UseAuthorization();

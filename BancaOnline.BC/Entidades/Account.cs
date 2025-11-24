@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using System;
+using BancaOnline.BC.Enums;
+
+namespace BancaOnline.BC.Entities
+{
+    public class Account
+    {
+        public Guid Id { get; set; }
+
+        public string AccountNumber { get; set; } = null!; // 12 dígitos
+        public AccountType Type { get; set; }
+        public CurrencyType Currency { get; set; }
+
+        public decimal Balance { get; set; }
+        public AccountStatus Status { get; set; }
+
+        // Cliente dueño de la cuenta
+        public int ClientId { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+    }
+}

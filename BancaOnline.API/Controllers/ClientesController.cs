@@ -1,5 +1,6 @@
 ﻿using BancaOnline.BW.CU;
 using BancaOnline.BW.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BancaOnline.API.Controllers
@@ -15,14 +16,22 @@ namespace BancaOnline.API.Controllers
             _gestionClientesCU = gestionClientesCU;
         }
 
+        // ============================
+        // GET: api/clientes
+        // ============================
         [HttpGet]
+        [Authorize(Roles = "Administrador,Gestor")]
         public async Task<IActionResult> GetTodos()
         {
             var clientes = await _gestionClientesCU.ObtenerTodos();
             return Ok(clientes);
         }
 
+        // ============================
+        // GET: api/clientes/{id}
+        // ============================
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrador,Gestor")]
         public async Task<IActionResult> GetPorId(int id)
         {
             var cliente = await _gestionClientesCU.ObtenerPorId(id);
@@ -32,17 +41,24 @@ namespace BancaOnline.API.Controllers
             return Ok(cliente);
         }
 
+        // ============================
+        // PUT: api/clientes/{id}
+        // ============================
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrador,Gestor")]
         public async Task<IActionResult> Actualizar(int id, [FromBody] ActualizarClienteDTO dto)
         {
-            var resultado = await _gestionClientesCU.Actualizar(id, dto);
-            return Ok(resultado);
-        }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        [HttpPut("{id}/asignar-usuario")]
-        public async Task<IActionResult> AsignarUsuario(int id, [FromBody] AsignarUsuarioDTO dto)
-        {
-            var resultado = await _gestionClientesCU.AsignarUsuario(id, dto.IdUsuario);
+            var resultado = await _gestionClientesCU.Actualizar(id, dto);
+
+            if (resultado.Contains("no encontrado"))
+                return NotFound(resultado);
+
+            if (resultado.Contains("existe"))
+                return Conflict(resultado);
+
             return Ok(resultado);
         }
     }

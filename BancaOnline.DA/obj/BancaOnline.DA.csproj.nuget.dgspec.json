@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj": {}
+    "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj": {
+    "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
+        "projectUniqueName": "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
         "projectName": "BancaOnline.BC",
-        "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
+        "projectPath": "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj",
         "packagesPath": "C:\\Users\\Maria Fernanda\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\obj\\",
+        "outputPath": "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.BC\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -69,14 +69,14 @@
         }
       }
     },
-    "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj": {
+    "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj",
+        "projectUniqueName": "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj",
         "projectName": "BancaOnline.DA",
-        "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj",
+        "projectPath": "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.DA\\BancaOnline.DA.csproj",
         "packagesPath": "C:\\Users\\Maria Fernanda\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.DA\\obj\\",
+        "outputPath": "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.DA\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -97,8 +97,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj": {
-                "projectPath": "C:\\Users\\Maria Fernanda\\Documents\\Visual Studio 2022\\Proyectos\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj"
+              "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj": {
+                "projectPath": "C:\\Users\\Maria Fernanda\\source\\repos\\MariFer29\\ProgramacionIV\\BancaOnline.BC\\BancaOnline.BC.csproj"
               }
             }
           }

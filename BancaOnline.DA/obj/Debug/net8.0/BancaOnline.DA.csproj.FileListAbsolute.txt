@@ -51,3 +51,39 @@ C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.DA\obj\Debug\net8.0\refint
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.pdb
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.genruntimeconfig.cache
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.DA\obj\Debug\net8.0\ref\BancaOnline.DA.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.deps.json
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.runtimeconfig.json
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.csproj.AssemblyReference.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.AssemblyInfoInputs.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.AssemblyInfo.cs
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.csproj.CoreCompileInputs.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.sourcelink.json
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnl.F6336EEE.Up2Date
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\refint\BancaOnline.DA.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.genruntimeconfig.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\ref\BancaOnline.DA.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.deps.json
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.runtimeconfig.json
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\bin\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.csproj.AssemblyReference.cache
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.AssemblyInfoInputs.cache
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.AssemblyInfo.cs
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.csproj.CoreCompileInputs.cache
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.sourcelink.json
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnl.F6336EEE.Up2Date
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\refint\BancaOnline.DA.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\BancaOnline.DA.genruntimeconfig.cache
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.DA\obj\Debug\net8.0\ref\BancaOnline.DA.dll

@@ -51,3 +51,39 @@ C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\BancaO
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.DA.pdb
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\obj\Debug\net8.0\BancaOnl.3E21666D.Up2Date
 C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\obj\Debug\net8.0\ref\BancaOnline.BW.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BW.deps.json
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BW.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BW.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.csproj.AssemblyReference.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.AssemblyInfoInputs.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.AssemblyInfo.cs
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.csproj.CoreCompileInputs.cache
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.sourcelink.json
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnl.3E21666D.Up2Date
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\refint\BancaOnline.BW.dll
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.pdb
+C:\Users\Home\Documents\GitHub\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\ref\BancaOnline.BW.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BW.deps.json
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BW.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BW.pdb
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BC.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.DA.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.BC.pdb
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\bin\Debug\net8.0\BancaOnline.DA.pdb
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.csproj.AssemblyReference.cache
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.AssemblyInfoInputs.cache
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.AssemblyInfo.cs
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.csproj.CoreCompileInputs.cache
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.sourcelink.json
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnl.3E21666D.Up2Date
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\refint\BancaOnline.BW.dll
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.pdb
+C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\ref\BancaOnline.BW.dll

@@ -17,25 +17,35 @@ namespace BancaOnline.API.Controllers
             _loginCU = loginCU;
         }
 
+        // Endpoint para registrar un nuevo usuario
         [HttpPost("registrar")]
         public async Task<IActionResult> Registrar([FromBody] RegistrarUsuarioDTO dto)
         {
             var resultado = await _registrarUsuarioCU.Ejecutar(dto);
-            return Ok(resultado);
+
+            // Validar si el CU devuelve error
+            if (resultado is string error && error.StartsWith("Error"))
+            {
+                return BadRequest(new { mensaje = error });
+            }
+
+            return Ok(new { mensaje = resultado });
         }
 
+        // Endpoint para iniciar sesión
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
             var token = await _loginCU.Ejecutar(dto);
 
             if (token == null)
-                return Unauthorized("Credenciales incorrectas o usuario bloqueado.");
+                return Unauthorized(new { mensaje = "Credenciales incorrectas o usuario bloqueado." });
 
-            return Ok(new { Token = token });
+            return Ok(new { token });
         }
     }
 }
+
 
 
 

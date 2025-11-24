@@ -15,25 +15,28 @@ namespace BancaOnline.BW.CU
             _usuariosRepo = usuariosRepo;
         }
 
-        // Obtener todos los clientes
         public async Task<IEnumerable<Cliente>> ObtenerTodos()
         {
             return await _clientesRepo.ListarTodosAsync();
         }
 
-        // Obtener cliente por ID
         public async Task<Cliente?> ObtenerPorId(int id)
         {
             return await _clientesRepo.ObtenerPorIdAsync(id);
         }
 
-        // Actualizar datos del cliente
         public async Task<string> Actualizar(int id, ActualizarClienteDTO dto)
         {
             var cliente = await _clientesRepo.ObtenerPorIdAsync(id);
             if (cliente == null)
                 return "Cliente no encontrado.";
 
+            // Validar correo único entre clientes
+            var clientePorCorreo = await _clientesRepo.ObtenerPorCorreoAsync(dto.Correo);
+            if (clientePorCorreo != null && clientePorCorreo.Id != id)
+                return "Ya existe un cliente con ese correo.";
+
+            // Asignar cambios
             cliente.NombreCompleto = dto.NombreCompleto;
             cliente.Telefono = dto.Telefono;
             cliente.Correo = dto.Correo;
@@ -41,33 +44,8 @@ namespace BancaOnline.BW.CU
             await _clientesRepo.ActualizarAsync(cliente);
             return "Cliente actualizado correctamente.";
         }
-
-        // Asignar usuario existente a cliente (1:1)
-        public async Task<string> AsignarUsuario(int idCliente, int idUsuario)
-        {
-            var cliente = await _clientesRepo.ObtenerPorIdAsync(idCliente);
-            if (cliente == null)
-                return "Cliente no encontrado.";
-
-            // Validación 1 usuario máximo
-            if (cliente.UsuarioId != null)
-                return "Este cliente ya tiene un usuario asociado.";
-
-            var usuario = await _usuariosRepo.ObtenerPorIdAsync(idUsuario);
-            if (usuario == null)
-                return "Usuario no encontrado.";
-
-            // Validación: solo usuarios con rol Cliente
-            if (usuario.Rol != "Cliente")
-                return "Solo se pueden asociar usuarios con rol 'Cliente'.";
-
-            // Asignar relación 1:1
-            cliente.UsuarioId = usuario.Id;
-
-            await _clientesRepo.ActualizarAsync(cliente);
-            return "Usuario asignado correctamente.";
-        }
     }
 }
+
 
 
