@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Clientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Mostrar mensaje de error -->
+  <ion-text color="danger" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </ion-text>
+
+  <!-- Lista de clientes -->
+  <ion-list>
+    <ion-item 
+      button 
+      detail
+      *ngFor="let c of clientes"
+      (click)="verDetalle(c)"
+    >
+      <ion-label>
+        <h2>{{ c.nombreCompleto }}</h2>
+        <p>{{ c.correo }}</p>
+        <p><strong>ID:</strong> {{ c.identificacion }}</p>
+        <p><strong>Usuario:</strong> {{ c.usuario?.email }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Botón para registrar nuevo cliente -->
+  <ion-button 
+    expand="full" 
+    color="primary" 
+    (click)="goToRegistrar()"
+    class="ion-margin-top"
+  >
+    Registrar Cliente
+  </ion-button>
+
+</ion-content>
