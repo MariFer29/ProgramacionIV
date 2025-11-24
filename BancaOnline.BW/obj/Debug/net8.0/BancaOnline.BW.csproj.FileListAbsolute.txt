@@ -87,3 +87,22 @@ C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj
 C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\refint\BancaOnline.BW.dll
 C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\BancaOnline.BW.pdb
 C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BW\obj\Debug\net8.0\ref\BancaOnline.BW.dll
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-Black.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-BlackItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-Bold.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-BoldItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-ExtraBold.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-ExtraBoldItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-ExtraLight.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-ExtraLightItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-Italic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-Light.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-LightItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-Medium.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-MediumItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-Regular.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-SemiBold.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-SemiBoldItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-Thin.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\Lato-ThinItalic.ttf
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BW\bin\Debug\net8.0\LatoFont\OFL.txt

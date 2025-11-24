@@ -8,9 +8,9 @@ namespace BancaOnline.API.Controllers
     [Route("api/[controller]")]
     public class CuentasController : ControllerBase
     {
-        private readonly IAccountCU _service;
+        private readonly IAccountBW _service;
 
-        public CuentasController(IAccountCU service)
+        public CuentasController(IAccountBW service)
         {
             _service = service;
         }

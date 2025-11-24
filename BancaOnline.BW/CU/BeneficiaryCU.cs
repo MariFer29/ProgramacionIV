@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace BancaOnline.BW.CU
 {
-    public class BeneficiaryCU : IBeneficiaryCU
+    public class BeneficiaryCU : IBeneficiaryBW
     {
         private readonly AppDbContext _db;
 

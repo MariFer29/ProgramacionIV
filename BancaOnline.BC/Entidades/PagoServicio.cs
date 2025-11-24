@@ -25,7 +25,7 @@ namespace BancaOnline.BC.Entidades
 
         public int Estado { get; set; }
 
-        public string Referencia { get; set; } = default!;
+        public string? Referencia { get; set; }
 
         public string? RazonFalla { get; set; }
     }

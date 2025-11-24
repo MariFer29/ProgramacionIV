@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+QuestPDF.Settings.License = LicenseType.Community;
 
 // CORS
 builder.Services.AddCors(options =>
@@ -35,7 +37,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Repositorios (DA)
 // ---------------------------------------------------------------------
 // Módulo A: Usuarios / Clientes
-builder.Services.AddScoped<IUsuariosRepositorioDA, UsuariosRepositorio>();
+builder.Services.AddScoped<IUsuariosRepositorioDA, UsuariosRepositorioDA>();
 builder.Services.AddScoped<IClientesRepositorioDA, ClientesRepositorio>();
 
 // Módulos D y E
@@ -45,10 +47,15 @@ builder.Services.AddScoped<IPagoServicioDA, PagoServicioDA>();
 builder.Services.AddScoped<IProveedorServicioDA, ProveedorServicioDA>();
 
 // Módulo B – Cuentas
-builder.Services.AddScoped<IAccountCU, AccountCU>();
+builder.Services.AddScoped<IAccountBW, AccountCU>();
 
 // Módulo C – Beneficiarios
-builder.Services.AddScoped<IBeneficiaryCU, BeneficiaryCU>();
+builder.Services.AddScoped<IBeneficiaryBW, BeneficiaryCU>();
+
+// Módulo F/G – Auditoría y Reportes, Historial.
+builder.Services.AddScoped<IAuditoriaRepositorioDA, AuditoriaRepositorioDA>();
+builder.Services.AddScoped<IReportesDA, ReportesDA>();
+
 
 
 // ---------------------------------------------------------------------
@@ -64,6 +71,12 @@ builder.Services.AddScoped<IProveedorServicioBW, ProveedorServicioCU>();
 builder.Services.AddScoped<RegistrarUsuarioCU>();
 builder.Services.AddScoped<LoginCU>();
 builder.Services.AddScoped<GestionClientesCU>();
+// Módulo F/G
+builder.Services.AddScoped<IAuditoriaBW, AuditoriaCU>();
+builder.Services.AddScoped<IReportesBW, ReportesCU>();
+builder.Services.AddScoped<IHistorialBW, HistorialCU>();
+builder.Services.AddScoped<IComprobantesBW, ComprobanteCU>();
+
 
 // ---------------------------------------------------------------------
 // JWT

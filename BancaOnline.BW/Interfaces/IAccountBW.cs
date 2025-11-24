@@ -11,7 +11,7 @@ using BancaOnline.BW.DTOs;
 
 namespace BancaOnline.BW.Interfaces
 {
-    public interface IAccountCU
+    public interface IAccountBW
     {
         Task<CuentaDTO> AbrirCuentaAsync(AbrirCuentaDTO request);
         Task<IReadOnlyList<CuentaDTO>> ConsultarCuentasAsync(FiltroCuentasDTO filtro);

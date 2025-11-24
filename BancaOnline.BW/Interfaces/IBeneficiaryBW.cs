@@ -11,7 +11,7 @@ using BancaOnline.BW.DTOs;
 
 namespace BancaOnline.BW.Interfaces
 {
-    public interface IBeneficiaryCU
+    public interface IBeneficiaryBW
     {
         Task<BeneficiarioDTO> RegistrarAsync(RegistrarBeneficiarioDTO request);
         Task<BeneficiarioDTO?> ActualizarAsync(ActualizarBeneficiarioDTO request);

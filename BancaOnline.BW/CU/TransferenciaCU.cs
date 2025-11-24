@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using BancaOnline.BC.Entidades;
+using BancaOnline.BC.Enums;
 using BancaOnline.BW.Interfaces;
+using BancaOnline.DA;
 using BancaOnline.DA.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BancaOnline.BW.CU
 {
     public class TransferenciaCU : ITransferenciaBW
     {
         private readonly ITransferenciaDA _da;
+        private readonly IClientesRepositorioDA _clientesRepo;
+        private readonly AppDbContext _db;
+        private readonly IAuditoriaBW _auditoriaBW;
 
         private const int ESTADO_PENDIENTE_APROBACION = 0;
         private const int ESTADO_EXITOSA = 1;
@@ -19,12 +26,18 @@ namespace BancaOnline.BW.CU
         private const int ESTADO_RECHAZADA = 3;
 
         private const decimal UMBRAL_APROBACION = 100_000m;
-
         private const decimal PORCENTAJE_COMISION = 0.005m;
 
-        public TransferenciaCU(ITransferenciaDA da)
+        public TransferenciaCU(
+            ITransferenciaDA da,
+            IClientesRepositorioDA clientesRepo,
+            AppDbContext db,
+            IAuditoriaBW auditoriaBW)
         {
             _da = da;
+            _clientesRepo = clientesRepo;
+            _db = db;
+            _auditoriaBW = auditoriaBW;
         }
 
         public Task<List<Transferencia>> ObtenerTransferenciasAsync()
@@ -35,20 +48,46 @@ namespace BancaOnline.BW.CU
             if (t == null)
                 throw new ArgumentNullException(nameof(t));
 
-
             if (t.Monto <= 0)
                 throw new ArgumentException("El monto de la transferencia debe ser mayor que cero.");
 
-            if (t.SaldoAntes <= 0)
-                throw new ArgumentException("El saldo antes de la transferencia debe ser mayor que cero.");
+            var cuentaOrigen = await _db.Accounts
+                .FirstOrDefaultAsync(a => a.Id == t.CuentaOrigenId);
 
-            // VALIDACIONES DE OTROS MÓDULOS (NO IMPLEMENTAR EN ESTE MÓDULO)
-            // Estas validaciones se harán cuando se integren los módulos de Cuentas y Clientes.
-            // Por ahora NO deben implementarse aquí:
-            // - Cuenta origen activa
-            // - Límite diario disponible
-            // - Tercero confirmado
+            if (cuentaOrigen is null)
+            {
+                await RegistrarAuditoriaTransferenciaAsync(
+                    t,
+                    cliente: null,
+                    tipoOperacion: "TransferenciaFallida",
+                    razonFalla: "Cuenta origen inexistente");
+                throw new InvalidOperationException("La cuenta origen no existe.");
+            }
 
+            if (cuentaOrigen.Status != AccountStatus.Active)
+            {
+                await RegistrarAuditoriaTransferenciaAsync(
+                    t,
+                    cliente: null,
+                    tipoOperacion: "TransferenciaFallida",
+                    razonFalla: "Cuenta origen no está activa");
+                throw new InvalidOperationException("La cuenta origen no está activa.");
+            }
+
+            // Verificar que el cliente dueño de la cuenta exista
+            var cliente = await _clientesRepo.ObtenerPorIdAsync(cuentaOrigen.ClientId);
+            if (cliente is null)
+            {
+                await RegistrarAuditoriaTransferenciaAsync(
+                    t,
+                    cliente: null,
+                    tipoOperacion: "TransferenciaFallida",
+                    razonFalla: "Cliente asociado a la cuenta no existe");
+                throw new InvalidOperationException("El cliente asociado a la cuenta no existe.");
+            }
+
+            // Usar el saldo real de la cuenta como SaldoAntes
+            t.SaldoAntes = cuentaOrigen.Balance;
 
             if (!string.IsNullOrWhiteSpace(t.IdempotencyKey))
             {
@@ -60,11 +99,17 @@ namespace BancaOnline.BW.CU
             }
 
             t.Comision = Math.Round(t.Monto * PORCENTAJE_COMISION, 2);
-
             var montoTotal = t.Monto + t.Comision;
 
             if (t.SaldoAntes < montoTotal)
+            {
+                await RegistrarAuditoriaTransferenciaAsync(
+                    t,
+                    cliente,
+                    tipoOperacion: "TransferenciaFallida",
+                    razonFalla: "Saldo insuficiente");
                 throw new InvalidOperationException("Saldo insuficiente para realizar la transferencia.");
+            }
 
             t.SaldoDespues = t.SaldoAntes - montoTotal;
 
@@ -86,6 +131,50 @@ namespace BancaOnline.BW.CU
             }
 
             await _da.CrearAsync(t);
+
+            // Auditoría de operación exitosa o pendiente
+            var tipo = t.Estado == ESTADO_EXITOSA
+                ? "TransferenciaExitosa"
+                : "TransferenciaPendienteAprobacion";
+
+            await RegistrarAuditoriaTransferenciaAsync(
+                t,
+                cliente,
+                tipoOperacion: tipo,
+                razonFalla: null);
+        }
+
+        private async Task RegistrarAuditoriaTransferenciaAsync(
+            Transferencia t,
+            Cliente? cliente,
+            string tipoOperacion,
+            string? razonFalla)
+        {
+            var auditoria = new Auditoria
+            {
+                Id = Guid.NewGuid(),
+                Fecha = DateTime.UtcNow,
+                UsuarioId = cliente?.UsuarioId,
+                UsuarioEmail = cliente?.Correo,
+                TipoOperacion = tipoOperacion,
+                Entidad = "Transferencia",
+                EntidadId = t.Id == Guid.Empty ? null : t.Id.ToString(),
+                DatosNuevos = JsonSerializer.Serialize(new
+                {
+                    t.CuentaOrigenId,
+                    t.CuentaDestinoId,
+                    t.Monto,
+                    t.Comision,
+                    t.SaldoAntes,
+                    t.SaldoDespues,
+                    t.Estado,
+                    t.FechaCreacion,
+                    t.FechaEjecucion,
+                    RazonFalla = razonFalla ?? t.RazonFalla
+                })
+            };
+
+            await _auditoriaBW.RegistrarAsync(auditoria);
         }
     }
 }

@@ -57,3 +57,4 @@ C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BC\obj
 C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\refint\BancaOnline.BC.dll
 C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.pdb
 C:\Users\Maria Fernanda\source\repos\MariFer29\ProgramacionIV\BancaOnline.BC\obj\Debug\net8.0\ref\BancaOnline.BC.dll
+C:\Users\Klein01\Source\Repos\BancaOnline\BancaOnline.BC\obj\Debug\net8.0\BancaOnline.BC.csproj.AssemblyReference.cache

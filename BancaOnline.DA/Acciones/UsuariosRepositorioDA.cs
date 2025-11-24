@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BancaOnline.DA.Acciones
 {
-    public class UsuariosRepositorio : IUsuariosRepositorioDA
+    public class UsuariosRepositorioDA : IUsuariosRepositorioDA
     {
         private readonly AppDbContext _context;
 
-        public UsuariosRepositorio(AppDbContext context)
+        public UsuariosRepositorioDA(AppDbContext context)
         {
             _context = context;
         }

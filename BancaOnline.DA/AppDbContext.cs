@@ -36,6 +36,12 @@ namespace BancaOnline.DA
         public DbSet<Account> Accounts => Set<Account>();
         public DbSet<Beneficiary> Beneficiaries => Set<Beneficiary>();
 
+        // -----------------------------
+        // Módulo F & G – Auditoría y Reportes, Historial.
+        // -----------------------------
+
+        public DbSet<Auditoria> Auditorias { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
