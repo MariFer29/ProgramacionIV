@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Beneficiarios / Terceros</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <!-- FORMULARIO -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{ editingId == null ? 'Registrar beneficiario' : 'Editar beneficiario' }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+
+        <ion-item>
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input formControlName="nombre"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Identificación</ion-label>
+          <ion-input formControlName="identificacion"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Relación</ion-label>
+          <ion-input formControlName="relacion"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Cuenta asociada</ion-label>
+          <ion-select formControlName="cuentaId" placeholder="Seleccione cuenta">
+            <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
+              {{ c.accountNumber }} (Cliente {{ c.clientId }})
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div class="buttons ion-margin-top">
+          <ion-button type="submit" expand="block" [disabled]="form.invalid || loading">
+            {{ editingId == null ? 'Guardar' : 'Actualizar' }}
+          </ion-button>
+
+          <ion-button
+            *ngIf="editingId != null"
+            type="button"
+            color="medium"
+            expand="block"
+            (click)="cancelarEdicion()">
+            Cancelar edición
+          </ion-button>
+
+          <ion-button
+            type="button"
+            color="light"
+            expand="block"
+            (click)="volver()">
+            Volver
+          </ion-button>
+        </div>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- LISTA -->
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>Beneficiarios registrados</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let b of beneficiarios">
+          <ion-label>
+            <h2>{{ b.nombre }} ({{ b.identificacion }})</h2>
+            <p>
+              Relación: {{ b.relacion }}<br>
+              Cuenta: {{ b.cuentaId }}
+            </p>
+          </ion-label>
+
+          <ion-buttons slot="end">
+            <ion-button color="warning" (click)="seleccionarParaEditar(b)">
+              Editar
+            </ion-button>
+            <ion-button color="danger" (click)="confirmarEliminar(b)">
+              Eliminar
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+
+        <ion-item *ngIf="!loading && beneficiarios.length === 0">
+          <ion-label>No hay beneficiarios registrados.</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

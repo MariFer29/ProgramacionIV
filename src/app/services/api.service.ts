@@ -45,4 +45,85 @@ export class ApiService {
       })
     };
   }
+  
+  // ==========================
+  // Cuentas
+  // ==========================
+
+  getCuentas(clientId?: number): Observable<any[]> {
+    const params: any = {};
+    if (clientId) {
+      params.clientId = clientId;
+    }
+
+    return this.http.get<any[]>(
+      `${this.baseUrl}/cuentas`,
+      { params, ...this.getAuthHeaders() }
+    );
+  }
+
+  abrirCuenta(body: {
+    clientId: number;
+    type: string;
+    currency: string;
+    initialBalance: number;
+  }): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/cuentas/abrir`,
+      body,
+      this.getAuthHeaders()
+    );
+  }
+
+  bloquearCuenta(id: string): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/cuentas/bloquear/${id}`,
+      {},
+      this.getAuthHeaders()
+    );
+  }
+
+  cerrarCuenta(id: string): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/cuentas/cerrar/${id}`,
+      {},
+      this.getAuthHeaders()
+    );
+  }
+
+  // ============================
+  //   BENEFICIARIOS / TERCEROS
+  // ============================
+  // OJO: si en tu backend la ruta es /terceros, cambia 'beneficiarios' por 'terceros'
+
+  getBeneficiarios() {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/beneficiarios`,
+      this.getAuthHeaders()
+    );
+  }
+
+  crearBeneficiario(body: any) {
+    return this.http.post(
+      `${this.baseUrl}/beneficiarios`,
+      body,
+      this.getAuthHeaders()
+    );
+  }
+
+  actualizarBeneficiario(id: number, body: any) {
+    return this.http.put(
+      `${this.baseUrl}/beneficiarios/${id}`,
+      body,
+      this.getAuthHeaders()
+    );
+  }
+
+  eliminarBeneficiario(id: number) {
+    return this.http.delete(
+      `${this.baseUrl}/beneficiarios/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
 }

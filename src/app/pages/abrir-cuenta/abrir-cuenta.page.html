@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Apertura de Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- MENSAJES -->
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <!-- Cliente -->
+    <ion-item>
+      <ion-label position="stacked">Cliente</ion-label>
+      <ion-select formControlName="clientId" placeholder="Seleccione un cliente">
+        <ion-select-option *ngFor="let c of clientes" [value]="c.id">
+          {{ c.id }} - {{ c.nombreCompleto || c.nombre || c.email }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Tipo de cuenta -->
+    <ion-item>
+      <ion-label position="stacked">Tipo de cuenta</ion-label>
+      <ion-select formControlName="type" placeholder="Seleccione tipo">
+        <ion-select-option *ngFor="let t of tiposCuenta" [value]="t">
+          {{ t }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Moneda -->
+    <ion-item>
+      <ion-label position="stacked">Moneda</ion-label>
+      <ion-select formControlName="currency" placeholder="Seleccione moneda">
+        <ion-select-option *ngFor="let m of monedas" [value]="m">
+          {{ m }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Saldo inicial -->
+    <ion-item>
+      <ion-label position="stacked">Saldo inicial</ion-label>
+      <ion-input
+        type="number"
+        formControlName="initialBalance"
+        min="0"
+      ></ion-input>
+    </ion-item>
+
+    <div class="buttons ion-margin-top">
+      <ion-button
+        type="submit"
+        expand="block"
+        [disabled]="form.invalid || loading">
+        {{ loading ? 'Guardando...' : 'Abrir cuenta' }}
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        color="medium"
+        type="button"
+        (click)="volver()">
+        Cancelar
+      </ion-button>
+    </div>
+
+  </form>
+</ion-content>
