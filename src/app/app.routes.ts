@@ -4,43 +4,83 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
     loadComponent: () =>
-      import('./pages/login/login.page').then(m => m.LoginPage)
+      import('./pages/login/login.page').then((m) => m.LoginPage),
   },
   {
     path: 'registrar-usuario',
-    loadComponent: () => import('./pages/registrar-usuario/registrar-usuario.page').then(m => m.RegistrarUsuarioPage)
+    loadComponent: () =>
+      import('./pages/registrar-usuario/registrar-usuario.page').then(
+        (m) => m.RegistrarUsuarioPage
+      ),
   },
   {
     path: 'clientes',
-    loadComponent: () => import('./pages/clientes/clientes.page').then(m => m.ClientesPage)
+    loadComponent: () =>
+      import('./pages/clientes/clientes.page').then((m) => m.ClientesPage),
   },
   {
     path: 'cliente-detalle/:id',
     loadComponent: () =>
-      import('./pages/clientes-detalle/clientes-detalle.page').then(m => m.ClientesDetallePage)
+      import('./pages/clientes-detalle/clientes-detalle.page').then(
+        (m) => m.ClientesDetallePage
+      ),
   },
   {
-  path: 'cuentas',
-  loadComponent: () =>
-    import('./pages/cuentas/cuentas.page').then(m => m.CuentasPage),
+    path: 'cuentas',
+    loadComponent: () =>
+      import('./pages/cuentas/cuentas.page').then((m) => m.CuentasPage),
   },
 
   {
     path: 'abrir-cuenta',
     loadComponent: () =>
-      import('./pages/abrir-cuenta/abrir-cuenta.page').then(m => m.AbrirCuentaPage)
+      import('./pages/abrir-cuenta/abrir-cuenta.page').then(
+        (m) => m.AbrirCuentaPage
+      ),
   },
-  
+
   {
     path: 'beneficiarios',
     loadComponent: () =>
-      import('./pages/beneficiarios/beneficiarios.page').then(m => m.BeneficiariosPage)
+      import('./pages/beneficiarios/beneficiarios.page').then(
+        (m) => m.BeneficiariosPage
+      ),
   },
 
-];
+  {
+    path: 'transferencias',
+    loadComponent: () =>
+      import('./pages/transferencias/transferencias.page').then(
+        (m) => m.TransferenciasPage
+      ),
+  },
 
+  {
+    path: 'pagos-servicio',
+    loadComponent: () =>
+      import('./pages/pagos-servicio/pagos-servicio.page').then(
+        (m) => m.PagosServicioPage
+      ),
+  },
+
+  {
+    path: 'proveedores-servicio',
+    loadComponent: () =>
+      import('./pages/proveedores-servicio/proveedores-servicio.page').then(
+        (m) => m.ProveedoresServicioPage
+      ),
+  },
+
+  {
+    path: 'transferencias-programadas',
+    loadComponent: () =>
+      import(
+        './pages/transferencias-programadas/transferencias-programadas.page'
+      ).then((m) => m.TransferenciasProgramadasPage),
+  },
+];

@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Transferencias</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <form [formGroup]="transferForm" (ngSubmit)="enviarTransferencia()">
+>
+    <ion-spinner *ngIf="loading"></ion-spinner>
+
+    <ion-item>
+      <ion-label position="stacked">Cuenta origen</ion-label>
+      <ion-select formControlName="cuentaOrigenId">
+        <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
+          {{ c.accountNumber }} • {{ c.currency }} • Saldo: {{ c.balance }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Cuenta destino</ion-label>
+      <ion-select formControlName="cuentaDestinoId">
+        <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
+          {{ c.accountNumber }} • Cliente: {{ c.clientId }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Monto</ion-label>
+      <ion-input type="number" formControlName="monto"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Moneda</ion-label>
+      <ion-select formControlName="moneda">
+        <ion-select-option value="CRC">CRC</ion-select-option>
+        <ion-select-option value="USD">USD</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Detalle</ion-label>
+      <ion-input type="text" formControlName="idempotencyKey"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" class="ion-margin-top" type="submit" [disabled]="transferForm.invalid || loading">
+      Registrar transferencia
+    </ion-button>
+
+  </form>
+
+</ion-content>

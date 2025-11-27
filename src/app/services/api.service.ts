@@ -4,17 +4,16 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-
-  private baseUrl = 'https://localhost:7192/api'; 
+  private baseUrl = 'https://localhost:7192/api';
 
   constructor(private http: HttpClient) {}
 
   // Login
-  login(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(
-      `${this.baseUrl}/usuarios/login`,
-      { email, password }
-    );
+  login(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/usuarios/login`, {
+      email,
+      password,
+    });
   }
 
   // Registrar usuario
@@ -29,23 +28,30 @@ export class ApiService {
 
   // Obtener un cliente por id
   getCliente(id: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/clientes/${id}`, this.getAuthHeaders());
+    return this.http.get(
+      `${this.baseUrl}/clientes/${id}`,
+      this.getAuthHeaders()
+    );
   }
 
   // Actualizar cliente
   actualizarCliente(id: number, data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/clientes/${id}`, data, this.getAuthHeaders());
+    return this.http.put(
+      `${this.baseUrl}/clientes/${id}`,
+      data,
+      this.getAuthHeaders()
+    );
   }
 
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
     return {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`
-      })
+        Authorization: `Bearer ${token}`,
+      }),
     };
   }
-  
+
   // ==========================
   // Cuentas
   // ==========================
@@ -56,10 +62,10 @@ export class ApiService {
       params.clientId = clientId;
     }
 
-    return this.http.get<any[]>(
-      `${this.baseUrl}/cuentas`,
-      { params, ...this.getAuthHeaders() }
-    );
+    return this.http.get<any[]>(`${this.baseUrl}/cuentas`, {
+      params,
+      ...this.getAuthHeaders(),
+    });
   }
 
   abrirCuenta(body: {
@@ -126,4 +132,110 @@ export class ApiService {
     );
   }
 
+  // ==========================
+  // TRANSFERENCIAS
+  // ==========================
+
+  crearTransferencia(body: {
+    cuentaOrigenId: string;
+    cuentaDestinoId: string;
+    monto: number;
+    moneda: string;
+    idempotencyKey?: string;
+  }): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/transferencias`,
+      body,
+      this.getAuthHeaders()
+    );
+  }
+
+  getTransferencias(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/transferencias`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // ==========================
+  // PROVEEDORES DE SERVICIO
+  // ==========================
+
+  getProveedoresServicio() {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/ProveedoresServicio`,
+      this.getAuthHeaders()
+    );
+  }
+
+  crearProveedorServicio(body: {
+    nombre: string;
+    descripcion?: string;
+    moneda: string;
+  }) {
+    return this.http.post(
+      `${this.baseUrl}/ProveedoresServicio`,
+      body,
+      this.getAuthHeaders()
+    );
+  }
+
+  // ==========================
+  // PAGOS DE SERVICIO
+  // ==========================
+
+  crearPagoServicio(body: {
+    proveedorId: string;
+    cuentaOrigenId: string;
+    numeroContrato: string;
+    moneda: string;
+    monto: number;
+    fechaProgramada?: string | null;
+  }) {
+    return this.http.post(
+      `${this.baseUrl}/PagoServicio`,
+      body,
+      this.getAuthHeaders()
+    );
+  }
+
+  getPagosServicio() {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/PagoServicio`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // ==============================
+  // TRANSFERENCIAS PROGRAMADAS
+  // ==============================
+
+  getTransferenciasProgramadas() {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/TransferenciasProgramadas`,
+      this.getAuthHeaders()
+    );
+  }
+
+  crearTransferenciaProgramada(body: {
+    cuentaOrigenId: string;
+    cuentaDestinoId: string;
+    monto: number;
+    moneda: string;
+    fechaEjecucion: string; // ISO string
+  }) {
+    return this.http.post(
+      `${this.baseUrl}/TransferenciasProgramadas`,
+      body,
+      this.getAuthHeaders()
+    );
+  }
+
+  cancelarTransferenciaProgramada(id: string) {
+    return this.http.put(
+      `${this.baseUrl}/TransferenciasProgramadas/cancelar/${id}`,
+      {},
+      this.getAuthHeaders()
+    );
+  }
 }

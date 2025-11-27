@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Proveedores de servicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ng-container *ngIf="isAdmin; else sinPermisos">
+
+    <form [formGroup]="form" (ngSubmit)="guardarProveedor()">
+
+      <ion-item>
+        <ion-label position="floating">Nombre del proveedor</ion-label>
+        <ion-input type="text" formControlName="nombre"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Descripción (opcional)</ion-label>
+        <ion-input type="text" formControlName="descripcion"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Moneda</ion-label>
+        <ion-select formControlName="moneda">
+          <ion-select-option value="CRC">CRC</ion-select-option>
+          <ion-select-option value="USD">USD</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button expand="block" class="ion-margin-top" type="submit" [disabled]="form.invalid || loading">
+        Guardar proveedor
+      </ion-button>
+
+      <ion-button expand="block" fill="clear" color="medium" (click)="volver()">
+        Volver
+      </ion-button>
+
+      <ion-spinner *ngIf="loading" class="ion-margin-top"></ion-spinner>
+
+    </form>
+
+    <ion-list class="ion-margin-top">
+      <ion-list-header>
+        Proveedores registrados
+      </ion-list-header>
+
+      <ion-item *ngFor="let p of proveedores">
+        <ion-label>
+          <h2>{{ p.nombre }}</h2>
+          <p>{{ p.descripcion }}</p>
+          <p>Moneda: {{ p.moneda }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </ng-container>
+
+  <!-- Template para NO admin -->
+  <ng-template #sinPermisos>
+    <ion-text color="danger">
+      <p>No tiene permisos para acceder a esta sección.</p>
+    </ion-text>
+    <ion-button expand="block" class="ion-margin-top" (click)="volver()">
+      Volver
+    </ion-button>
+  </ng-template>
+
+</ion-content>
