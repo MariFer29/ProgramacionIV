@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { ApiService } from '../../services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-transferencias-programadas',
@@ -18,13 +19,14 @@ export class TransferenciasProgramadasPage implements OnInit {
   monto: number = 0;
   fechaEjecucion: string = '';
   detalle: string = '';
-  moneda: string = 'CRC'; 
+  moneda: string = 'CRC';
 
   constructor(
     private api: ApiService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
-  ) {}
+    private toastCtrl: ToastController,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     const clienteIdStr = localStorage.getItem('clienteId');
@@ -123,4 +125,9 @@ export class TransferenciasProgramadasPage implements OnInit {
     });
     await toast.present();
   }
+
+  goToMenu() {
+    this.router.navigate(['/admin-menu']);
+  }
+
 }

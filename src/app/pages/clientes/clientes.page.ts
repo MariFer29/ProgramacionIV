@@ -45,6 +45,10 @@ export class ClientesPage implements OnInit {
     this.router.navigate(['/registrar-usuario']);
   }
 
+  goToMenu() {
+    this.router.navigate(['/admin-menu']);
+  }
 }
+
 
 

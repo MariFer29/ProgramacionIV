@@ -190,6 +190,6 @@ export class BeneficiariosPage implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/clientes']);
+    this.router.navigate(['/admin-menu']);
   }
 }

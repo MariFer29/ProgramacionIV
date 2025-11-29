@@ -79,8 +79,8 @@ export class RegistrarUsuarioPage implements OnInit {
     return hasUpper && hasNumber && hasSymbol && validLength ? null : { invalidPassword: true };
   }
 
-  public goToClientes() {
-    this.router.navigate(['/clientes']);
+  public goToMenu() {
+    this.router.navigate(['/admin-menu']); 
   }
 
   submitRegister() {

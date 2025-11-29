@@ -56,11 +56,13 @@ export class LoginPage {
         const token = res.token;
         localStorage.setItem('token', token);
 
-        let rol: string | undefined = res.rol || res.role || res.Rol;
+        let rol: any = res.rol || res.role || res.Rol;
 
+        // Intentar sacar el rol desde el token si no viene en la respuesta
         if (!rol && token) {
           const data = this.decodeToken(token);
           console.log('PAYLOAD TOKEN:', data);
+
           if (data) {
             rol =
               data.rol ||
@@ -72,15 +74,32 @@ export class LoginPage {
           }
         }
 
+        // Si sigue sin rol, usar "Cliente" por defecto
         if (!rol) {
           rol = 'Cliente';
         }
 
-        localStorage.setItem('rol', rol);
-        console.log('ROL final guardado:', rol);
+        // Normalizar
+        const rolLower = rol.toString().trim().toLowerCase();
+
+        localStorage.setItem('rol', rolLower);
+
+        console.log('ROL recibido:', rol);
+        console.log('ROL normalizado:', rolLower);
 
         this.errorMessage = '';
-        this.router.navigate(['/clientes']);
+
+        // ======== DETECCIÓN ROBUSTA DE ADMIN =========
+        const esAdmin = ['admin', 'administrador', 'adm', '1', 'superadmin']
+          .includes(rolLower);
+
+        if (esAdmin) {
+          console.log('>> Redirigiendo a menú admin');
+          this.router.navigate(['/admin-menu']);
+        } else {
+          console.log('>> Redirigiendo a Menu clientes');
+          this.router.navigate(['/menu-cliente']);
+        }
       },
       error: () => {
         this.errorMessage = 'Credenciales incorrectas o usuario bloqueado.';
@@ -88,3 +107,5 @@ export class LoginPage {
     });
   }
 }
+
+

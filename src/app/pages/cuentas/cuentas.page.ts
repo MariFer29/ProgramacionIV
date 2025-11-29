@@ -41,7 +41,7 @@ export class CuentasPage implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarCuentas();
@@ -156,6 +156,10 @@ export class CuentasPage implements OnInit {
         (!this.statusFilter || c.status === this.statusFilter)
       );
     });
+  }
+
+  goToMenu() {
+    this.router.navigate(['/admin-menu']);
   }
 
 }

@@ -7,7 +7,6 @@
 <ion-content class="ion-padding">
 
   <form [formGroup]="transferForm" (ngSubmit)="enviarTransferencia()">
->
     <ion-spinner *ngIf="loading"></ion-spinner>
 
     <ion-item>
@@ -48,6 +47,10 @@
 
     <ion-button expand="block" class="ion-margin-top" type="submit" [disabled]="transferForm.invalid || loading">
       Registrar transferencia
+    </ion-button>
+
+    <ion-button expand="block" color="medium" class="ion-margin-top" (click)="goToMenu()">
+      Volver al Menú
     </ion-button>
 
   </form>

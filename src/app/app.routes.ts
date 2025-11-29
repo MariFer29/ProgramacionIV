@@ -83,4 +83,14 @@ export const routes: Routes = [
         './pages/transferencias-programadas/transferencias-programadas.page'
       ).then((m) => m.TransferenciasProgramadasPage),
   },
+  {
+    path: 'admin-menu',
+    loadComponent: () => import('./pages/admin-menu/admin-menu.page').then( m => m.AdminMenuPage)
+  },
+  {
+    path: 'menu-cliente',
+    loadComponent: () => import('./pages/menu-cliente/menu-cliente.page').then( m => m.MenuClientePage)
+  },
+
+
 ];

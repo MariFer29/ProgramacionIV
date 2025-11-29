@@ -97,6 +97,6 @@ export class AbrirCuentaPage implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/cuentas']);
+    this.router.navigate(['/admin-menu']);
   }
 }

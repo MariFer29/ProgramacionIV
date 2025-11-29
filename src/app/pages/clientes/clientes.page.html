@@ -13,12 +13,7 @@
 
   <!-- Lista de clientes -->
   <ion-list>
-    <ion-item 
-      button 
-      detail
-      *ngFor="let c of clientes"
-      (click)="verDetalle(c)"
-    >
+    <ion-item button detail *ngFor="let c of clientes" (click)="verDetalle(c)">
       <ion-label>
         <h2>{{ c.nombreCompleto }}</h2>
         <p>{{ c.correo }}</p>
@@ -29,13 +24,13 @@
   </ion-list>
 
   <!-- Botón para registrar nuevo cliente -->
-  <ion-button 
-    expand="full" 
-    color="primary" 
-    (click)="goToRegistrar()"
-    class="ion-margin-top"
-  >
+  <ion-button expand="full" color="primary" (click)="goToRegistrar()" class="ion-margin-top">
     Registrar Cliente
+
+  </ion-button>
+
+  <ion-button expand="full" color="medium" (click)="goToMenu()" class="ion-margin-top">
+    Volver al Menú
   </ion-button>
 
 </ion-content>

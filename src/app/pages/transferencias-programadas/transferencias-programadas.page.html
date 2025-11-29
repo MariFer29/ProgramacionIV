@@ -1,12 +1,19 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Transferencias programadas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="goToMenu()">
+        Volver
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-  <ion-list>
+  <ion-list lines="full">
 
     <ion-item>
       <ion-label position="stacked">Cuenta origen</ion-label>
@@ -28,8 +35,7 @@
 
     <ion-item>
       <ion-label position="floating">Monto</ion-label>
-      <ion-input type="number" [(ngModel)]="monto">
-      </ion-input>
+      <ion-input type="number" [(ngModel)]="monto"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -42,20 +48,29 @@
 
     <ion-item>
       <ion-label position="stacked">Fecha de ejecución</ion-label>
-      <ion-datetime presentation="date-time" [(ngModel)]="fechaEjecucion">
+      <ion-datetime
+        presentation="date-time"
+        [(ngModel)]="fechaEjecucion">
       </ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Detalle (opcional)</ion-label>
-      <ion-input type="text" [(ngModel)]="detalle">
-      </ion-input>
+      <ion-input type="text" [(ngModel)]="detalle"></ion-input>
     </ion-item>
 
   </ion-list>
 
-  <ion-button expand="block" class="ion-margin-top" (click)="registrar()">
+  <!-- BOTÓN REGISTRAR -->
+  <ion-button
+    expand="block"
+    color="primary"
+    class="ion-margin-top"
+    (click)="registrar()">
     Registrar transferencia programada
   </ion-button>
 
 </ion-content>
+
+
+

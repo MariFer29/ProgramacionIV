@@ -25,7 +25,7 @@ export class TransferenciasPage implements OnInit {
     private fb: FormBuilder,
     private api: ApiService,
     private toastCtrl: ToastController
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.transferForm = this.fb.group({
@@ -97,4 +97,9 @@ export class TransferenciasPage implements OnInit {
       },
     });
   }
+
+  goToMenu() {
+    (window as any).location = '/admin-menu';
+  }
+
 }

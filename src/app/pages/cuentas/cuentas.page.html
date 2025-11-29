@@ -1,19 +1,16 @@
 <ion-header>
   <ion-toolbar>
+
+
+
     <ion-title>Cuentas</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="irAbrirCuenta()">
         Abrir cuenta
       </ion-button>
-
-      <!-- OPCIONAL: si ya tienes la página de beneficiarios -->
-      <!--
-      <ion-button (click)="irBeneficiarios()">
-        Beneficiarios
-      </ion-button>
-      -->
     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -29,10 +26,7 @@
       <!-- Filtro por id de cliente -->
       <ion-item>
         <ion-label position="floating">Id Cliente (opcional)</ion-label>
-        <ion-input
-          type="number"
-          [(ngModel)]="clientIdFilter">
-        </ion-input>
+        <ion-input type="number" [(ngModel)]="clientIdFilter"></ion-input>
       </ion-item>
 
       <!-- Filtro por tipo de cuenta -->
@@ -70,24 +64,21 @@
       <ion-button expand="block" (click)="cargarCuentas()">
         Buscar
       </ion-button>
+      <ion-button expand="block" color="medium" class="ion-margin-top" (click)="goToMenu()">
+        Volver al Menú
+      </ion-button>
+
     </ion-card-content>
   </ion-card>
 
-  <!-- LOADING -->
-  <ion-spinner
-    *ngIf="isLoading"
-    name="crescent"
-    class="ion-margin">
-  </ion-spinner>
+  <ion-spinner *ngIf="isLoading" name="crescent" class="ion-margin"></ion-spinner>
 
-  <!-- ERROR -->
   <ion-text color="danger" *ngIf="errorMessage">
     {{ errorMessage }}
   </ion-text>
 
   <!-- LISTADO -->
   <ion-list *ngIf="!isLoading">
-    <!-- OJO: ahora usamos cuentasFiltradas -->
     <ion-item *ngFor="let c of cuentasFiltradas">
       <ion-label>
         <h2>{{ c.accountNumber }} • {{ c.type }} • {{ c.currency }}</h2>
@@ -100,19 +91,16 @@
       </ion-label>
 
       <ion-buttons slot="end">
-        <ion-button
-          color="warning"
-          (click)="confirmarAccion(c.id, 'bloquear')"
+
+        <ion-button color="warning" (click)="confirmarAccion(c.id, 'bloquear')"
           [disabled]="c.status === 'Bloqueada' || c.status === 'Cerrada'">
           Bloquear
         </ion-button>
 
-        <ion-button
-          color="danger"
-          (click)="confirmarAccion(c.id, 'cerrar')"
-          [disabled]="c.status === 'Cerrada'">
+        <ion-button color="danger" (click)="confirmarAccion(c.id, 'cerrar')" [disabled]="c.status === 'Cerrada'">
           Cerrar
         </ion-button>
+
       </ion-buttons>
     </ion-item>
 
@@ -120,4 +108,5 @@
       <ion-label>No hay cuentas que coincidan con el filtro.</ion-label>
     </ion-item>
   </ion-list>
+
 </ion-content>
