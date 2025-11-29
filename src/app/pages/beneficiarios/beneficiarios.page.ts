@@ -38,7 +38,7 @@ export class BeneficiariosPage implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -190,6 +190,15 @@ export class BeneficiariosPage implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/admin-menu']);
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rol)) {
+      // Redirigir a menú admin
+      this.router.navigate(['/admin-menu']);
+    } else {
+      // Si no es admin, asumimos cliente
+      this.router.navigate(['/menu-cliente']);
+    }
   }
+
 }

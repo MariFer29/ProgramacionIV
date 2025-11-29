@@ -16,7 +16,7 @@
   <div class="grid">
 
     <!-- Mis Cuentas -->
-    <div class="card" (click)="goTo('/cuentas')">
+    <div class="card" (click)="goTo('/mis-cuentas')">
       <ion-icon name="card-outline"></ion-icon>
       <span>Mis Cuentas</span>
     </div>
@@ -25,6 +25,11 @@
     <div class="card" (click)="goTo('/transferencias')">
       <ion-icon name="swap-horizontal-outline"></ion-icon>
       <span>Transferencias</span>
+    </div>
+
+    <div class="card" (click)="goTo('/transferencias-programadas')">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>Programadas</span>
     </div>
 
     <!-- Pagos de Servicios -->
@@ -48,4 +53,3 @@
   </div>
 
 </ion-content>
-

@@ -41,12 +41,19 @@ export class ClientesPage implements OnInit {
     this.router.navigate(['/cliente-detalle', cliente.id]);
   }
 
-  goToRegistrar() {
-    this.router.navigate(['/registrar-usuario']);
-  }
-
   goToMenu() {
-    this.router.navigate(['/admin-menu']);
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rol)) {
+      // Redirigir a menú admin
+      this.router.navigate(['/admin-menu']);
+    } else if (['gestor', 'manager', '2'].includes(rol)) {
+      // Redirigir a menú gestor
+      this.router.navigate(['/menu-gestor']);
+    } else {
+      // Por seguridad, si no reconoce el rol, redirigir a login
+      this.router.navigate(['/login']);
+    }
   }
 }
 

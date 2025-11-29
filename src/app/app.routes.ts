@@ -90,7 +90,11 @@ export const routes: Routes = [
   {
     path: 'menu-cliente',
     loadComponent: () => import('./pages/menu-cliente/menu-cliente.page').then( m => m.MenuClientePage)
+  },  {
+    path: 'menu-gestor',
+    loadComponent: () => import('./pages/menu-gestor/menu-gestor.page').then( m => m.MenuGestorPage)
   },
+
 
 
 ];

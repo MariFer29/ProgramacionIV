@@ -127,7 +127,15 @@ export class TransferenciasProgramadasPage implements OnInit {
   }
 
   goToMenu() {
-    this.router.navigate(['/admin-menu']);
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rol)) {
+      // Redirigir a menú admin
+      this.router.navigate(['/admin-menu']);
+    } else {
+      // Si no es admin, asumimos cliente
+      this.router.navigate(['/menu-cliente']);
+    }
   }
 
 }

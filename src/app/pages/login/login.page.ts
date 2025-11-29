@@ -69,7 +69,7 @@ export class LoginPage {
               data.role ||
               data.Rol ||
               data[
-                'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+              'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
               ];
           }
         }
@@ -89,15 +89,22 @@ export class LoginPage {
 
         this.errorMessage = '';
 
-        // ======== DETECCIÓN ROBUSTA DE ADMIN =========
-        const esAdmin = ['admin', 'administrador', 'adm', '1', 'superadmin']
-          .includes(rolLower);
+        // ======== DETECCIÓN DE ROLES =========
+        const esAdmin = ['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rolLower);
+        const esGestor = ['gestor', 'manager', '2'].includes(rolLower);
+        const esCliente = ['cliente', 'user', '3'].includes(rolLower);
 
         if (esAdmin) {
           console.log('>> Redirigiendo a menú admin');
           this.router.navigate(['/admin-menu']);
+        } else if (esGestor) {
+          console.log('>> Redirigiendo a menú gestor');
+          this.router.navigate(['/menu-gestor']);
+        } else if (esCliente) {
+          console.log('>> Redirigiendo a menú cliente');
+          this.router.navigate(['/menu-cliente']);
         } else {
-          console.log('>> Redirigiendo a Menu clientes');
+          console.warn('Rol desconocido, redirigiendo a cliente por defecto');
           this.router.navigate(['/menu-cliente']);
         }
       },

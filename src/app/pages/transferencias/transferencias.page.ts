@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-transferencias',
@@ -24,7 +25,8 @@ export class TransferenciasPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -99,7 +101,15 @@ export class TransferenciasPage implements OnInit {
   }
 
   goToMenu() {
-    (window as any).location = '/admin-menu';
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rol)) {
+      // Redirigir a menú admin
+      this.router.navigate(['/admin-menu']);
+    } else {
+      // Si no es admin, asumimos cliente
+      this.router.navigate(['/menu-cliente']);
+    }
   }
 
 }

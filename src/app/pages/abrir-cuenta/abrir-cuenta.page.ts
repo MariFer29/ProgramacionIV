@@ -29,7 +29,7 @@ export class AbrirCuentaPage implements OnInit {
     private api: ApiService,
     private router: Router,
     private toastCtrl: ToastController,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -97,6 +97,15 @@ export class AbrirCuentaPage implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/admin-menu']);
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rol)) {
+      this.router.navigate(['/admin-menu']);
+    } else if (['gestor', 'manager', '2'].includes(rol)) {
+      this.router.navigate(['/menu-gestor']);
+    } else {
+      this.router.navigate(['/login']); // fallback por seguridad
+    }
   }
+
 }
