@@ -42,6 +42,43 @@ export class LoginPage {
     }
   }
 
+  private setClienteIdDesdeClientes(email: string, rolLower: string): void {
+    if (rolLower !== 'cliente') {
+      localStorage.removeItem('clienteId');
+      return;
+    }
+
+    this.api.getClientes().subscribe({
+      next: (clientes: any[]) => {
+        const correoLogin = email.toLowerCase();
+        const cliente = clientes.find((c: any) => {
+          const correo = (
+            c.correo ||
+            c.email ||
+            c.emailAddress ||
+            ''
+          ).toLowerCase();
+          return correo === correoLogin;
+        });
+
+        if (cliente && (cliente.id || cliente.Id)) {
+          const id = cliente.id ?? cliente.Id;
+          localStorage.setItem('clienteId', id.toString());
+          console.log('CLIENTE ID (desde getClientes) guardado:', id);
+        } else {
+          console.warn(
+            'No se encontró cliente con ese correo, limpiando clienteId'
+          );
+          localStorage.removeItem('clienteId');
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener clientes para clienteId:', err);
+        localStorage.removeItem('clienteId');
+      },
+    });
+  }
+
   submitLogin() {
     if (this.loginForm.invalid) {
       return;
@@ -69,7 +106,7 @@ export class LoginPage {
               data.role ||
               data.Rol ||
               data[
-              'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+                'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
               ];
           }
         }
@@ -81,16 +118,23 @@ export class LoginPage {
 
         // Normalizar
         const rolLower = rol.toString().trim().toLowerCase();
-
         localStorage.setItem('rol', rolLower);
 
         console.log('ROL recibido:', rol);
         console.log('ROL normalizado:', rolLower);
 
+        this.setClienteIdDesdeClientes(email, rolLower);
+
         this.errorMessage = '';
 
         // ======== DETECCIÓN DE ROLES =========
-        const esAdmin = ['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rolLower);
+        const esAdmin = [
+          'admin',
+          'administrador',
+          'adm',
+          '1',
+          'superadmin',
+        ].includes(rolLower);
         const esGestor = ['gestor', 'manager', '2'].includes(rolLower);
         const esCliente = ['cliente', 'user', '3'].includes(rolLower);
 
@@ -114,5 +158,3 @@ export class LoginPage {
     });
   }
 }
-
-

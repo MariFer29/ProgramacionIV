@@ -85,16 +85,27 @@ export const routes: Routes = [
   },
   {
     path: 'admin-menu',
-    loadComponent: () => import('./pages/admin-menu/admin-menu.page').then( m => m.AdminMenuPage)
+    loadComponent: () =>
+      import('./pages/admin-menu/admin-menu.page').then((m) => m.AdminMenuPage),
   },
   {
     path: 'menu-cliente',
-    loadComponent: () => import('./pages/menu-cliente/menu-cliente.page').then( m => m.MenuClientePage)
-  },  {
+    loadComponent: () =>
+      import('./pages/menu-cliente/menu-cliente.page').then(
+        (m) => m.MenuClientePage
+      ),
+  },
+  {
     path: 'menu-gestor',
-    loadComponent: () => import('./pages/menu-gestor/menu-gestor.page').then( m => m.MenuGestorPage)
+    loadComponent: () =>
+      import('./pages/menu-gestor/menu-gestor.page').then(
+        (m) => m.MenuGestorPage
+      ),
   },
 
-
-
+  {
+    path: 'historial',
+    loadComponent: () =>
+      import('./pages/historial/historial.page').then((m) => m.HistorialPage),
+  },
 ];

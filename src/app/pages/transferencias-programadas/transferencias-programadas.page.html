@@ -48,9 +48,7 @@
 
     <ion-item>
       <ion-label position="stacked">Fecha de ejecución</ion-label>
-      <ion-datetime
-        presentation="date-time"
-        [(ngModel)]="fechaEjecucion">
+      <ion-datetime presentation="date-time" [(ngModel)]="fechaEjecucion">
       </ion-datetime>
     </ion-item>
 
@@ -62,15 +60,12 @@
   </ion-list>
 
   <!-- BOTÓN REGISTRAR -->
-  <ion-button
-    expand="block"
-    color="primary"
-    class="ion-margin-top"
-    (click)="registrar()">
+  <ion-button expand="block" color="primary" class="ion-margin-top" (click)="registrar()">
     Registrar transferencia programada
   </ion-button>
 
+  <ion-button expand="block" fill="clear" color="medium" (click)="volver()">
+    Volver al menú
+  </ion-button>
+
 </ion-content>
-
-
-

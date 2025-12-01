@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Historial de movimientos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Filtros</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-item>
+        <ion-label position="stacked">Cuenta</ion-label>
+        <ion-select [(ngModel)]="cuentaSeleccionadaId">
+          <ion-select-option value="">Todas</ion-select-option>
+          <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
+            {{ c.accountNumber || c.numeroCuenta }} • Saldo: {{ c.balance ?? c.saldo }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label position="stacked">Desde</ion-label>
+        <ion-input type="date" [(ngModel)]="fechaDesde"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Hasta</ion-label>
+        <ion-input type="date" [(ngModel)]="fechaHasta"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Tipo</ion-label>
+        <ion-select [(ngModel)]="tipoSeleccionado">
+          <ion-select-option value="">Todos</ion-select-option>
+          <ion-select-option value="1">Transferencias</ion-select-option>
+          <ion-select-option value="2">Pagos de servicio</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Estado (código numérico)</ion-label>
+        <ion-input type="number" [(ngModel)]="estadoCodigo" placeholder="Opcional"></ion-input>
+      </ion-item>
+
+
+      <ion-button expand="block" class="ion-margin-top" (click)="buscar()">
+        Buscar
+      </ion-button>
+
+      <ion-button expand="block" fill="clear" color="medium" (click)="limpiarFiltros()">
+        Limpiar filtros
+      </ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-spinner *ngIf="loading" class="ion-margin-top" name="crescent"></ion-spinner>
+
+  <ion-list *ngIf="!loading && movimientos.length > 0">
+    <ion-list-header>
+      Resultados
+    </ion-list-header>
+
+    <ion-item *ngFor="let m of movimientos">
+      <ion-label>
+        <h2>{{ m.fecha | date:'short' }} • {{ m.tipo }}</h2>
+
+        <p *ngIf="m.numeroCuentaOrigen">
+          Origen: {{ m.numeroCuentaOrigen }}
+        </p>
+        <p *ngIf="m.numeroCuentaDestino">
+          Destino: {{ m.numeroCuentaDestino }}
+        </p>
+
+        <p>Monto: {{ m.monto }}</p>
+        <p>Comisión: {{ m.comision }}</p>
+        <p>Estado: {{ m.estado }}</p>
+
+        <p *ngIf="m.descripcion">
+          {{ m.descripcion }}
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-text *ngIf="!loading && movimientos.length === 0">
+    <p>No hay movimientos para los filtros seleccionados.</p>
+  </ion-text>
+
+  <ion-button expand="block" class="ion-margin-top" (click)="volver()">
+    Volver al menú
+  </ion-button>
+
+
+</ion-content>

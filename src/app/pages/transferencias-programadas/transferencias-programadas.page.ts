@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { Cuenta, TransferenciaProgramada } from '../../models/banca.models';
+
+
 
 @Component({
   selector: 'app-transferencias-programadas',
@@ -13,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./transferencias-programadas.page.scss'],
 })
 export class TransferenciasProgramadasPage implements OnInit {
-  cuentas: any[] = [];
+  cuentas: Cuenta[] = [];
   cuentaOrigen: string = '';
   cuentaDestino: string = '';
   monto: number = 0;
@@ -26,7 +29,7 @@ export class TransferenciasProgramadasPage implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const clienteIdStr = localStorage.getItem('clienteId');
@@ -53,7 +56,7 @@ export class TransferenciasProgramadasPage implements OnInit {
       error: (err) => {
         console.error('ERROR AL CARGAR CUENTAS TP:', err);
         this.showToast('Error al cargar cuentas');
-      }
+      },
     });
   }
 
@@ -66,7 +69,7 @@ export class TransferenciasProgramadasPage implements OnInit {
       monto: this.monto,
       moneda: this.moneda,
       fechaEjecucion: this.fechaEjecucion,
-      detalle: this.detalle
+      detalle: this.detalle,
     });
 
     if (
@@ -85,7 +88,7 @@ export class TransferenciasProgramadasPage implements OnInit {
       monto: this.monto,
       moneda: this.moneda,
       fechaEjecucion: this.fechaEjecucion,
-      detalle: this.detalle   // el backend lo ignorará si la entidad no tiene esta propiedad
+      detalle: this.detalle, // el backend lo ignorará si la entidad no tiene esta propiedad
     };
 
     console.log('BODY A ENVIAR TP:', body);
@@ -138,4 +141,15 @@ export class TransferenciasProgramadasPage implements OnInit {
     }
   }
 
+  volver(): void {
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'superadmin'].includes(rol)) {
+      this.router.navigate(['/admin-menu']);
+    } else if (rol.includes('gestor')) {
+      this.router.navigate(['/menu-gestor']);
+    } else {
+      this.router.navigate(['/menu-cliente']);
+    }
+  }
 }

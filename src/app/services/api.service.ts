@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import {
+  Transferencia,
+  TransferenciaProgramada,
+  PagoServicio,
+  ProveedorServicio,
+  MovimientoHistorial, 
+} from '../models/banca.models';
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private baseUrl = 'https://localhost:7192/api';
@@ -56,6 +64,7 @@ export class ApiService {
   // Cuentas
   // ==========================
 
+  // Dejamos any[] para no romper el módulo de cuentas de tus compas
   getCuentas(clientId?: number): Observable<any[]> {
     const params: any = {};
     if (clientId) {
@@ -100,7 +109,6 @@ export class ApiService {
   // ============================
   //   BENEFICIARIOS / TERCEROS
   // ============================
-  // OJO: si en tu backend la ruta es /terceros, cambia 'beneficiarios' por 'terceros'
 
   getBeneficiarios() {
     return this.http.get<any[]>(
@@ -150,8 +158,8 @@ export class ApiService {
     );
   }
 
-  getTransferencias(): Observable<any[]> {
-    return this.http.get<any[]>(
+  getTransferencias(): Observable<Transferencia[]> {
+    return this.http.get<Transferencia[]>(
       `${this.baseUrl}/transferencias`,
       this.getAuthHeaders()
     );
@@ -161,8 +169,8 @@ export class ApiService {
   // PROVEEDORES DE SERVICIO
   // ==========================
 
-  getProveedoresServicio() {
-    return this.http.get<any[]>(
+  getProveedoresServicio(): Observable<ProveedorServicio[]> {
+    return this.http.get<ProveedorServicio[]>(
       `${this.baseUrl}/ProveedoresServicio`,
       this.getAuthHeaders()
     );
@@ -172,8 +180,8 @@ export class ApiService {
     nombre: string;
     descripcion?: string;
     moneda: string;
-  }) {
-    return this.http.post(
+  }): Observable<ProveedorServicio> {
+    return this.http.post<ProveedorServicio>(
       `${this.baseUrl}/ProveedoresServicio`,
       body,
       this.getAuthHeaders()
@@ -191,16 +199,16 @@ export class ApiService {
     moneda: string;
     monto: number;
     fechaProgramada?: string | null;
-  }) {
-    return this.http.post(
+  }): Observable<PagoServicio> {
+    return this.http.post<PagoServicio>(
       `${this.baseUrl}/PagoServicio`,
       body,
       this.getAuthHeaders()
     );
   }
 
-  getPagosServicio() {
-    return this.http.get<any[]>(
+  getPagosServicio(): Observable<PagoServicio[]> {
+    return this.http.get<PagoServicio[]>(
       `${this.baseUrl}/PagoServicio`,
       this.getAuthHeaders()
     );
@@ -210,8 +218,8 @@ export class ApiService {
   // TRANSFERENCIAS PROGRAMADAS
   // ==============================
 
-  getTransferenciasProgramadas() {
-    return this.http.get<any[]>(
+  getTransferenciasProgramadas(): Observable<TransferenciaProgramada[]> {
+    return this.http.get<TransferenciaProgramada[]>(
       `${this.baseUrl}/TransferenciasProgramadas`,
       this.getAuthHeaders()
     );
@@ -223,8 +231,8 @@ export class ApiService {
     monto: number;
     moneda: string;
     fechaEjecucion: string; // ISO string
-  }) {
-    return this.http.post(
+  }): Observable<TransferenciaProgramada> {
+    return this.http.post<TransferenciaProgramada>(
       `${this.baseUrl}/TransferenciasProgramadas`,
       body,
       this.getAuthHeaders()
@@ -236,6 +244,46 @@ export class ApiService {
       `${this.baseUrl}/TransferenciasProgramadas/cancelar/${id}`,
       {},
       this.getAuthHeaders()
+    );
+  }
+
+  // ==============================
+  // HISTORIAL
+  // ==============================
+  getHistorialPorCliente(
+    clienteId: number,
+    filtros: {
+      desde?: string;
+      hasta?: string;
+      tipo?: number | null;
+      estado?: number | null;
+      cuentaId?: string | null;
+    }
+  ): Observable<MovimientoHistorial[]> {
+    const params: any = {};
+
+    if (filtros.desde) {
+      params.desde = filtros.desde;
+    }
+    if (filtros.hasta) {
+      params.hasta = filtros.hasta;
+    }
+    if (filtros.tipo != null) {
+      params.tipo = filtros.tipo; 
+    }
+    if (filtros.estado != null) {
+      params.estado = filtros.estado; 
+    }
+    if (filtros.cuentaId) {
+      params.cuentaId = filtros.cuentaId; 
+    }
+
+    return this.http.get<MovimientoHistorial[]>(
+      `${this.baseUrl}/Historial/cliente/${clienteId}`,
+      {
+        params,
+        ...this.getAuthHeaders(),
+      }
     );
   }
 }
