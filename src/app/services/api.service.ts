@@ -70,8 +70,8 @@ export class ApiService {
 
   abrirCuenta(body: {
     clientId: number;
-    type: string;
-    currency: string;
+    type: number;
+    currency: number;
     initialBalance: number;
   }): Observable<any> {
     return this.http.post(
@@ -117,7 +117,7 @@ export class ApiService {
     );
   }
 
-  actualizarBeneficiario(id: number, body: any) {
+  actualizarBeneficiario(id: string, body: any) {
     return this.http.put(
       `${this.baseUrl}/beneficiarios/${id}`,
       body,
@@ -125,7 +125,7 @@ export class ApiService {
     );
   }
 
-  eliminarBeneficiario(id: number) {
+  eliminarBeneficiario(id: string) {
     return this.http.delete(
       `${this.baseUrl}/beneficiarios/${id}`,
       this.getAuthHeaders()

@@ -5,13 +5,19 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 
+
+
 export interface Beneficiario {
-  id: number;
-  nombre: string;
-  identificacion: string;
-  relacion: string;
-  cuentaId: string;
+  id: string;          
+  clientId: number;
+  alias: string;
+  bank: string;
+  currency: number;
+  accountNumber: string;
+  country: string;
 }
+
+
 
 @Component({
   selector: 'app-beneficiarios',
@@ -39,17 +45,20 @@ export class BeneficiariosPage implements OnInit {
     private toastCtrl: ToastController,
     private router: Router,
   ) { }
+  
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      nombre: ['', Validators.required],
-      identificacion: ['', Validators.required],
-      relacion: ['', Validators.required],
-      cuentaId: ['', Validators.required],
-    });
+  this.form = this.fb.group({
+    alias: ['', Validators.required],
+    bank: ['', Validators.required],
+    currency: ['', Validators.required],       // 'CRC' o 'USD'
+    accountNumber: ['', Validators.required],
+    country: ['', Validators.required],
+  });
 
-    this.cargarDatos();
+  this.cargarDatos();
   }
+
 
   cargarDatos(): void {
     this.loading = true;
@@ -80,79 +89,116 @@ export class BeneficiariosPage implements OnInit {
     });
   }
 
+
+
   seleccionarParaEditar(b: Beneficiario): void {
-    this.editingId = b.id;
+    this.editingId = b.id as any;
     this.form.patchValue({
-      nombre: b.nombre,
-      identificacion: b.identificacion,
-      relacion: b.relacion,
-      cuentaId: b.cuentaId,
+      alias: b.alias,
+      bank: b.bank,
+      currency: b.currency === 2 ? 'USD' : 'CRC',
+      accountNumber: b.accountNumber,
+      country: b.country,
     });
     this.successMessage = '';
     this.errorMessage = '';
   }
+
+
+
 
   cancelarEdicion(): void {
     this.editingId = null;
     this.form.reset();
   }
 
+
   guardar(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.loading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    const body = this.form.value;
-
-    const obs = this.editingId == null
-      ? this.api.crearBeneficiario(body)
-      : this.api.actualizarBeneficiario(this.editingId, body);
-
-    obs.subscribe({
-      next: async () => {
-        this.loading = false;
-        this.successMessage = this.editingId == null
-          ? 'Beneficiario registrado correctamente.'
-          : 'Beneficiario actualizado correctamente.';
-
-        const t = await this.toastCtrl.create({
-          message: this.successMessage,
-          duration: 2500,
-          color: 'success',
-        });
-        await t.present();
-
-        this.form.reset();
-        this.editingId = null;
-        this.cargarDatos();
-      },
-      error: async (err) => {
-        console.error(err);
-        this.loading = false;
-        this.errorMessage =
-          err.error?.mensaje ||
-          err.error?.error ||
-          'Error al guardar beneficiario.';
-
-        const t = await this.toastCtrl.create({
-          message: this.errorMessage,
-          duration: 2500,
-          color: 'danger',
-        });
-        await t.present();
-      }
-    });
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
   }
+
+  this.loading = true;
+  this.errorMessage = '';
+  this.successMessage = '';
+
+  // 1. Obtener clientId del usuario logueado
+  const clientIdStr = localStorage.getItem('clientId');
+  const clientId = clientIdStr ? Number(clientIdStr) : null;
+
+  if (!clientId) {
+    this.loading = false;
+    this.errorMessage = 'No se encontró el cliente actual. Inicia sesión de nuevo.';
+    return;
+  }
+
+  // 2. Leer valores del formulario
+  const { alias, bank, currency, accountNumber, country } = this.form.value;
+
+  // 3. Mapear moneda texto → enum numérico del backend
+  const currencyMap: Record<string, number> = {
+    'CRC': 1,
+    'USD': 2,
+  };
+
+  const body = {
+    clientId,
+    alias,
+    bank,
+    currency: currencyMap[currency] ?? 1,
+    accountNumber,
+    country,
+  };
+
+  const obs = this.editingId == null
+    ? this.api.crearBeneficiario(body)
+    : this.api.actualizarBeneficiario(this.editingId as any, body);
+
+  obs.subscribe({
+    next: async () => {
+      this.loading = false;
+      this.successMessage = this.editingId == null
+        ? 'Beneficiario registrado correctamente.'
+        : 'Beneficiario actualizado correctamente.';
+
+      const t = await this.toastCtrl.create({
+        message: this.successMessage,
+        duration: 2500,
+        color: 'success',
+      });
+      await t.present();
+
+      this.form.reset();
+      this.editingId = null;
+      this.cargarDatos();
+    },
+    error: async (err) => {
+      console.error(err);
+      this.loading = false;
+      this.errorMessage =
+        err.error?.mensaje ||
+        err.error?.error ||
+        'Error al guardar beneficiario.';
+
+      const t = await this.toastCtrl.create({
+        message: this.errorMessage,
+        duration: 2500,
+        color: 'danger',
+      });
+      await t.present();
+    }
+  });
+}
+
+
+
+  
 
   async confirmarEliminar(b: Beneficiario): Promise<void> {
     const alert = await this.alertCtrl.create({
       header: 'Eliminar beneficiario',
-      message: `¿Seguro que deseas eliminar a "${b.nombre}"?`,
+      message: `¿Seguro que deseas eliminar a "${b.alias}"?`,
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
@@ -166,7 +212,8 @@ export class BeneficiariosPage implements OnInit {
     await alert.present();
   }
 
-  eliminar(id: number): void {
+
+  eliminar(id: string): void {
     this.api.eliminarBeneficiario(id).subscribe({
       next: async () => {
         const t = await this.toastCtrl.create({

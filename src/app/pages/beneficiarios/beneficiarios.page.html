@@ -10,66 +10,98 @@
   <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
   <!-- FORMULARIO -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        {{ editingId == null ? 'Registrar beneficiario' : 'Editar beneficiario' }}
-      </ion-card-title>
-    </ion-card-header>
+   <!-- ============================
+     FORMULARIO DE BENEFICIARIO
+     Alineado con el backend (.NET)
+     Campos correctos:
+     alias, bank, currency, accountNumber, country
+================================= -->
 
-    <ion-card-content>
-      <form [formGroup]="form" (ngSubmit)="guardar()">
+<form [formGroup]="form" (ngSubmit)="guardar()">
 
-        <ion-item>
-          <ion-label position="stacked">Nombre</ion-label>
-          <ion-input formControlName="nombre"></ion-input>
-        </ion-item>
+  <!-- Alias del beneficiario -->
+  <ion-item>
+    <ion-label position="stacked">Alias</ion-label>
+    <ion-input
+      formControlName="alias"
+      placeholder="Ej: Mamá, Amigo, Empresa X">
+    </ion-input>
+  </ion-item>
 
-        <ion-item>
-          <ion-label position="stacked">Identificación</ion-label>
-          <ion-input formControlName="identificacion"></ion-input>
-        </ion-item>
+  <!-- Banco del beneficiario -->
+  <ion-item>
+    <ion-label position="stacked">Banco</ion-label>
+    <ion-input
+      formControlName="bank"
+      placeholder="Ej: BAC, BCR, Davivienda, etc.">
+    </ion-input>
+  </ion-item>
 
-        <ion-item>
-          <ion-label position="stacked">Relación</ion-label>
-          <ion-input formControlName="relacion"></ion-input>
-        </ion-item>
+  <!-- Moneda -->
+  <ion-item>
+    <ion-label position="stacked">Moneda</ion-label>
+    <ion-select
+      formControlName="currency"
+      placeholder="Seleccione moneda">
+      <ion-select-option value="CRC">CRC</ion-select-option>
+      <ion-select-option value="USD">USD</ion-select-option>
+    </ion-select>
+  </ion-item>
 
-        <ion-item>
-          <ion-label position="stacked">Cuenta asociada</ion-label>
-          <ion-select formControlName="cuentaId" placeholder="Seleccione cuenta">
-            <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
-              {{ c.accountNumber }} (Cliente {{ c.clientId }})
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
+  <!-- Número de cuenta -->
+  <ion-item>
+    <ion-label position="stacked">Número de cuenta</ion-label>
+    <ion-input
+      formControlName="accountNumber"
+      placeholder="Ej: 1234567890123456"
+      type="text">
+    </ion-input>
+  </ion-item>
 
-        <div class="buttons ion-margin-top">
-          <ion-button type="submit" expand="block" [disabled]="form.invalid || loading">
-            {{ editingId == null ? 'Guardar' : 'Actualizar' }}
-          </ion-button>
+  <!-- País -->
+  <ion-item>
+    <ion-label position="stacked">País</ion-label>
+    <ion-input
+      formControlName="country"
+      placeholder="Ej: Costa Rica, Colombia, etc.">
+    </ion-input>
+  </ion-item>
 
-          <ion-button
-            *ngIf="editingId != null"
-            type="button"
-            color="medium"
-            expand="block"
-            (click)="cancelarEdicion()">
-            Cancelar edición
-          </ion-button>
+  <!-- Botones de acción -->
+  <div class="buttons ion-margin-top">
 
-          <ion-button
-            type="button"
-            color="light"
-            expand="block"
-            (click)="volver()">
-            Volver
-          </ion-button>
-        </div>
+    <!-- Botón Guardar / Actualizar -->
+    <ion-button 
+      type="submit"
+      expand="block"
+      [disabled]="form.invalid || loading">
+      {{ editingId == null ? 'Guardar' : 'Actualizar' }}
+    </ion-button>
 
-      </form>
-    </ion-card-content>
-  </ion-card>
+    <!-- Botón para cancelar edición -->
+    <ion-button
+      *ngIf="editingId != null"
+      type="button"
+      color="medium"
+      expand="block"
+      (click)="cancelarEdicion()">
+      Cancelar edición
+    </ion-button>
+
+    <!-- Volver al menú -->
+    <ion-button
+      type="button"
+      color="light"
+      expand="block"
+      (click)="volver()">
+      Volver
+    </ion-button>
+
+  </div>
+
+</form>
+
+  
 
   <!-- LISTA -->
   <ion-card class="ion-margin-top">
@@ -81,10 +113,11 @@
       <ion-list>
         <ion-item *ngFor="let b of beneficiarios">
           <ion-label>
-            <h2>{{ b.nombre }} ({{ b.identificacion }})</h2>
+            <h2>{{ b.alias }} - {{ b.bank }}</h2>
             <p>
-              Relación: {{ b.relacion }}<br>
-              Cuenta: {{ b.cuentaId }}
+              Cuenta: {{ b.accountNumber }}<br>
+              Moneda: {{ b.currency === 2 ? 'USD' : 'CRC' }}<br>
+              País: {{ b.country }}
             </p>
           </ion-label>
 

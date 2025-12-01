@@ -54,7 +54,7 @@ export class AbrirCuentaPage implements OnInit {
     });
   }
 
-  submit(): void {
+    submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -64,7 +64,37 @@ export class AbrirCuentaPage implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.api.abrirCuenta(this.form.value).subscribe({
+    //5Leer valores del formulario
+    const { clientId, type, currency, initialBalance } = this.form.value;
+
+    // Mapear texto → enum (según el backend)
+    const typeMap: Record<string, number> = {
+      'Ahorros': 1,      // Savings
+      'Corriente': 2,    // Checking
+      'Plazo Fijo': 4,   // FixedTerm
+    };
+
+    const currencyMap: Record<string, number> = {
+      'CRC': 1,
+      'USD': 2,
+    };
+
+    const body = {
+      clientId: Number(clientId),
+      type: typeMap[type],
+      currency: currencyMap[currency],
+      initialBalance: Number(initialBalance ?? 0),
+    };
+
+    //Validación por si algo viene raro
+    if (!body.type || !body.currency) {
+      this.loading = false;
+      this.errorMessage = 'Tipo de cuenta o moneda inválidos.';
+      return;
+    }
+
+    // Llamar al API con el body ya mapeado
+    this.api.abrirCuenta(body).subscribe({
       next: async () => {
         this.loading = false;
         this.successMessage = 'Cuenta creada correctamente.';
@@ -95,6 +125,7 @@ export class AbrirCuentaPage implements OnInit {
       }
     });
   }
+
 
   volver(): void {
     const rol = localStorage.getItem('rol')?.toLowerCase() || '';
