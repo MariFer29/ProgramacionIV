@@ -64,7 +64,7 @@ export class ApiService {
   // Cuentas
   // ==========================
 
-  // Dejamos any[] para no romper el módulo de cuentas de tus compas
+  // Dejamos any[] para no romper el módulo de cuentas 
   getCuentas(clientId?: number): Observable<any[]> {
     const params: any = {};
     if (clientId) {
