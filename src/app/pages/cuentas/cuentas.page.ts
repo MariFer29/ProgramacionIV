@@ -36,6 +36,12 @@ export class CuentasPage implements OnInit {
   currencyFilter = '';
   statusFilter = '';
 
+  // Rol
+  esAdmin = false;
+  esGestor = false;
+  
+
+
   constructor(
     private api: ApiService,
     private alertCtrl: AlertController,
@@ -43,14 +49,47 @@ export class CuentasPage implements OnInit {
     private router: Router
   ) { }
 
+  //CAMBIAMOS ngOnInit PARA LEER EL ROL
   ngOnInit(): void {
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    this.esAdmin = [
+      'admin',
+      'administrador',
+      'adm',
+      '1',
+      'superadmin',
+    ].includes(rol);
+
+    this.esGestor = [
+      'gestor',
+      'manager',
+      '2',
+    ].includes(rol);
+
     this.cargarCuentas();
   }
+  
 
   cargarCuentas() {
     this.isLoading = true;
     this.errorMessage = '';
 
+    
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+    const clienteIdStr = localStorage.getItem('clienteId');  // 
+    const clienteId = clienteIdStr ? Number(clienteIdStr) : null;
+
+    
+    if (['cliente', 'user', '3'].includes(rol) && clienteId) {
+      console.log('Modo cliente: usando clienteId del login:', clienteId);
+      this.clientIdFilter = clienteId;
+    } else {
+      console.log('Modo admin/gestor u otro: usando clientIdFilter tal cual está:', this.clientIdFilter);
+      
+   }
+
+    
     this.api.getCuentas(this.clientIdFilter).subscribe({
       next: (data) => {
         this.cuentas = data;
@@ -70,6 +109,7 @@ export class CuentasPage implements OnInit {
       },
     });
   }
+
 
   // ABRIR CUENTA
   irAbrirCuenta() {
