@@ -33,7 +33,7 @@
       </ion-button>
 
       <ion-button expand="block" fill="clear" color="medium" (click)="volver()">
-        Volver
+        Volver al menú
       </ion-button>
 
       <ion-spinner *ngIf="loading" class="ion-margin-top"></ion-spinner>
@@ -56,13 +56,12 @@
 
   </ng-container>
 
-  <!-- Template para NO admin -->
   <ng-template #sinPermisos>
     <ion-text color="danger">
       <p>No tiene permisos para acceder a esta sección.</p>
     </ion-text>
     <ion-button expand="block" class="ion-margin-top" (click)="volver()">
-      Volver
+      Volver al menú
     </ion-button>
   </ng-template>
 

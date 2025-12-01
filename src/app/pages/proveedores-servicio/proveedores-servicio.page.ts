@@ -9,6 +9,7 @@ import {
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import { ProveedorServicio } from 'src/app/models/banca.models';
 
 @Component({
   selector: 'app-proveedores-servicio',
@@ -19,7 +20,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class ProveedoresServicioPage implements OnInit {
   form!: FormGroup;
-  proveedores: any[] = [];
+  proveedores: ProveedorServicio[] = [];
   loading = false;
   errorMessage = '';
   successMessage = '';
@@ -33,10 +34,10 @@ export class ProveedoresServicioPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const rol = localStorage.getItem('rol');
+    const rolLocal = localStorage.getItem('rol') || '';
+    const rol = rolLocal.toLowerCase();
 
-    if (rol !== 'Administrador') {
-      
+    if (!['administrador', 'admin', 'superadmin'].includes(rol)) {
       this.isAdmin = false;
       this.errorMessage = 'No tiene permisos para acceder a esta sección.';
       return;
@@ -125,6 +126,14 @@ export class ProveedoresServicioPage implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/clientes']);
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'superadmin'].includes(rol)) {
+      this.router.navigate(['/admin-menu']);
+    } else if (rol.includes('gestor')) {
+      this.router.navigate(['/menu-gestor']);
+    } else {
+      this.router.navigate(['/menu-cliente']);
+    }
   }
 }
