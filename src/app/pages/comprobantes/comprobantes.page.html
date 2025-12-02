@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Comprobantes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="volver()">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Filtros -->
+  <form (ngSubmit)="buscar()">
+    <!-- Cuenta -->
+    <ion-item>
+      <ion-label position="stacked">Cuenta</ion-label>
+      <ion-select [(ngModel)]="cuentaSeleccionadaId" name="cuentaSeleccionadaId" interface="popover" required>
+        <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
+          {{ c.accountNumber }} • {{ c.currency }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Fechas -->
+    <ion-item>
+      <ion-label position="stacked">Desde</ion-label>
+      <ion-input type="date" [(ngModel)]="fechaDesde" name="fechaDesde"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Hasta</ion-label>
+      <ion-input type="date" [(ngModel)]="fechaHasta" name="fechaHasta"></ion-input>
+    </ion-item>
+
+    <!-- Tipo -->
+    <ion-item>
+      <ion-label position="stacked">Tipo</ion-label>
+      <ion-select [(ngModel)]="tipoSeleccionado" name="tipoSeleccionado" interface="popover">
+        <ion-select-option value="">Todos</ion-select-option>
+        <ion-select-option value="1">Transferencias</ion-select-option>
+        <ion-select-option value="2">Pagos de servicio</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Estado (opcional, por si lo usas igual que en historial) -->
+    <ion-item>
+      <ion-label position="stacked">Estado</ion-label>
+      <ion-select [(ngModel)]="estadoCodigo" name="estadoCodigo" interface="popover">
+        <ion-select-option value="">Todos</ion-select-option>
+        <ion-select-option value="1">Exitosa</ion-select-option>
+        <ion-select-option value="2">Fallida</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Botones -->
+    <ion-button expand="block" class="ion-margin-top" type="submit" [disabled]="loading || !cuentaSeleccionadaId">
+      Buscar
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" color="medium" type="button" (click)="limpiarFiltros()">
+      Limpiar filtros
+    </ion-button>
+
+    <ion-spinner *ngIf="loading" class="ion-margin-top"></ion-spinner>
+  </form>
+
+  <!-- Lista de comprobantes -->
+  <ion-list *ngIf="!loading && comprobantes.length > 0">
+    <ion-list-header>Resultados</ion-list-header>
+
+    <ion-item *ngFor="let m of comprobantes">
+      <ion-label>
+        <h2>{{ m.fecha | date: 'short' }} • {{ m.tipo }}</h2>
+
+        <p *ngIf="m.numeroCuentaOrigen">
+          Origen: {{ m.numeroCuentaOrigen }}
+        </p>
+        <p *ngIf="m.numeroCuentaDestino">
+          Destino: {{ m.numeroCuentaDestino }}
+        </p>
+
+        <p>Monto: {{ m.monto }}</p>
+        <p>Comisión: {{ m.comision }}</p>
+        <p>Estado: {{ m.estado }}</p>
+
+        <p *ngIf="m.descripcion">
+          {{ m.descripcion }}
+        </p>
+      </ion-label>
+
+      <ion-button size="small" slot="end" (click)="descargarComprobante(m)"
+        [disabled]="!m.transferenciaId && !m.pagoServicioId">
+        Comprobante
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-item *ngIf="!loading && comprobantes.length === 0">
+    <ion-label>No hay comprobantes para los filtros seleccionados.</ion-label>
+  </ion-item>
+</ion-content>

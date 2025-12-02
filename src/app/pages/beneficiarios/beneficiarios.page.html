@@ -7,23 +7,24 @@
         <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <!-- Mensajes -->
+  <div *ngIf="successMessage" class="success">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
 
-  <!-- FORMULARIO -->
   <!-- ============================
-     FORMULARIO DE BENEFICIARIO
-     Alineado con el backend (.NET)
-     Campos correctos:
-     alias, bank, currency, accountNumber, country
-================================= -->
-
+       FORMULARIO DE BENEFICIARIO
+       Campos alineados con el DTO:
+       alias, bank, currency (int), accountNumber, country
+  ================================= -->
   <form [formGroup]="form" (ngSubmit)="guardar()">
 
     <!-- Alias del beneficiario -->
@@ -40,19 +41,19 @@
       </ion-input>
     </ion-item>
 
-    <!-- Moneda -->
+    <!-- Moneda (1 = CRC, 2 = USD) -->
     <ion-item>
       <ion-label position="stacked">Moneda</ion-label>
       <ion-select formControlName="currency" placeholder="Seleccione moneda">
-        <ion-select-option value="CRC">CRC</ion-select-option>
-        <ion-select-option value="USD">USD</ion-select-option>
+        <ion-select-option value="1">CRC</ion-select-option>
+        <ion-select-option value="2">USD</ion-select-option>
       </ion-select>
     </ion-item>
 
     <!-- Número de cuenta -->
     <ion-item>
       <ion-label position="stacked">Número de cuenta</ion-label>
-      <ion-input formControlName="accountNumber" placeholder="Ej: 1234567890123456" type="text">
+      <ion-input formControlName="accountNumber" type="text" placeholder="Ej: 1234567890123456">
       </ion-input>
     </ion-item>
 
@@ -65,24 +66,21 @@
 
     <!-- Botones de acción -->
     <div class="buttons ion-margin-top">
-
-      <!-- Botón Guardar / Actualizar -->
       <ion-button type="submit" expand="block" [disabled]="form.invalid || loading">
-        {{ editingId == null ? 'Guardar' : 'Actualizar' }}
+        {{ editingId == null ? 'GUARDAR' : 'ACTUALIZAR' }}
       </ion-button>
 
-      <!-- Botón para cancelar edición -->
       <ion-button *ngIf="editingId != null" type="button" color="medium" expand="block" (click)="cancelarEdicion()">
         Cancelar edición
       </ion-button>
-
     </div>
 
+    <ion-spinner *ngIf="loading" class="ion-margin-top"></ion-spinner>
   </form>
 
-
-
-  <!-- LISTA -->
+  <!-- ============================
+       LISTA DE BENEFICIARIOS
+  ================================= -->
   <ion-card class="ion-margin-top">
     <ion-card-header>
       <ion-card-title>Beneficiarios registrados</ion-card-title>
@@ -90,6 +88,7 @@
 
     <ion-card-content>
       <ion-list>
+
         <ion-item *ngFor="let b of beneficiarios">
           <ion-label>
             <h2>{{ b.alias }} - {{ b.bank }}</h2>
@@ -113,6 +112,7 @@
         <ion-item *ngIf="!loading && beneficiarios.length === 0">
           <ion-label>No hay beneficiarios registrados.</ion-label>
         </ion-item>
+
       </ion-list>
     </ion-card-content>
   </ion-card>

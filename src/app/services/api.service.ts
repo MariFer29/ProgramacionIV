@@ -7,7 +7,10 @@ import {
   TransferenciaProgramada,
   PagoServicio,
   ProveedorServicio,
-  MovimientoHistorial, 
+  MovimientoHistorial,
+  ExtractoMensual,
+  HistorialFiltro,
+  Cuenta,
 } from '../models/banca.models';
 
 @Injectable({ providedIn: 'root' })
@@ -64,17 +67,14 @@ export class ApiService {
   // Cuentas
   // ==========================
 
-  // Dejamos any[] para no romper el módulo de cuentas 
-  getCuentas(clientId?: number): Observable<any[]> {
-    const params: any = {};
+  getCuentas(clientId?: number) {
+    let url = `${this.baseUrl}/cuentas`;
+
     if (clientId) {
-      params.clientId = clientId;
+      url += `?clientId=${clientId}`;
     }
 
-    return this.http.get<any[]>(`${this.baseUrl}/cuentas`, {
-      params,
-      ...this.getAuthHeaders(),
-    });
+    return this.http.get<any[]>(url, this.getAuthHeaders());
   }
 
   abrirCuenta(body: {
@@ -110,9 +110,9 @@ export class ApiService {
   //   BENEFICIARIOS / TERCEROS
   // ============================
 
-  getBeneficiarios() {
+  getBeneficiarios(clientId: number) {
     return this.http.get<any[]>(
-      `${this.baseUrl}/beneficiarios`,
+      `${this.baseUrl}/beneficiarios?clientId=${clientId}`,
       this.getAuthHeaders()
     );
   }
@@ -125,9 +125,9 @@ export class ApiService {
     );
   }
 
-  actualizarBeneficiario(id: string, body: any) {
+  actualizarBeneficiario(body: any) {
     return this.http.put(
-      `${this.baseUrl}/beneficiarios/${id}`,
+      `${this.baseUrl}/beneficiarios`,
       body,
       this.getAuthHeaders()
     );
@@ -269,13 +269,13 @@ export class ApiService {
       params.hasta = filtros.hasta;
     }
     if (filtros.tipo != null) {
-      params.tipo = filtros.tipo; 
+      params.tipo = filtros.tipo;
     }
     if (filtros.estado != null) {
-      params.estado = filtros.estado; 
+      params.estado = filtros.estado;
     }
     if (filtros.cuentaId) {
-      params.cuentaId = filtros.cuentaId; 
+      params.cuentaId = filtros.cuentaId;
     }
 
     return this.http.get<MovimientoHistorial[]>(
@@ -285,5 +285,52 @@ export class ApiService {
         ...this.getAuthHeaders(),
       }
     );
+  }
+
+  // ==============================
+  // COMPROBANTES (PDF)
+  // ==============================
+
+  downloadComprobanteTransferencia(id: string) {
+    return this.http.get(`${this.baseUrl}/Comprobantes/transferencia/${id}`, {
+      ...this.getAuthHeaders(),
+      responseType: 'blob' as 'json',
+    });
+  }
+
+  downloadComprobantePago(id: string) {
+    return this.http.get(`${this.baseUrl}/Comprobantes/pago/${id}`, {
+      ...this.getAuthHeaders(),
+      responseType: 'blob' as 'json',
+    });
+  }
+
+  // ==============================
+  // EXTRACTOS
+  // ==============================
+
+  getExtractoMensual(cuentaId: string, anio: number, mes: number) {
+    const params: any = { anio, mes };
+
+    return this.http.get<ExtractoMensual>(
+      `${this.baseUrl}/Historial/extracto/${cuentaId}`,
+      {
+        params,
+        ...this.getAuthHeaders(),
+      }
+    );
+  }
+
+  downloadExtractoMensualPdf(cuentaId: string, anio: number, mes: number) {
+    const params: any = {
+      anio: anio.toString(),
+      mes: mes.toString(),
+    };
+
+    return this.http.get(`${this.baseUrl}/Comprobantes/extracto/${cuentaId}`, {
+      params,
+      responseType: 'blob',
+      ...this.getAuthHeaders(),
+    });
   }
 }

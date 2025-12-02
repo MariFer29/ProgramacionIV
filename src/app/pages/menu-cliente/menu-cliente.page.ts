@@ -26,6 +26,10 @@ export class MenuClientePage {
     this.router.navigate(['/mis-cuentas']);
   }
 
+  irAExtractos() {
+  this.router.navigate(['/extractos']);
+}
+
 }
 
 

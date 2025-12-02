@@ -23,7 +23,6 @@ export interface Account {
   styleUrls: ['./mis-cuentas.page.scss'],
 })
 export class MisCuentasPage implements OnInit {
-
   cuentas: Account[] = [];
   isLoading = false;
   errorMessage = '';
@@ -38,28 +37,59 @@ export class MisCuentasPage implements OnInit {
     this.cargarMisCuentas();
   }
 
+  // ===============================
+  //      UTILIDAD: DECODIFICAR TOKEN
+  // ===============================
+  private decodeToken(token: string): any | null {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(json);
+    } catch {
+      console.warn('No se pudo decodificar el token en MisCuentas');
+      return null;
+    }
+  }
+
   cargarMisCuentas(): void {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // 1. Tomar el clienteId que se guardó en el login
-    const clienteIdStr = localStorage.getItem('clienteId');
-    const clienteId = clienteIdStr ? Number(clienteIdStr) : null;
+    const rolRaw = localStorage.getItem('rol') || '';
+    const rol = rolRaw.toLowerCase();
 
-    if (!clienteId) {
+    const token = localStorage.getItem('token') || '';
+    const payload = token ? this.decodeToken(token) : null;
+
+    const clienteIdFromToken = payload?.clienteId;
+    const clienteId =
+      clienteIdFromToken !== undefined && clienteIdFromToken !== null
+        ? Number(clienteIdFromToken)
+        : NaN;
+
+    if (rol === 'cliente' && (Number.isNaN(clienteId) || clienteId <= 0)) {
       this.isLoading = false;
-      this.errorMessage = 'No se encontró el cliente actual. Inicia sesión de nuevo.';
+      this.errorMessage =
+        'No se pudo identificar el cliente desde el token. Inicia sesión de nuevo.';
       return;
     }
 
-    // 2. Llamar al API para obtener TODAS las cuentas de ESTE cliente
-    this.api.getCuentas(clienteId).subscribe({
+    let obs$;
+
+    if (rol === 'cliente') {
+      obs$ = this.api.getCuentas(clienteId);
+    } else {
+      obs$ = this.api.getCuentas();
+    }
+
+    obs$.subscribe({
       next: (data: any[]) => {
-        this.cuentas = data;
+        console.log('CUENTAS MIS-CUENTAS:', data);
+        this.cuentas = data || [];
         this.isLoading = false;
       },
       error: async (err) => {
-        console.error(err);
+        console.error('Error al cargar cuentas:', err);
         this.errorMessage = 'Error al cargar tus cuentas.';
         this.isLoading = false;
 
@@ -69,7 +99,7 @@ export class MisCuentasPage implements OnInit {
           color: 'danger',
         });
         await t.present();
-      }
+      },
     });
   }
 

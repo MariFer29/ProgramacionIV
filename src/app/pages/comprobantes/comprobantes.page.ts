@@ -12,15 +12,14 @@ import {
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-historial',
-  templateUrl: './historial.page.html',
-  styleUrls: ['./historial.page.scss'],
+  selector: 'app-comprobantes',
+  templateUrl: './comprobantes.page.html',
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule],
 })
-export class HistorialPage implements OnInit {
+export class ComprobantesPage implements OnInit {
   cuentas: Cuenta[] = [];
-  movimientos: MovimientoHistorial[] = [];
+  comprobantes: MovimientoHistorial[] = [];
 
   cuentaSeleccionadaId: string = '';
   fechaDesde: string = '';
@@ -47,7 +46,7 @@ export class HistorialPage implements OnInit {
       const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
       return JSON.parse(json);
     } catch {
-      console.warn('No se pudo decodificar el token en Historial');
+      console.warn('No se pudo decodificar el token en Comprobantes');
       return null;
     }
   }
@@ -81,7 +80,7 @@ export class HistorialPage implements OnInit {
       return `${y}-${m}-${d}`;
     }
 
-    console.warn('Fecha en formato no reconocido:', valor);
+    console.warn('Fecha en formato no reconocido (Comprobantes):', valor);
     return undefined;
   }
 
@@ -92,7 +91,7 @@ export class HistorialPage implements OnInit {
     const token = localStorage.getItem('token') || '';
 
     const payload = token ? this.decodeToken(token) : null;
-    console.log('PAYLOAD TOKEN (Historial):', payload);
+    console.log('PAYLOAD TOKEN (Comprobantes):', payload);
 
     const clienteIdFromToken = payload?.clienteId;
     const clienteId =
@@ -105,7 +104,7 @@ export class HistorialPage implements OnInit {
     if (rol === 'cliente') {
       if (Number.isNaN(clienteId) || clienteId <= 0) {
         console.warn(
-          'Rol cliente pero sin clienteId válido en el token. No se cargan cuentas.'
+          'Rol cliente pero sin clienteId válido en el token. No se cargan cuentas (Comprobantes).'
         );
         this.cuentas = [];
         this.mostrarToast(
@@ -124,7 +123,7 @@ export class HistorialPage implements OnInit {
 
     obs$.subscribe({
       next: (data) => {
-        console.log('CUENTAS HISTORIAL:', data);
+        console.log('CUENTAS COMPROBANTES:', data);
         this.cuentas = data;
 
         // Si solo hay una cuenta, la preseleccionamos
@@ -133,13 +132,13 @@ export class HistorialPage implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al cargar cuentas en historial:', err);
+        console.error('Error al cargar cuentas en Comprobantes:', err);
         this.mostrarToast('Error al cargar cuentas', 'danger');
       },
     });
   }
 
-  // =============== BUSCAR HISTORIAL =================
+  // =============== BUSCAR COMPROBANTES =================
   buscar(): void {
     if (!this.cuentaSeleccionadaId) {
       this.mostrarToast('Seleccione una cuenta.');
@@ -152,7 +151,7 @@ export class HistorialPage implements OnInit {
     const filtrosBase: HistorialFiltro = {
       desde: desdeNormalizado,
       hasta: hastaNormalizado,
-      // NO enviamos tipo; lo filtramos aquí
+      // NO enviamos tipo; filtramos en front
       estado: this.estadoCodigo ? Number(this.estadoCodigo) : undefined,
     };
 
@@ -173,12 +172,12 @@ export class HistorialPage implements OnInit {
     }
 
     this.loading = true;
-    this.movimientos = [];
+    this.comprobantes = [];
 
-    console.log('BUSCAR HISTORIAL → clienteId:', clienteId);
-    console.log('BUSCAR HISTORIAL → filtros (sin tipo):', filtrosBase);
+    console.log('BUSCAR COMPROBANTES → clienteId:', clienteId);
+    console.log('BUSCAR COMPROBANTES → filtros (sin tipo):', filtrosBase);
     console.log(
-      'BUSCAR HISTORIAL → cuentaId:',
+      'BUSCAR COMPROBANTES → cuentaId:',
       this.cuentaSeleccionadaId || null
     );
 
@@ -191,35 +190,33 @@ export class HistorialPage implements OnInit {
         next: (data) => {
           this.loading = false;
           const rawData: any[] = data || [];
-          console.log('RESPUESTA HISTORIAL (RAW):', rawData);
+          console.log('RESPUESTA COMPROBANTES (RAW):', rawData);
 
-          // Para ver exactamente qué tipos llegan
-          const tiposUnicos = Array.from(
-            new Set(rawData.map((m) => (m.tipo || '').toString()))
+          // Solo tomamos movimientos que puedan tener comprobante:
+          // Transferencia o PagoServicio con su respectivo Id
+          let result = rawData.filter(
+            (m) =>
+              (m.tipo === 'Transferencia' && m.transferenciaId) ||
+              (m.tipo === 'PagoServicio' && m.pagoServicioId)
           );
-          console.log('TIPOS EN RESPUESTA HISTORIAL:', tiposUnicos);
 
-          let result = rawData;
-
-          // Filtro explícito en base al valor real del campo m.tipo
+          // Filtro por tipo en front
           if (this.tipoSeleccionado === '1') {
-            // Solo transferencias
             result = result.filter((m) => m.tipo === 'Transferencia');
           } else if (this.tipoSeleccionado === '2') {
-            // Solo pagos de servicio
             result = result.filter((m) => m.tipo === 'PagoServicio');
           }
 
-          console.log('RESPUESTA HISTORIAL (filtrada por tipo):', result);
-          this.movimientos = result;
+          console.log('COMPROBANTES (filtrados):', result);
+          this.comprobantes = result;
         },
         error: (err) => {
-          console.error('Error al obtener historial:', err);
+          console.error('Error al obtener comprobantes:', err);
           this.loading = false;
           this.mostrarToast(
             err.error?.message ||
               err.error?.mensaje ||
-              'Error al obtener el historial.',
+              'Error al obtener los comprobantes.',
             'danger'
           );
         },
@@ -231,7 +228,7 @@ export class HistorialPage implements OnInit {
     this.fechaHasta = '';
     this.tipoSeleccionado = '';
     this.estadoCodigo = '';
-    this.movimientos = [];
+    this.comprobantes = [];
   }
 
   private async mostrarToast(message: string, color: string = 'medium') {
