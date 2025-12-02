@@ -23,7 +23,6 @@ export interface Account {
   styleUrls: ['./mis-cuentas.page.scss'],
 })
 export class MisCuentasPage implements OnInit {
-
   cuentas: Account[] = [];
   isLoading = false;
   errorMessage = '';
@@ -38,6 +37,20 @@ export class MisCuentasPage implements OnInit {
     this.cargarMisCuentas();
   }
 
+  // ===============================
+  //      UTILIDAD: DECODIFICAR TOKEN
+  // ===============================
+  private decodeToken(token: string): any | null {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(json);
+    } catch {
+      console.warn('No se pudo decodificar el token en MisCuentas');
+      return null;
+    }
+  }
+
   cargarMisCuentas(): void {
     this.isLoading = true;
     this.errorMessage = '';
@@ -45,9 +58,16 @@ export class MisCuentasPage implements OnInit {
     const clienteIdStr = localStorage.getItem('clienteId');
     const clienteId = clienteIdStr ? Number(clienteIdStr) : null;
 
-    if (!clienteId) {
+    const clienteIdFromToken = payload?.clienteId;
+    const clienteId =
+      clienteIdFromToken !== undefined && clienteIdFromToken !== null
+        ? Number(clienteIdFromToken)
+        : NaN;
+
+    if (rol === 'cliente' && (Number.isNaN(clienteId) || clienteId <= 0)) {
       this.isLoading = false;
-      this.errorMessage = 'No se encontró el cliente actual. Inicia sesión de nuevo.';
+      this.errorMessage =
+        'No se pudo identificar el cliente desde el token. Inicia sesión de nuevo.';
       return;
     }
 
@@ -74,7 +94,7 @@ export class MisCuentasPage implements OnInit {
         this.isLoading = false;
       },
       error: async (err) => {
-        console.error(err);
+        console.error('Error al cargar cuentas:', err);
         this.errorMessage = 'Error al cargar tus cuentas.';
         this.isLoading = false;
 
@@ -84,7 +104,7 @@ export class MisCuentasPage implements OnInit {
           color: 'danger',
         });
         await t.present();
-      }
+      },
     });
   }
 

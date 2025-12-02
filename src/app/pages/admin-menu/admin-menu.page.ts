@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin-menu.page.scss'],
 })
 export class AdminMenuPage {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   goTo(path: string) {
     this.router.navigate([path]);
@@ -22,5 +22,7 @@ export class AdminMenuPage {
     this.router.navigate(['/login']);
   }
 
+  irAExtractos() {
+    this.router.navigate(['/extractos']);
+  }
 }
-

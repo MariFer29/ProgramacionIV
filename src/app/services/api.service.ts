@@ -7,7 +7,10 @@ import {
   TransferenciaProgramada,
   PagoServicio,
   ProveedorServicio,
-  MovimientoHistorial, 
+  MovimientoHistorial,
+  ExtractoMensual,
+  HistorialFiltro,
+  Cuenta,
 } from '../models/banca.models';
 
 @Injectable({ providedIn: 'root' })
@@ -64,17 +67,14 @@ export class ApiService {
   // Cuentas
   // ==========================
 
-  // Dejamos any[] para no romper el módulo de cuentas 
-  getCuentas(clientId?: number): Observable<any[]> {
-    const params: any = {};
+  getCuentas(clientId?: number) {
+    let url = `${this.baseUrl}/cuentas`;
+
     if (clientId) {
-      params.clientId = clientId;
+      url += `?clientId=${clientId}`;
     }
 
-    return this.http.get<any[]>(`${this.baseUrl}/cuentas`, {
-      params,
-      ...this.getAuthHeaders(),
-    });
+    return this.http.get<any[]>(url, this.getAuthHeaders());
   }
 
   abrirCuenta(body: {
@@ -110,11 +110,16 @@ export class ApiService {
   //   BENEFICIARIOS / TERCEROS
   // ============================
 
-  getBeneficiarios() {
-    return this.http.get<any[]>(
-      `${this.baseUrl}/beneficiarios`,
-      this.getAuthHeaders()
-    );
+  getBeneficiarios(clientId?: number) {
+    const options: any = {
+      ...this.getAuthHeaders(),
+    };
+
+    if (clientId && clientId > 0) {
+      options.params = { clientId: clientId.toString() };
+    }
+
+    return this.http.get<any[]>(`${this.baseUrl}/beneficiarios`, options);
   }
 
   crearBeneficiario(body: any) {
@@ -125,9 +130,16 @@ export class ApiService {
     );
   }
 
-  actualizarBeneficiario(id: string, body: any) {
+  actualizarBeneficiario(body: {
+    id: string;
+    alias: string;
+    bank: string;
+    currency: number;
+    accountNumber: string;
+    country: string;
+  }) {
     return this.http.put(
-      `${this.baseUrl}/beneficiarios/${id}`,
+      `${this.baseUrl}/beneficiarios`,
       body,
       this.getAuthHeaders()
     );
@@ -250,16 +262,7 @@ export class ApiService {
   // ==============================
   // HISTORIAL
   // ==============================
-  getHistorialPorCliente(
-    clienteId: number,
-    filtros: {
-      desde?: string;
-      hasta?: string;
-      tipo?: number | null;
-      estado?: number | null;
-      cuentaId?: string | null;
-    }
-  ): Observable<MovimientoHistorial[]> {
+  getHistorialPorCliente(clienteId: number, filtros: HistorialFiltro) {
     const params: any = {};
 
     if (filtros.desde) {
@@ -268,22 +271,94 @@ export class ApiService {
     if (filtros.hasta) {
       params.hasta = filtros.hasta;
     }
-    if (filtros.tipo != null) {
-      params.tipo = filtros.tipo; 
+    if (filtros.tipo !== undefined && filtros.tipo !== null) {
+      params.tipo = filtros.tipo;
     }
-    if (filtros.estado != null) {
-      params.estado = filtros.estado; 
+    if (filtros.estado !== undefined && filtros.estado !== null) {
+      params.estado = filtros.estado;
     }
     if (filtros.cuentaId) {
-      params.cuentaId = filtros.cuentaId; 
+      params.cuentaId = filtros.cuentaId;
     }
 
-    return this.http.get<MovimientoHistorial[]>(
-      `${this.baseUrl}/Historial/cliente/${clienteId}`,
+    return this.http.get<any[]>(
+      `${this.baseUrl}/historial/cliente/${clienteId}`,
       {
         params,
         ...this.getAuthHeaders(),
       }
     );
+  }
+
+  getHistorialPorCuenta(cuentaId: string, filtros: HistorialFiltro) {
+    const params: any = {};
+
+    if (filtros.desde) {
+      params.desde = filtros.desde;
+    }
+    if (filtros.hasta) {
+      params.hasta = filtros.hasta;
+    }
+    if (filtros.tipo !== undefined && filtros.tipo !== null) {
+      params.tipo = filtros.tipo;
+    }
+    if (filtros.estado !== undefined && filtros.estado !== null) {
+      params.estado = filtros.estado;
+    }
+
+    return this.http.get<any[]>(
+      `${this.baseUrl}/historial/cuenta/${cuentaId}`,
+      {
+        params,
+        ...this.getAuthHeaders(),
+      }
+    );
+  }
+
+  // ==============================
+  // COMPROBANTES (PDF)
+  // ==============================
+
+  downloadComprobanteTransferencia(id: string) {
+    return this.http.get(`${this.baseUrl}/Comprobantes/transferencia/${id}`, {
+      ...this.getAuthHeaders(),
+      responseType: 'blob' as 'json',
+    });
+  }
+
+  downloadComprobantePago(id: string) {
+    return this.http.get(`${this.baseUrl}/Comprobantes/pago/${id}`, {
+      ...this.getAuthHeaders(),
+      responseType: 'blob' as 'json',
+    });
+  }
+
+  // ==============================
+  // EXTRACTOS
+  // ==============================
+
+  getExtractoMensual(cuentaId: string, anio: number, mes: number) {
+    const params: any = { anio, mes };
+
+    return this.http.get<ExtractoMensual>(
+      `${this.baseUrl}/Historial/extracto/${cuentaId}`,
+      {
+        params,
+        ...this.getAuthHeaders(),
+      }
+    );
+  }
+
+  downloadExtractoMensualPdf(cuentaId: string, anio: number, mes: number) {
+    const params: any = {
+      anio: anio.toString(),
+      mes: mes.toString(),
+    };
+
+    return this.http.get(`${this.baseUrl}/Comprobantes/extracto/${cuentaId}`, {
+      params,
+      responseType: 'blob',
+      ...this.getAuthHeaders(),
+    });
   }
 }

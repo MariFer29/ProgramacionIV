@@ -7,7 +7,7 @@
         <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    
+
   </ion-toolbar>
 </ion-header>
 
@@ -92,6 +92,10 @@
           {{ m.descripcion }}
         </p>
       </ion-label>
+      <ion-button size="small" slot="end" (click)="descargarComprobante(m)"
+        [disabled]="!m.transferenciaId && !m.pagoServicioId">
+        Comprobante
+      </ion-button>
     </ion-item>
   </ion-list>
 
