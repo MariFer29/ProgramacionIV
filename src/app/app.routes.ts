@@ -127,6 +127,17 @@ export const routes: Routes = [
   },
 
   {
+    path: 'reportes',
+    loadComponent: () =>
+      import('./pages/reportes/reportes.page').then((m) => m.ReportesPage),
+  },
+  {
+    path: 'auditoria',
+    loadComponent: () =>
+      import('./pages/auditoria/auditoria.page').then((m) => m.AuditoriaPage),
+  },
+
+  {
     path: 'comprobantes',
     loadComponent: () =>
       import('./pages/comprobantes/comprobantes.page').then(
@@ -137,6 +148,10 @@ export const routes: Routes = [
   {
     path: 'extractos',
     loadComponent: () =>
-      import('./pages/extractos/extractos.page').then((m) => m.ExtractosPage),
+      import('./pages/extractos/extractos.page').then(
+        (m) => m.ExtractosPage
+      ),
   },
+
+
 ];
