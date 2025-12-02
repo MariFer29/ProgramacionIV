@@ -39,7 +39,7 @@ export class CuentasPage implements OnInit {
   // Rol
   esAdmin = false;
   esGestor = false;
-  
+
 
 
   constructor(
@@ -69,30 +69,43 @@ export class CuentasPage implements OnInit {
 
     this.cargarCuentas();
   }
-  
+
 
   cargarCuentas() {
     this.isLoading = true;
     this.errorMessage = '';
 
-    
     const rol = localStorage.getItem('rol')?.toLowerCase() || '';
-    const clienteIdStr = localStorage.getItem('clienteId');  // 
+    const clienteIdStr = localStorage.getItem('clienteId');
     const clienteId = clienteIdStr ? Number(clienteIdStr) : null;
 
-    
     if (['cliente', 'user', '3'].includes(rol) && clienteId) {
       console.log('Modo cliente: usando clienteId del login:', clienteId);
       this.clientIdFilter = clienteId;
     } else {
       console.log('Modo admin/gestor u otro: usando clientIdFilter tal cual está:', this.clientIdFilter);
-      
-   }
+    }
 
-    
     this.api.getCuentas(this.clientIdFilter).subscribe({
       next: (data) => {
-        this.cuentas = data;
+
+        // 🔹 Mapear moneda y tipo de cuenta sin tocar accountNumber
+        const monedaMap: any = { 1: 'CRC', 2: 'USD' };
+        const tipoMap: any = { 1: 'Ahorros', 2: 'Corriente', 4: 'Plazo Fijo' };
+        const statusMap: any = {
+          1: 'Activa',
+          2: 'Bloqueada',
+          3: 'Cerrada'
+        };
+
+
+        this.cuentas = data.map(c => ({
+          ...c,
+          currency: monedaMap[c.currency] || 'CRC',  // número -> código moneda
+          type: tipoMap[c.type] || 'Desconocido',   // número -> nombre tipo cuenta
+          status: statusMap[c.status] || 'Desconocido'
+        }));
+
         this.isLoading = false;
       },
       error: async (err) => {
@@ -109,6 +122,8 @@ export class CuentasPage implements OnInit {
       },
     });
   }
+
+
 
 
   // ABRIR CUENTA

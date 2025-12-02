@@ -32,7 +32,7 @@ export class MisCuentasPage implements OnInit {
     private api: ApiService,
     private toastCtrl: ToastController,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarMisCuentas();
@@ -42,7 +42,6 @@ export class MisCuentasPage implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // 1. Tomar el clienteId que se guardó en el login
     const clienteIdStr = localStorage.getItem('clienteId');
     const clienteId = clienteIdStr ? Number(clienteIdStr) : null;
 
@@ -52,10 +51,26 @@ export class MisCuentasPage implements OnInit {
       return;
     }
 
-    // 2. Llamar al API para obtener TODAS las cuentas de ESTE cliente
     this.api.getCuentas(clienteId).subscribe({
       next: (data: any[]) => {
-        this.cuentas = data;
+
+        // 🔹 Mapear moneda y tipo de cuenta sin tocar accountNumber
+        const monedaMap: any = { 1: 'CRC', 2: 'USD' };
+        const tipoMap: any = { 1: 'Ahorros', 2: 'Corriente', 4: 'Plazo Fijo' };
+                const statusMap: any = {
+          1: 'Activa',
+          2: 'Bloqueada',
+          3: 'Cerrada'
+        };
+
+
+        this.cuentas = data.map(c => ({
+          ...c,
+          currency: monedaMap[c.currency] || 'CRC',
+          type: tipoMap[c.type] || 'Desconocido',
+          status: statusMap[c.status] || 'Desconocido'
+        }));
+
         this.isLoading = false;
       },
       error: async (err) => {
@@ -72,6 +87,7 @@ export class MisCuentasPage implements OnInit {
       }
     });
   }
+
 
   volverAlMenuCliente(): void {
     this.router.navigate(['/menu-cliente']);

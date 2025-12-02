@@ -25,7 +25,7 @@
       <ion-label>
         <h2>{{ c.accountNumber }} • {{ c.type }} • {{ c.currency }}</h2>
         <p>
-          Saldo: {{ c.balance | currency:c.currency:'symbol':'1.2-2' }}<br>
+          Saldo: {{ c.balance | number:'1.2-2' }}<br>
           Estado: {{ c.status }}<br>
           Creada: {{ c.createdAt | date:'short' }}
         </p>
