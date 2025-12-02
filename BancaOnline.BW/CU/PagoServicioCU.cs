@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using BancaOnline.BC.Entidades;
 using BancaOnline.BW.Interfaces;
 using BancaOnline.DA;
@@ -19,7 +15,11 @@ namespace BancaOnline.BW.CU
         private readonly IClientesRepositorioDA _clientesRepo;
         private readonly IAuditoriaBW _auditoriaBW;
 
-        public PagoServicioCU(IPagoServicioDA da, AppDbContext db,IClientesRepositorioDA clientesRepo,IAuditoriaBW auditoriaBW)
+        public PagoServicioCU(
+            IPagoServicioDA da,
+            AppDbContext db,
+            IClientesRepositorioDA clientesRepo,
+            IAuditoriaBW auditoriaBW)
         {
             _da = da;
             _db = db;
@@ -38,53 +38,63 @@ namespace BancaOnline.BW.CU
             if (string.IsNullOrWhiteSpace(pago.NumeroContrato))
                 throw new ArgumentException("El número de contrato es obligatorio.");
 
-            var largoContrato = pago.NumeroContrato.Length;
-            if (largoContrato < 8 || largoContrato > 12)
-            {
-                await RegistrarAuditoriaPagoAsync(pago, null,
-                    "PagoServicioFallido", "Número de contrato inválido");
+            if (pago.NumeroContrato.Length < 8 || pago.NumeroContrato.Length > 12)
                 throw new ArgumentException("El número de contrato debe tener entre 8 y 12 caracteres.");
+
+            var cuenta = await _db.Accounts
+                .FirstOrDefaultAsync(a => a.Id == pago.CuentaOrigenId);
+
+            if (cuenta == null)
+                throw new InvalidOperationException("La cuenta origen no existe.");
+
+            pago.SaldoAntes = cuenta.Balance;
+
+            if (cuenta.Balance < pago.Monto)
+            {
+                pago.Estado = 3; 
+                pago.SaldoDespues = cuenta.Balance;
+                pago.RazonFalla = "Saldo insuficiente";
+
+                await RegistrarAuditoriaPagoAsync(pago, null, "PagoServicioFallido", pago.RazonFalla);
+                throw new InvalidOperationException("Saldo insuficiente para realizar el pago.");
             }
 
-            if (pago.Id == Guid.Empty)
-                pago.Id = Guid.NewGuid();
-
-            pago.FechaCreacion = DateTime.UtcNow;
-
             var ahora = DateTime.UtcNow;
+            pago.FechaCreacion = ahora;
 
-            if (pago.FechaProgramada.HasValue && pago.FechaProgramada.Value > ahora)
+            bool esProgramado = pago.FechaProgramada.HasValue &&
+                                pago.FechaProgramada.Value > ahora;
+
+            if (esProgramado)
             {
-                // Programado
-                pago.Estado = 1;
+                pago.Estado = 1; 
                 pago.FechaPago = null;
+                pago.SaldoDespues = null; 
             }
             else
             {
-                // Se paga de una vez
-                pago.Estado = 2;
+                pago.Estado = 2; 
                 pago.FechaProgramada = null;
+
+                cuenta.Balance -= pago.Monto;
+
                 pago.FechaPago = ahora;
+                pago.SaldoDespues = cuenta.Balance;
+
+                _db.Accounts.Update(cuenta);
             }
 
             if (string.IsNullOrWhiteSpace(pago.Referencia))
-            {
                 pago.Referencia = $"PAG-{Guid.NewGuid().ToString("N")[..10]}";
-            }
 
             await _da.CrearAsync(pago);
 
-            // Buscar cliente dueño de la cuenta (si existe)
-            Cliente? cliente = null;
-            var cuenta = await _db.Accounts.FirstOrDefaultAsync(a => a.Id == pago.CuentaOrigenId);
-            if (cuenta != null)
-            {
-                cliente = await _clientesRepo.ObtenerPorIdAsync(cuenta.ClientId);
-            }
-
-            var tipo = pago.Estado == 2 ? "PagoServicioEjecutado" : "PagoServicioProgramado";
-
-            await RegistrarAuditoriaPagoAsync(pago, cliente, tipo, null);
+            await RegistrarAuditoriaPagoAsync(
+                pago,
+                await _clientesRepo.ObtenerPorIdAsync(cuenta.ClientId),
+                esProgramado ? "PagoServicioProgramado" : "PagoServicioEjecutado",
+                null
+            );
         }
 
         private async Task RegistrarAuditoriaPagoAsync(
@@ -101,7 +111,7 @@ namespace BancaOnline.BW.CU
                 UsuarioEmail = cliente?.Correo,
                 TipoOperacion = tipoOperacion,
                 Entidad = "PagoServicio",
-                EntidadId = pago.Id == Guid.Empty ? null : pago.Id.ToString(),
+                EntidadId = pago.Id.ToString(),
                 DatosNuevos = JsonSerializer.Serialize(new
                 {
                     pago.ProveedorId,
@@ -114,6 +124,8 @@ namespace BancaOnline.BW.CU
                     pago.FechaProgramada,
                     pago.FechaPago,
                     pago.Referencia,
+                    pago.SaldoAntes,
+                    pago.SaldoDespues,
                     RazonFalla = razonFalla ?? pago.RazonFalla
                 })
             };

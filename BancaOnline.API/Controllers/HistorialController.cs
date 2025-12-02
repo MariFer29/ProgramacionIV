@@ -27,10 +27,19 @@ namespace BancaOnline.API.Controllers
             [FromQuery] int? estado,
             [FromQuery] Guid? cuentaId)
         {
+            DateTime? desdeNorm = null;
+            DateTime? hastaNorm = null;
+
+            if (desde.HasValue)
+                desdeNorm = desde.Value.Date; // 00:00:00
+
+            if (hasta.HasValue)
+                hastaNorm = hasta.Value.Date.AddDays(1).AddTicks(-1); // 23:59:59.9999999
+
             var filtro = new HistorialFiltroDTO
             {
-                Desde = desde,
-                Hasta = hasta,
+                Desde = desdeNorm,
+                Hasta = hastaNorm,
                 Tipo = tipo,
                 Estado = estado,
                 CuentaId = cuentaId

@@ -74,7 +74,6 @@ namespace BancaOnline.BW.CU
                 throw new InvalidOperationException("La cuenta origen no está activa.");
             }
 
-            // Verificar que el cliente dueño de la cuenta exista
             var cliente = await _clientesRepo.ObtenerPorIdAsync(cuentaOrigen.ClientId);
             if (cliente is null)
             {
@@ -86,7 +85,6 @@ namespace BancaOnline.BW.CU
                 throw new InvalidOperationException("El cliente asociado a la cuenta no existe.");
             }
 
-            // Usar el saldo real de la cuenta como SaldoAntes
             t.SaldoAntes = cuentaOrigen.Balance;
 
             if (!string.IsNullOrWhiteSpace(t.IdempotencyKey))
@@ -130,9 +128,23 @@ namespace BancaOnline.BW.CU
                 t.FechaEjecucion = DateTime.UtcNow;
             }
 
+            if (t.Estado == ESTADO_EXITOSA)
+            {
+                cuentaOrigen.Balance = t.SaldoDespues;
+
+                var cuentaDestino = await _db.Accounts
+                    .FirstOrDefaultAsync(a => a.Id == t.CuentaDestinoId);
+
+                if (cuentaDestino != null && cuentaDestino.Status == AccountStatus.Active)
+                {
+                    cuentaDestino.Balance += t.Monto;
+                }
+
+                await _db.SaveChangesAsync();
+            }
+
             await _da.CrearAsync(t);
 
-            // Auditoría de operación exitosa o pendiente
             var tipo = t.Estado == ESTADO_EXITOSA
                 ? "TransferenciaExitosa"
                 : "TransferenciaPendienteAprobacion";
@@ -143,6 +155,7 @@ namespace BancaOnline.BW.CU
                 tipoOperacion: tipo,
                 razonFalla: null);
         }
+
 
         private async Task RegistrarAuditoriaTransferenciaAsync(
             Transferencia t,

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BancaOnline.BC.Entidades;
@@ -65,7 +64,6 @@ namespace BancaOnline.BW.CU
 
             await _da.CrearAsync(tp);
 
-            // Buscar cliente dueño de la cuenta (si existe)
             Cliente? cliente = null;
             var cuenta = await _db.Accounts.FirstOrDefaultAsync(a => a.Id == tp.CuentaOrigenId);
             if (cuenta != null)
@@ -99,7 +97,6 @@ namespace BancaOnline.BW.CU
 
             await _da.CancelarAsync(id);
 
-            // Buscar cliente dueño de la cuenta (si existe)
             Cliente? cliente = null;
             var cuenta = await _db.Accounts.FirstOrDefaultAsync(a => a.Id == tp.CuentaOrigenId);
             if (cuenta != null)
@@ -114,6 +111,79 @@ namespace BancaOnline.BW.CU
                 razonFalla: null);
         }
 
+        public async Task EjecutarTransferenciasPendientesAsync()
+        {
+            var ahora = DateTime.UtcNow;
+
+            var pendientes = await _db.TransferenciasProgramadas
+                .Where(tp =>
+                    tp.Estado == ESTADO_PROGRAMADA &&
+                    tp.FechaEjecucion.Date <= ahora.Date)
+                .ToListAsync();
+
+            foreach (var tp in pendientes)
+            {
+                await EjecutarTransferenciaProgramada(tp);
+            }
+
+            await _db.SaveChangesAsync();
+        }
+
+        private async Task EjecutarTransferenciaProgramada(TransferenciaProgramada tp)
+        {
+            var cuentaOrigen = await _db.Accounts.FirstOrDefaultAsync(a => a.Id == tp.CuentaOrigenId);
+            var cuentaDestino = await _db.Accounts.FirstOrDefaultAsync(a => a.Id == tp.CuentaDestinoId);
+
+            Cliente? cliente = null;
+            if (cuentaOrigen != null)
+            {
+                cliente = await _clientesRepo.ObtenerPorIdAsync(cuentaOrigen.ClientId);
+            }
+
+            if (cuentaOrigen == null || cuentaDestino == null)
+            {
+                tp.Estado = ESTADO_FALLIDA;
+                tp.FechaEjecucionReal = DateTime.UtcNow;
+
+                await RegistrarAuditoriaTransferenciaProgramadaAsync(
+                    tp,
+                    cliente,
+                    tipoOperacion: "TransferenciaProgramadaFallida",
+                    razonFalla: "Cuenta origen o destino inexistente"
+                );
+
+                return;
+
+            }
+
+            if (cuentaOrigen.Balance < tp.Monto)
+            {
+                tp.Estado = ESTADO_FALLIDA;
+                tp.FechaEjecucionReal = DateTime.UtcNow;
+
+                await RegistrarAuditoriaTransferenciaProgramadaAsync(
+                    tp,
+                    cliente,
+                    tipoOperacion: "TransferenciaProgramadaFallida",
+                    razonFalla: "Saldo insuficiente"
+                );
+
+                return;
+            }
+
+            cuentaOrigen.Balance -= tp.Monto;
+            cuentaDestino.Balance += tp.Monto;
+
+            tp.Estado = ESTADO_EXITOSA;
+            tp.FechaEjecucionReal = DateTime.UtcNow;
+
+            await RegistrarAuditoriaTransferenciaProgramadaAsync(
+                tp,
+                cliente,
+                tipoOperacion: "TransferenciaProgramadaEjecutada",
+                razonFalla: null);
+        }
+
         private async Task RegistrarAuditoriaTransferenciaProgramadaAsync(
             TransferenciaProgramada tp,
             Cliente? cliente,
@@ -124,7 +194,7 @@ namespace BancaOnline.BW.CU
             {
                 Id = Guid.NewGuid(),
                 Fecha = DateTime.UtcNow,
-                UsuarioId = cliente?.UsuarioId,   
+                UsuarioId = cliente?.UsuarioId,
                 UsuarioEmail = cliente?.Correo,
                 TipoOperacion = tipoOperacion,
                 Entidad = "TransferenciaProgramada",
@@ -145,6 +215,5 @@ namespace BancaOnline.BW.CU
 
             await _auditoriaBW.RegistrarAsync(auditoria);
         }
-
     }
 }

@@ -46,7 +46,7 @@ namespace BancaOnline.BW.CU
                     usuario.FechaBloqueoHasta = DateTime.UtcNow.AddMinutes(15);
 
                 await _usuariosRepo.ActualizarAsync(usuario);
-                return null; // <-- ERROR, devuelve null siempre
+                return null;
             }
 
             // Login exitoso
@@ -55,7 +55,15 @@ namespace BancaOnline.BW.CU
 
             await _usuariosRepo.ActualizarAsync(usuario);
 
-            return _jwtService.GenerarToken(usuario);
+            var token = _jwtService.GenerarToken(usuario);
+
+            Console.WriteLine("======================================");
+            Console.WriteLine("TOKEN GENERADO PARA LOGIN:");
+            Console.WriteLine(token);
+            Console.WriteLine("======================================");
+
+            return token;
+
         }
     }
 }

@@ -28,5 +28,8 @@ namespace BancaOnline.BC.Entidades
         public string? Referencia { get; set; }
 
         public string? RazonFalla { get; set; }
+        public decimal? SaldoAntes { get; set; }
+        public decimal? SaldoDespues { get; set; }
+
     }
 }

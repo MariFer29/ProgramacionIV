@@ -81,8 +81,7 @@ builder.Services.AddScoped<IComprobantesBW, ComprobanteCU>();
 // ---------------------------------------------------------------------
 // JWT
 // ---------------------------------------------------------------------
-builder.Services.AddSingleton<JwtService>();
-
+builder.Services.AddScoped<JwtService>();
 var jwtKey = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
 
 builder.Services.AddAuthentication(options =>
