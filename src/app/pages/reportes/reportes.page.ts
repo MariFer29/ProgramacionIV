@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 
 import {
   ReporteTotales,
@@ -34,12 +38,12 @@ export class ReportesPage implements OnInit {
 
   constructor(
     private api: ApiService,
-    private toastController: ToastController
-  ) {}
+    private toastController: ToastController,
+    private router: Router
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  // ← AQUÍ está el cambio importante
   cambiarSegment(valor: any) {
     if (!valor) {
       return;
@@ -159,14 +163,6 @@ export class ReportesPage implements OnInit {
   }
 
   // ======================
-  // Exportar a "PDF" (print)
-  // ======================
-
-  exportarPdf() {
-    window.print();
-  }
-
-  // ======================
   // Utils
   // ======================
 
@@ -178,5 +174,17 @@ export class ReportesPage implements OnInit {
       position: 'bottom',
     });
     await toast.present();
+  }
+
+  volver(): void {
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'superadmin'].includes(rol)) {
+      this.router.navigate(['/admin-menu']);
+    } else if (rol.includes('gestor')) {
+      this.router.navigate(['/menu-gestor']);
+    } else {
+      this.router.navigate(['/menu-cliente']);
+    }
   }
 }

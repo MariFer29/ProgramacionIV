@@ -19,7 +19,7 @@ export class ExtractosPage implements OnInit {
 
   cuentaSeleccionadaId: string = '';
   anioSeleccionado: string = '';
-  mesSeleccionado: string = ''; // 1-12
+  mesSeleccionado: string = ''; 
 
   loading = false;
 
@@ -91,7 +91,6 @@ export class ExtractosPage implements OnInit {
         console.log('CUENTAS EXTRACTOS:', data);
         this.cuentas = data;
 
-        // Si solo hay una cuenta, la preseleccionamos
         if (this.cuentas.length === 1) {
           this.cuentaSeleccionadaId = this.cuentas[0].id as any;
         }

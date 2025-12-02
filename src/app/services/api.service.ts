@@ -13,7 +13,6 @@ import {
   HistorialFiltro,
   Cuenta,
 
-  // Módulo G – Reportes & Auditoría
   ReporteTotales,
   ClienteTop,
   VolumenDiario,

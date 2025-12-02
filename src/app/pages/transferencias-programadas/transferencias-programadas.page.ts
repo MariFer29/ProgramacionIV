@@ -59,7 +59,6 @@ export class TransferenciasProgramadasPage implements OnInit {
         // Filtrar solo cuentas activas (status = 1)
         const cuentasActivas = todas.filter(c => c.status === 1);
 
-        // Mapear currency numérico a texto
         const cuentasMapeadas = cuentasActivas.map(c => ({
           ...c,
           currency: c.currency === 2 ? 'USD' : 'CRC', 

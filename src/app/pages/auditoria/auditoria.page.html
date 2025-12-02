@@ -1,6 +1,12 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Auditoría</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -29,20 +35,14 @@
           <ion-col size="12" size-md="3">
             <ion-item>
               <ion-label position="stacked">Usuario ID</ion-label>
-              <ion-input
-                type="number"
-                [(ngModel)]="usuarioId"
-              ></ion-input>
+              <ion-input type="number" [(ngModel)]="usuarioId"></ion-input>
             </ion-item>
           </ion-col>
 
           <ion-col size="12" size-md="3">
             <ion-item>
               <ion-label position="stacked">Tipo de operación</ion-label>
-              <ion-input
-                [(ngModel)]="tipoOperacion"
-                placeholder="Transferencia, AbrirCuenta..."
-              ></ion-input>
+              <ion-input [(ngModel)]="tipoOperacion" placeholder="Transferencia, AbrirCuenta..."></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -79,13 +79,6 @@
         </ion-row>
       </ion-grid>
 
-      <ion-button expand="block" (click)="exportarCsv()">
-        Exportar a Excel (CSV)
-      </ion-button>
-
-      <ion-button expand="block" color="medium" (click)="exportarPdf()">
-        Exportar a PDF
-      </ion-button>
     </ion-card-content>
   </ion-card>
 

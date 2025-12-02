@@ -30,7 +30,7 @@ export class HistorialPage implements OnInit {
   cuentaSeleccionadaId: string = '';
   fechaDesde: string = '';
   fechaHasta: string = '';
-  tipoSeleccionado: string = ''; // '' | '1' | '2'
+  tipoSeleccionado: string = ''; 
   estadoCodigo: string = '';
 
   // Para admin/gestor: cliente seleccionado
@@ -82,7 +82,7 @@ export class HistorialPage implements OnInit {
   ): string | undefined {
     if (!valor) return undefined;
 
-    // Ya viene como yyyy-MM-dd
+    // yyyy-MM-dd
     if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
       return valor;
     }
@@ -205,8 +205,8 @@ export class HistorialPage implements OnInit {
         return;
       }
 
-      // ADMIN: solo filtra por cuenta (sin fechas ni tipo)
-      const filtros: HistorialFiltro = {}; // sin desde/hasta/tipo/estado
+      // ADMIN: solo filtra por cuenta 
+      const filtros: HistorialFiltro = {}; 
 
       console.log(
         'BUSCAR HISTORIAL (ADMIN/GESTOR) → cuentaId:',
@@ -271,7 +271,6 @@ export class HistorialPage implements OnInit {
       this.api
         .getHistorialPorCliente(clienteId, {
           ...filtrosBase,
-          // Para cliente: cuenta opcional ('' = todas)
           cuentaId: this.cuentaSeleccionadaId || null,
         })
         .subscribe({
@@ -305,7 +304,7 @@ export class HistorialPage implements OnInit {
 
     let result = rawData;
 
-    // El filtro por tipo se aplica sólo si el usuario lo usa (cliente).
+    // El filtro por tipo se aplica sólo si el usuario lo usa.
     if (this.tipoSeleccionado === '1') {
       // Solo transferencias
       result = result.filter((m) => m.tipo === 'Transferencia');
@@ -324,7 +323,6 @@ export class HistorialPage implements OnInit {
     this.tipoSeleccionado = '';
     this.estadoCodigo = '';
     this.movimientos = [];
-    // Nota: no tocamos clienteSeleccionadoId ni cuentaSeleccionadaId
   }
 
   private async mostrarToast(message: string, color: string = 'medium') {

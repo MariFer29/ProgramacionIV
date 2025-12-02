@@ -2,9 +2,9 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
-  gap: 10px; /* reduce el espacio entre cards */
+  gap: 10px; 
   justify-items: center;
-  padding: 10px; /* reduce padding general */
+  padding: 10px; 
 }
 
 /* Card individual */

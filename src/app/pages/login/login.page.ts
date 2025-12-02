@@ -92,7 +92,6 @@ export class LoginPage {
 
         console.log('ROL normalizado:', rolLower);
 
-        // Limpia error previo
         this.errorMessage = '';
 
         // ============================

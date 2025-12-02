@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-
+import { Router } from '@angular/router';
 import { Auditoria } from 'src/app/models/banca.models';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -24,8 +24,9 @@ export class AuditoriaPage {
 
   constructor(
     private api: ApiService,
-    private toastController: ToastController
-  ) {}
+    private toastController: ToastController,
+    private router: Router
+  ) { }
 
   buscar() {
     this.loading = true;
@@ -49,32 +50,6 @@ export class AuditoriaPage {
       });
   }
 
-  exportarCsv() {
-    if (!this.registros?.length) {
-      this.mostrarToast('No hay datos para exportar.', 'medium');
-      return;
-    }
-
-    let csv = 'Fecha,Usuario,TipoOperacion,Entidad,EntidadId\n';
-    for (const r of this.registros) {
-      csv += `${r.fecha},${r.usuarioEmail || ''},${r.tipoOperacion},${r.entidad},${r.entidadId || ''}\n`;
-    }
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'auditoria.csv';
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-  }
-
-  exportarPdf() {
-    window.print();
-  }
-
   async mostrarToast(message: string, color: string = 'primary') {
     const toast = await this.toastController.create({
       message,
@@ -83,5 +58,17 @@ export class AuditoriaPage {
       position: 'bottom',
     });
     await toast.present();
+  }
+
+  volver(): void {
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+
+    if (['admin', 'administrador', 'superadmin'].includes(rol)) {
+      this.router.navigate(['/admin-menu']);
+    } else if (rol.includes('gestor')) {
+      this.router.navigate(['/menu-gestor']);
+    } else {
+      this.router.navigate(['/menu-cliente']);
+    }
   }
 }

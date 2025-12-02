@@ -55,7 +55,7 @@ export class PagosServicioPage implements OnInit {
       ],
       monto: [0, [Validators.required, Validators.min(1)]],
       moneda: ['CRC', Validators.required],
-      fechaProgramada: [null], // opcional
+      fechaProgramada: [null], 
     });
 
     this.cargarProveedores();

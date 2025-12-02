@@ -1,6 +1,12 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Reportes</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -40,14 +46,11 @@
 
         <ion-row>
           <ion-col size="12">
-            <ion-button
-              expand="block"
-              (click)="
+            <ion-button expand="block" (click)="
                 segment === 'totales' && cargarTotales();
                 segment === 'top' && cargarTopClientes();
                 segment === 'volumen' && cargarVolumenDiario();
-              "
-            >
+              ">
               Buscar
             </ion-button>
           </ion-col>
@@ -59,10 +62,7 @@
   </ion-card>
 
   <!-- Segment para cambiar reportes -->
-  <ion-segment
-    [value]="segment"
-    (ionChange)="cambiarSegment($event.detail.value)"
-  >
+  <ion-segment [value]="segment" (ionChange)="cambiarSegment($event.detail.value)">
     <ion-segment-button value="totales">
       <ion-label>Totales</ion-label>
     </ion-segment-button>
@@ -95,10 +95,6 @@
 
         <ion-button expand="block" (click)="exportarCsv('totales')">
           Exportar a Excel (CSV)
-        </ion-button>
-
-        <ion-button expand="block" color="medium" (click)="exportarPdf()">
-          Exportar a PDF
         </ion-button>
 
       </ion-card-content>
@@ -136,16 +132,8 @@
           No hay datos para mostrar.
         </ion-text>
 
-        <ion-button
-          expand="block"
-          (click)="exportarCsv('top')"
-          [disabled]="!topClientes.length"
-        >
+        <ion-button expand="block" (click)="exportarCsv('top')" [disabled]="!topClientes.length">
           Exportar a Excel (CSV)
-        </ion-button>
-
-        <ion-button expand="block" color="medium" (click)="exportarPdf()">
-          Exportar a PDF
         </ion-button>
 
       </ion-card-content>
@@ -181,17 +169,10 @@
           No hay datos para mostrar.
         </ion-text>
 
-        <ion-button
-          expand="block"
-          (click)="exportarCsv('volumen')"
-          [disabled]="!volumenDiario.length"
-        >
+        <ion-button expand="block" (click)="exportarCsv('volumen')" [disabled]="!volumenDiario.length">
           Exportar a Excel (CSV)
         </ion-button>
 
-        <ion-button expand="block" color="medium" (click)="exportarPdf()">
-          Exportar a PDF
-        </ion-button>
 
       </ion-card-content>
     </ion-card>

@@ -26,14 +26,9 @@
         <!-- Cliente -->
         <ion-item>
           <ion-label position="stacked">Cliente</ion-label>
-          <ion-select
-            [(ngModel)]="clienteSeleccionadoId"
-            (ionChange)="onClienteChange()"
-            interface="popover"
+          <ion-select [(ngModel)]="clienteSeleccionadoId" (ionChange)="onClienteChange()" interface="popover"
             placeholder="Seleccione un cliente">
-            <ion-select-option
-              *ngFor="let cli of listaClientes"
-              [value]="cli.id">
+            <ion-select-option *ngFor="let cli of listaClientes" [value]="cli.id">
               {{ cli.nombreCompleto || (cli.nombre + ' ' + cli.apellidos) || ('Cliente ' + cli.id) }}
             </ion-select-option>
           </ion-select>
@@ -42,13 +37,8 @@
         <!-- Cuenta (obligatoria para admin/gestor) -->
         <ion-item>
           <ion-label position="stacked">Cuenta</ion-label>
-          <ion-select
-            [(ngModel)]="cuentaSeleccionadaId"
-            interface="popover"
-            placeholder="Seleccione una cuenta">
-            <ion-select-option
-              *ngFor="let c of cuentas"
-              [value]="c.id">
+          <ion-select [(ngModel)]="cuentaSeleccionadaId" interface="popover" placeholder="Seleccione una cuenta">
+            <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
               {{ c.accountNumber }} • Saldo: {{ c.balance | number:'1.2-2' }}
             </ion-select-option>
           </ion-select>
@@ -62,14 +52,9 @@
         <!-- Cuenta (cliente puede usar "Todas") -->
         <ion-item>
           <ion-label position="stacked">Cuenta</ion-label>
-          <ion-select
-            [(ngModel)]="cuentaSeleccionadaId"
-            interface="popover"
-            placeholder="Todas">
+          <ion-select [(ngModel)]="cuentaSeleccionadaId" interface="popover" placeholder="Todas">
             <ion-select-option value="">Todas</ion-select-option>
-            <ion-select-option
-              *ngFor="let c of cuentas"
-              [value]="c.id">
+            <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
               {{ c.accountNumber }} • Saldo: {{ c.balance | number:'1.2-2' }}
             </ion-select-option>
           </ion-select>
@@ -78,30 +63,21 @@
         <!-- Desde -->
         <ion-item>
           <ion-label position="stacked">Desde</ion-label>
-          <ion-datetime
-            presentation="date"
-            [(ngModel)]="fechaDesde"
-            placeholder="dd/mm/aaaa">
-          </ion-datetime>
+          <ion-input type="date" [(ngModel)]="fechaDesde" placeholder="Seleccione una fecha">
+          </ion-input>
         </ion-item>
 
         <!-- Hasta -->
         <ion-item>
           <ion-label position="stacked">Hasta</ion-label>
-          <ion-datetime
-            presentation="date"
-            [(ngModel)]="fechaHasta"
-            placeholder="dd/mm/aaaa">
-          </ion-datetime>
+          <ion-input type="date" [(ngModel)]="fechaHasta" placeholder="Seleccione una fecha">
+          </ion-input>
         </ion-item>
-
+        
         <!-- Tipo -->
         <ion-item>
           <ion-label position="stacked">Tipo</ion-label>
-          <ion-select
-            [(ngModel)]="tipoSeleccionado"
-            interface="popover"
-            placeholder="Todos">
+          <ion-select [(ngModel)]="tipoSeleccionado" interface="popover" placeholder="Todos">
             <ion-select-option value="">Todos</ion-select-option>
             <ion-select-option value="1">Transferencias</ion-select-option>
             <ion-select-option value="2">Pagos de servicio</ion-select-option>
@@ -111,10 +87,7 @@
         <!-- Estado -->
         <ion-item>
           <ion-label position="stacked">Estado (código numérico)</ion-label>
-          <ion-input
-            type="number"
-            [(ngModel)]="estadoCodigo"
-            placeholder="Opcional">
+          <ion-input type="number" [(ngModel)]="estadoCodigo" placeholder="Opcional">
           </ion-input>
         </ion-item>
 
@@ -133,10 +106,7 @@
   </ion-card>
 
   <!-- Spinner -->
-  <ion-spinner
-    *ngIf="loading"
-    class="ion-margin-top"
-    name="crescent">
+  <ion-spinner *ngIf="loading" class="ion-margin-top" name="crescent">
   </ion-spinner>
 
   <!-- Resultados -->
@@ -163,10 +133,7 @@
         </p>
       </ion-label>
 
-      <ion-button
-        size="small"
-        slot="end"
-        (click)="descargarComprobante(m)"
+      <ion-button size="small" slot="end" (click)="descargarComprobante(m)"
         [disabled]="!m.transferenciaId && !m.pagoServicioId">
         Comprobante
       </ion-button>

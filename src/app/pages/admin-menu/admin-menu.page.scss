@@ -1,4 +1,4 @@
-/* Estilo general del grid y cards (igual que antes) */
+/* Estilo general del grid y cards */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -40,9 +40,9 @@
   color: #2c3e50;
 }
 
-/* NUEVO: Botón de cerrar sesión */
+/* Botón de cerrar sesión */
 .logout-button {
-  --background: #557ef9; /* rojo llamativo */
+  --background: #557ef9; 
   --color: #fff;
   --border-radius: 12px;
   --padding-start: 12px;
