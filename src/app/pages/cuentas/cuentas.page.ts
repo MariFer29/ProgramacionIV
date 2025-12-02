@@ -30,8 +30,6 @@ export class CuentasPage implements OnInit {
   errorMessage = '';
 
   clientIdFilter?: number;
-
-  // NUEVOS FILTROS
   typeFilter = '';
   currencyFilter = '';
   statusFilter = '';
@@ -49,7 +47,7 @@ export class CuentasPage implements OnInit {
     private router: Router
   ) { }
 
-  //CAMBIAMOS ngOnInit PARA LEER EL ROL
+  //ngOnInit PARA LEER EL ROL
   ngOnInit(): void {
     const rol = localStorage.getItem('rol')?.toLowerCase() || '';
 
@@ -89,7 +87,7 @@ export class CuentasPage implements OnInit {
     this.api.getCuentas(this.clientIdFilter).subscribe({
       next: (data) => {
 
-        // 🔹 Mapear moneda y tipo de cuenta sin tocar accountNumber
+        // Mapear moneda y tipo de cuenta 
         const monedaMap: any = { 1: 'CRC', 2: 'USD' };
         const tipoMap: any = { 1: 'Ahorros', 2: 'Corriente', 4: 'Plazo Fijo' };
         const statusMap: any = {
@@ -97,7 +95,6 @@ export class CuentasPage implements OnInit {
           2: 'Bloqueada',
           3: 'Cerrada'
         };
-
 
         this.cuentas = data.map(c => ({
           ...c,
@@ -122,9 +119,6 @@ export class CuentasPage implements OnInit {
       },
     });
   }
-
-
-
 
   // ABRIR CUENTA
   irAbrirCuenta() {

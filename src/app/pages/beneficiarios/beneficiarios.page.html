@@ -16,14 +16,6 @@
   <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
   <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
-  <!-- FORMULARIO -->
-  <!-- ============================
-     FORMULARIO DE BENEFICIARIO
-     Alineado con el backend (.NET)
-     Campos correctos:
-     alias, bank, currency, accountNumber, country
-================================= -->
-
   <form [formGroup]="form" (ngSubmit)="guardar()">
 
     <!-- Alias del beneficiario -->

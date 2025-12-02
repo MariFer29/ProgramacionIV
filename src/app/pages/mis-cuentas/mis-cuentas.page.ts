@@ -54,10 +54,10 @@ export class MisCuentasPage implements OnInit {
     this.api.getCuentas(clienteId).subscribe({
       next: (data: any[]) => {
 
-        // 🔹 Mapear moneda y tipo de cuenta sin tocar accountNumber
+        // Mapear moneda y tipo de cuenta
         const monedaMap: any = { 1: 'CRC', 2: 'USD' };
         const tipoMap: any = { 1: 'Ahorros', 2: 'Corriente', 4: 'Plazo Fijo' };
-                const statusMap: any = {
+        const statusMap: any = {
           1: 'Activa',
           2: 'Bloqueada',
           3: 'Cerrada'
@@ -87,7 +87,6 @@ export class MisCuentasPage implements OnInit {
       }
     });
   }
-
 
   volverAlMenuCliente(): void {
     this.router.navigate(['/menu-cliente']);
