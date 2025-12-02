@@ -90,18 +90,27 @@
         </p>
       </ion-label>
 
-      <ion-buttons slot="end">
+      
+      <!-- Botones de acciones: SOLO para administrador -->
+      <ion-buttons slot="end" *ngIf="esAdmin">
 
-        <ion-button color="warning" (click)="confirmarAccion(c.id, 'bloquear')"
+        <ion-button
+          color="warning"
+          (click)="confirmarAccion(c.id, 'bloquear')"
           [disabled]="c.status === 'Bloqueada' || c.status === 'Cerrada'">
           Bloquear
         </ion-button>
 
-        <ion-button color="danger" (click)="confirmarAccion(c.id, 'cerrar')" [disabled]="c.status === 'Cerrada'">
+        <ion-button
+          color="danger"
+          (click)="confirmarAccion(c.id, 'cerrar')"
+          [disabled]="c.status === 'Cerrada'">
           Cerrar
         </ion-button>
 
       </ion-buttons>
+
+
     </ion-item>
 
     <ion-item *ngIf="!isLoading && cuentasFiltradas.length === 0">

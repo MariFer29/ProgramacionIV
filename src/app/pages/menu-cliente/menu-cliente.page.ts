@@ -21,6 +21,11 @@ export class MenuClientePage {
   goTo(route: string) {
     this.router.navigate([route]);
   }
+
+  irAMisCuentas() {
+    this.router.navigate(['/mis-cuentas']);
+  }
+
 }
 
 

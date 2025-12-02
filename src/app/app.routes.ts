@@ -95,6 +95,24 @@ export const routes: Routes = [
         (m) => m.MenuClientePage
       ),
   },
+
+  {
+    path: 'mis-cuentas',
+    loadComponent: () =>
+      import('./pages/mis-cuentas/mis-cuentas.page').then(
+        (m) => m.MisCuentasPage
+      ),
+  },
+
+  {
+    path: 'mis-cuentas',
+    loadComponent: () =>
+      import('./pages/mis-cuentas/mis-cuentas.page').then(
+        m => m.MisCuentasPage
+      ),
+  },
+
+
   {
     path: 'menu-gestor',
     loadComponent: () =>
@@ -108,4 +126,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/historial/historial.page').then((m) => m.HistorialPage),
   },
+
 ];
