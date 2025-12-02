@@ -134,7 +134,6 @@ namespace BancaOnline.BW.CU
 
         public async Task<byte[]> GenerarComprobanteExtractoMensualAsync(Guid cuentaId, int anio, int mes)
         {
-            // Reutiliza la lógica de HistorialCU
             var extracto = await _historialBW.GenerarExtractoMensualAsync(cuentaId, anio, mes);
 
             var pdf = Document.Create(container =>

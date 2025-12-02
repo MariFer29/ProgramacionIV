@@ -72,7 +72,6 @@ namespace BancaOnline.BW.CU
         {
             var movimientos = new List<MovimientoHistorialDTO>();
 
-            // Todas las cuentas involucradas
             var cuentasIds = new HashSet<Guid>(
                 transferencias.SelectMany(t => new[] { t.CuentaOrigenId, t.CuentaDestinoId })
                               .Concat(pagos.Select(p => p.CuentaOrigenId)));
@@ -126,7 +125,7 @@ namespace BancaOnline.BW.CU
                             CuentaOrigenId = p.CuentaOrigenId,
                             NumeroCuentaOrigen = cuentaOrigen?.AccountNumber,
                             Monto = p.Monto,
-                            Comision = 0m, // pagos sin comisión extra
+                            Comision = 0m, 
                             Estado = p.Estado,
                             Descripcion = $"Pago de servicio desde {cuentaOrigen?.AccountNumber} (contrato {p.NumeroContrato})"
                         };
@@ -163,10 +162,8 @@ namespace BancaOnline.BW.CU
                 .OrderBy(m => m.Fecha)
                 .ToList();
 
-            // Saldo final = balance actual de la cuenta
             var saldoFinal = cuenta.Balance;
 
-            //  obtener saldo inicial de la primera transferencia del mes
             var transferenciasMes = await _reportesDA.ObtenerTransferenciasHistorialAsync(
                 null,
                 cuentaId,
@@ -181,7 +178,6 @@ namespace BancaOnline.BW.CU
 
             if (transferenciasOrdenadas.Any())
             {
-                // Saldo antes de la primera transferencia del mes
                 saldoInicial = transferenciasOrdenadas.First().SaldoAntes;
             }
             else

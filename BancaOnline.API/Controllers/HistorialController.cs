@@ -16,7 +16,6 @@ namespace BancaOnline.API.Controllers
             _historialBW = historialBW;
         }
 
-        // GET api/historial/cliente/123?desde=...&hasta=...&tipo=1&estado=1&cuentaId=...
         [HttpGet("cliente/{clienteId:int}")]
         // [Authorize(Roles = "Cliente,Gestor,Administrador")]
         public async Task<IActionResult> GetPorCliente(
@@ -31,10 +30,10 @@ namespace BancaOnline.API.Controllers
             DateTime? hastaNorm = null;
 
             if (desde.HasValue)
-                desdeNorm = desde.Value.Date; // 00:00:00
+                desdeNorm = desde.Value.Date; 
 
             if (hasta.HasValue)
-                hastaNorm = hasta.Value.Date.AddDays(1).AddTicks(-1); // 23:59:59.9999999
+                hastaNorm = hasta.Value.Date.AddDays(1).AddTicks(-1); 
 
             var filtro = new HistorialFiltroDTO
             {
@@ -49,7 +48,6 @@ namespace BancaOnline.API.Controllers
             return Ok(result);
         }
 
-        // GET api/historial/cuenta/{cuentaId}?desde=...&hasta=...&tipo=2&estado=1
         [HttpGet("cuenta/{cuentaId:guid}")]
         // [Authorize(Roles = "Cliente,Gestor,Administrador")]
         public async Task<IActionResult> GetPorCuenta(
@@ -72,7 +70,6 @@ namespace BancaOnline.API.Controllers
             return Ok(result);
         }
 
-        // GET api/historial/extracto/{cuentaId}?anio=2025&mes=11
         [HttpGet("extracto/{cuentaId:guid}")]
         // [Authorize(Roles = "Cliente,Gestor,Administrador")]
         public async Task<IActionResult> GetExtracto(

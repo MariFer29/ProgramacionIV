@@ -15,7 +15,6 @@ namespace BancaOnline.API.Controllers
             _reportesBW = reportesBW;
         }
 
-        // GET => api/reportes/totales?desde=2025-01-01&hasta=2025-01-31
         [HttpGet("totales")]
         public async Task<IActionResult> GetTotales(
             [FromQuery] DateTime desde,
@@ -25,7 +24,6 @@ namespace BancaOnline.API.Controllers
             return Ok(result);
         }
 
-        // GET => api/reportes/top-clientes?desde=2025-01-01&hasta=2025-01-31&top=5
         [HttpGet("top-clientes")]
         public async Task<IActionResult> GetTopClientes(
             [FromQuery] DateTime desde,
@@ -36,7 +34,6 @@ namespace BancaOnline.API.Controllers
             return Ok(result);
         }
 
-        // GET => api/reportes/volumen-diario?desde=2025-01-01&hasta=2025-01-31
         [HttpGet("volumen-diario")]
         public async Task<IActionResult> GetVolumenDiario(
             [FromQuery] DateTime desde,

@@ -15,7 +15,6 @@ namespace BancaOnline.API.Controllers
             _auditoriaBW = auditoriaBW;
         }
 
-        // GET => api/auditoria?desde=2025-01-01&hasta=2025-01-31&usuarioId=...&tipoOperacion=Transferencia
         //[Authorize(Roles = "Gestor,Administrador")]
         [HttpGet]
         public async Task<IActionResult> Get(

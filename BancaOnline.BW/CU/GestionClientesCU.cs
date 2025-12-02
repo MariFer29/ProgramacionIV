@@ -31,12 +31,10 @@ namespace BancaOnline.BW.CU
             if (cliente == null)
                 return "Cliente no encontrado.";
 
-            // Validar correo único entre clientes
             var clientePorCorreo = await _clientesRepo.ObtenerPorCorreoAsync(dto.Correo);
             if (clientePorCorreo != null && clientePorCorreo.Id != id)
                 return "Ya existe un cliente con ese correo.";
 
-            // Asignar cambios
             cliente.NombreCompleto = dto.NombreCompleto;
             cliente.Telefono = dto.Telefono;
             cliente.Correo = dto.Correo;

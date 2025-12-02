@@ -118,7 +118,6 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1"
     });
 
-    // ==== ESTO AGREGA EL BOTÓN AUTHORIZE ====
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Description = "Autorización JWT usando Bearer. Ejemplo: Bearer {token}",

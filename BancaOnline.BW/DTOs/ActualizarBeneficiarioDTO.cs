@@ -11,7 +11,7 @@ namespace BancaOnline.BW.DTOs
 {
     public class ActualizarBeneficiarioDTO
     {
-        public Guid Id { get; set; }  // Id del beneficiario
+        public Guid Id { get; set; }  
 
         public string Alias { get; set; } = null!;
         public string Bank { get; set; } = null!;

@@ -30,7 +30,6 @@ namespace BancaOnline.DA.Acciones
         {
             var query = _context.Transferencias.AsQueryable();
 
-            // Filtrar por cliente 
             if (clienteId.HasValue)
             {
                 int cid = clienteId.Value;
@@ -40,7 +39,6 @@ namespace BancaOnline.DA.Acciones
                         a.ClientId == cid));
             }
 
-            // Filtrar por cuenta (origen o destino)
             if (cuentaId.HasValue)
             {
                 Guid accId = cuentaId.Value;
@@ -49,14 +47,12 @@ namespace BancaOnline.DA.Acciones
                     t.CuentaDestinoId == accId);
             }
 
-            // Rango de fechas 
             if (desde.HasValue)
                 query = query.Where(t => t.FechaCreacion >= desde.Value);
 
             if (hasta.HasValue)
                 query = query.Where(t => t.FechaCreacion <= hasta.Value);
 
-            // Estado (int)
             if (estado.HasValue)
                 query = query.Where(t => t.Estado == estado.Value);
 
@@ -74,7 +70,6 @@ namespace BancaOnline.DA.Acciones
         {
             var query = _context.PagosServicios.AsQueryable();
 
-            // Filtrar por cliente a través de la cuenta origen
             if (clienteId.HasValue)
             {
                 int cid = clienteId.Value;
@@ -84,21 +79,18 @@ namespace BancaOnline.DA.Acciones
                         a.ClientId == cid));
             }
 
-            // Filtrar por cuenta origen
             if (cuentaId.HasValue)
             {
                 Guid accId = cuentaId.Value;
                 query = query.Where(p => p.CuentaOrigenId == accId);
             }
 
-            // Rango de fechas
             if (desde.HasValue)
                 query = query.Where(p => p.FechaCreacion >= desde.Value);
 
             if (hasta.HasValue)
                 query = query.Where(p => p.FechaCreacion <= hasta.Value);
 
-            // Estado (int)
             if (estado.HasValue)
                 query = query.Where(p => p.Estado == estado.Value);
 
@@ -109,7 +101,6 @@ namespace BancaOnline.DA.Acciones
 
         public async Task<decimal> ObtenerTotalOperacionesAsync(DateTime desde, DateTime hasta)
         {
-            // Total de transferencias exitosas
             var totalTransferencias = await _context.Transferencias
                 .Where(t =>
                     t.FechaCreacion >= desde &&
@@ -117,7 +108,6 @@ namespace BancaOnline.DA.Acciones
                     t.Estado == ESTADO_TRANSFERENCIA_EXITOSA)
                 .SumAsync(t => t.Monto + t.Comision);
 
-            // Total de pagos de servicio pagados
             var totalPagos = await _context.PagosServicios
                 .Where(p =>
                     p.FechaCreacion >= desde &&
@@ -158,7 +148,6 @@ namespace BancaOnline.DA.Acciones
             DateTime desde,
             DateTime hasta)
         {
-            // Volumen diario de transferencias exitosas
             var query = await _context.Transferencias
                 .Where(t =>
                     t.FechaCreacion >= desde &&

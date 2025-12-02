@@ -13,14 +13,13 @@ namespace BancaOnline.BC.Entities
     {
         public Guid Id { get; set; }
 
-        public string AccountNumber { get; set; } = null!; // 12 dígitos
+        public string AccountNumber { get; set; } = null!; 
         public AccountType Type { get; set; }
         public CurrencyType Currency { get; set; }
 
         public decimal Balance { get; set; }
         public AccountStatus Status { get; set; }
 
-        // Cliente dueño de la cuenta
         public int ClientId { get; set; }
 
         public DateTime CreatedAt { get; set; }

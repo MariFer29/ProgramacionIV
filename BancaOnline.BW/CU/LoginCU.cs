@@ -24,14 +24,12 @@ namespace BancaOnline.BW.CU
             if (usuario == null)
                 return null;
 
-            // Usuario bloqueado
             if (usuario.FechaBloqueoHasta != null &&
                 usuario.FechaBloqueoHasta > DateTime.UtcNow)
             {
-                return null; // <-- NO devolver string
+                return null; 
             }
 
-            // Verificar contraseña
             var resultado = _passwordHasher.VerifyHashedPassword(
                 usuario,
                 usuario.ContrasenaHash,
@@ -49,7 +47,6 @@ namespace BancaOnline.BW.CU
                 return null;
             }
 
-            // Login exitoso
             usuario.IntentosFallidos = 0;
             usuario.FechaBloqueoHasta = null;
 

@@ -9,7 +9,6 @@ namespace BancaOnline.DA.Interfaces
 {
     public interface IReportesDA
     {
-        // Historial para módulo F
         Task<IEnumerable<Transferencia>> ObtenerTransferenciasHistorialAsync(
             int? clienteId,
             Guid? cuentaId,
@@ -24,7 +23,6 @@ namespace BancaOnline.DA.Interfaces
             DateTime? hasta,
             int? estado);
 
-        // Reportes agregados para módulo G
         Task<decimal> ObtenerTotalOperacionesAsync(DateTime desde, DateTime hasta);
 
         Task<IEnumerable<(int ClientId, decimal MontoTotal)>> ObtenerTopClientesAsync(

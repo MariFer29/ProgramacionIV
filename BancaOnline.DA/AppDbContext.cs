@@ -16,9 +16,6 @@ namespace BancaOnline.DA
         {
         }
 
-        // -----------------------------
-        // Tablas existentes
-        // -----------------------------
         public DbSet<Transferencia> Transferencias => Set<Transferencia>();
         public DbSet<TransferenciaProgramada> TransferenciasProgramadas => Set<TransferenciaProgramada>();
         public DbSet<PagoServicio> PagosServicios => Set<PagoServicio>();
@@ -48,9 +45,6 @@ namespace BancaOnline.DA
         {
             base.OnModelCreating(modelBuilder);
 
-            // -----------------------------
-            // Tablas existentes
-            // -----------------------------
             modelBuilder.Entity<Transferencia>().ToTable("Transferencia");
             modelBuilder.Entity<TransferenciaProgramada>().ToTable("TransferenciaProgramada");
             modelBuilder.Entity<PagoServicio>().ToTable("PagoServicio");
@@ -93,7 +87,7 @@ namespace BancaOnline.DA
                       .HasMaxLength(20);
 
                 entity.HasIndex(c => c.Identificacion)
-                      .IsUnique();  // Identificación única
+                      .IsUnique();  
 
                 entity.Property(c => c.NombreCompleto)
                       .IsRequired()
@@ -105,7 +99,6 @@ namespace BancaOnline.DA
                 entity.Property(c => c.Correo)
                       .HasMaxLength(100);
 
-                // Relación 1:1 Cliente → Usuario (opcional)
                 entity.HasOne(c => c.Usuario)
                       .WithOne()
                       .HasForeignKey<Cliente>(c => c.UsuarioId)

@@ -12,7 +12,6 @@ namespace BancaOnline.BC.Entities
     {
         public Guid Id { get; set; }
 
-        // dueño del beneficiario (cliente)
         public int ClientId { get; set; }
 
         public string Alias { get; set; } = null!;
