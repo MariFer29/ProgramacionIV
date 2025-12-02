@@ -33,7 +33,7 @@ export class BeneficiariosPage implements OnInit {
     private api: ApiService,
     private alertCtrl: AlertController,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -54,13 +54,13 @@ export class BeneficiariosPage implements OnInit {
   filtrarBeneficiarios(): void {
     const term = this.searchTerm.toLowerCase();
 
-    this.beneficiariosFiltrados = this.beneficiarios.filter(b =>
-      b.alias.toLowerCase().includes(term) ||
-      b.bank.toLowerCase().includes(term) ||
-      b.country.toLowerCase().includes(term)
+    this.beneficiariosFiltrados = this.beneficiarios.filter(
+      (b) =>
+        b.alias.toLowerCase().includes(term) ||
+        b.bank.toLowerCase().includes(term) ||
+        b.country.toLowerCase().includes(term)
     );
   }
-
 
   // ===============================
   //      TOKEN Y CLIENTE ID
@@ -108,7 +108,7 @@ export class BeneficiariosPage implements OnInit {
     } else {
       this.successMessage = '';
       this.errorMessage = '';
-      this.cargarBeneficiarios(); 
+      this.cargarBeneficiarios();
     }
   }
 
@@ -138,8 +138,6 @@ export class BeneficiariosPage implements OnInit {
     });
   }
 
-
-
   // ===============================
   //      GUARDAR (CREAR / EDITAR)
   // ===============================
@@ -150,41 +148,35 @@ export class BeneficiariosPage implements OnInit {
       return;
     }
 
+    // 1. Obtener el clienteId desde el token
+    const clienteId = this.getClienteId();
+    if (!clienteId) {
+      this.loading = false;
+      this.errorMessage =
+        'No se encontró el cliente actual. Inicia sesión de nuevo.';
+      this.successMessage = '';
+      return;
+    }
+
     const valores = this.form.value;
 
+
     const body: any = {
+      clientId: clienteId, 
       alias: valores.alias,
       bank: valores.bank,
-      currency: Number(valores.currency),
+      currency: Number(valores.currency), 
       accountNumber: valores.accountNumber,
       country: valores.country,
     };
 
     if (this.editingId) {
-      body.id = this.editingId;
+      body.id = this.editingId; 
     }
 
     this.loading = true;
     this.successMessage = '';
     this.errorMessage = '';
-
-    const clienteId = this.getClienteId();
-    const rolRaw = localStorage.getItem('rol') || '';
-    const rol = rolRaw.toLowerCase();
-
-    if (rol === 'cliente') {
-      if (!clienteId) {
-        this.loading = false;
-        this.errorMessage =
-          'No se encontró el cliente actual. Inicia sesión de nuevo.';
-        return;
-      }
-    } else {
-      this.loading = false;
-      this.errorMessage =
-        'Solo los clientes pueden registrar beneficiarios desde esta pantalla.';
-      return;
-    }
 
     const peticion$ = this.editingId
       ? this.api.actualizarBeneficiario(body)
@@ -197,8 +189,13 @@ export class BeneficiariosPage implements OnInit {
           ? 'Beneficiario actualizado correctamente.'
           : 'Beneficiario creado correctamente.';
         this.errorMessage = '';
-        this.cancelarEdicion(false);
-        this.cargarBeneficiarios(clienteId!);
+        this.cancelarEdicion(false); 
+
+        // Recargar lista
+        const id = this.getClienteId();
+        if (id) {
+          this.cargarBeneficiarios(id);
+        }
       },
       error: (err) => {
         console.error('Error al guardar beneficiario:', err);
