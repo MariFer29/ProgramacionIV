@@ -5,9 +5,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
-  <form [formGroup]="form" (ngSubmit)="enviarPago()">
-
+  <form [formGroup]="form" (ngSubmit)="registrarPago()">
     <ion-item>
       <ion-label position="stacked">Proveedor</ion-label>
       <ion-select formControlName="proveedorId">
@@ -19,23 +17,28 @@
 
     <ion-item>
       <ion-label position="stacked">Cuenta origen</ion-label>
-      <ion-select formControlName="cuentaOrigenId">
+      <ion-select formControlName="cuentaOrigenId" (ionChange)="onCuentaOrigenChange($event.detail.value)">
         <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
-          {{ c.accountNumber }} • {{ c.currency }} • Saldo: {{ c.balance }}
+          {{ c.accountNumber }} • {{ c.currency }}
         </ion-select-option>
       </ion-select>
     </ion-item>
 
+    <ion-item *ngIf="saldoDisponible !== null">
+      <ion-label>
+        Saldo disponible:
+        {{ saldoDisponible | number: '1.2-2' }}
+      </ion-label>
+    </ion-item>
+
     <ion-item>
       <ion-label position="floating">Número de contrato</ion-label>
-      <ion-input type="text" formControlName="numeroContrato" maxlength="12">
-      </ion-input>
+      <ion-input type="text" formControlName="numeroContrato" maxlength="12"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Monto</ion-label>
-      <ion-input type="number" formControlName="monto">
-      </ion-input>
+      <ion-input type="number" formControlName="monto"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -48,8 +51,7 @@
 
     <ion-item>
       <ion-label position="stacked">Fecha programada (opcional)</ion-label>
-      <ion-datetime presentation="date" formControlName="fechaProgramada">
-      </ion-datetime>
+      <ion-datetime presentation="date" formControlName="fechaProgramada"></ion-datetime>
     </ion-item>
 
     <ion-button expand="block" class="ion-margin-top" type="submit" [disabled]="form.invalid || loading">
@@ -61,7 +63,5 @@
     </ion-button>
 
     <ion-spinner *ngIf="loading" class="ion-margin-top"></ion-spinner>
-
   </form>
-
 </ion-content>

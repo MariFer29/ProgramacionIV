@@ -93,6 +93,19 @@ export class LoginPage {
         const token = res.token;
         localStorage.setItem('token', token);
 
+        const posibleClienteId =
+          res.clienteId ?? res.clientId ?? res.clienteID ?? null;
+
+        if (posibleClienteId != null) {
+          console.log('clienteId recibido en login:', posibleClienteId);
+          localStorage.setItem('clienteId', String(posibleClienteId));
+        } else {
+          console.warn(
+            'Login no devolvió clienteId; no se puede filtrar cuentas solo del cliente.'
+          );
+          localStorage.removeItem('clienteId');
+        }
+
         let rol: any = res.rol || res.role || res.Rol;
 
         // Intentar sacar el rol desde el token si no viene en la respuesta

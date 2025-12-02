@@ -25,7 +25,7 @@ export class HistorialPage implements OnInit {
   cuentaSeleccionadaId: string = '';
   fechaDesde: string = '';
   fechaHasta: string = '';
-  tipoSeleccionado: string = '';
+  tipoSeleccionado: string = ''; // '' | '1' | '2'
   estadoCodigo: string = '';
 
   loading = false;
@@ -40,80 +40,181 @@ export class HistorialPage implements OnInit {
     this.cargarCuentas();
   }
 
+  // =============== UTILIDAD TOKEN =================
+  private decodeToken(token: string): any | null {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(json);
+    } catch {
+      console.warn('No se pudo decodificar el token en Historial');
+      return null;
+    }
+  }
+
+  // Normaliza lo que venga a yyyy-MM-dd para el backend (.NET)
+  private normalizarFecha(
+    valor: string | null | undefined
+  ): string | undefined {
+    if (!valor) return undefined;
+
+    // Ya viene como yyyy-MM-dd
+    if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
+      return valor;
+    }
+
+    // dd/MM/yyyy o dd-MM-yyyy
+    const match = valor.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    if (match) {
+      const [, d, m, y] = match;
+      const dd = d.padStart(2, '0');
+      const mm = m.padStart(2, '0');
+      return `${y}-${mm}-${dd}`;
+    }
+
+    // Cualquier otra cosa: último intento con Date
+    const date = new Date(valor);
+    if (!isNaN(date.getTime())) {
+      const y = date.getFullYear();
+      const m = (date.getMonth() + 1).toString().padStart(2, '0');
+      const d = date.getDate().toString().padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    console.warn('Fecha en formato no reconocido:', valor);
+    return undefined;
+  }
+
+  // =============== CARGAR CUENTAS =================
   cargarCuentas(): void {
-    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
-    const clienteIdStr = localStorage.getItem('clienteId');
+    const rolRaw = localStorage.getItem('rol') || '';
+    const rol = rolRaw.toLowerCase();
+    const token = localStorage.getItem('token') || '';
+
+    const payload = token ? this.decodeToken(token) : null;
+    console.log('PAYLOAD TOKEN (Historial):', payload);
+
+    const clienteIdFromToken = payload?.clienteId;
+    const clienteId =
+      clienteIdFromToken !== undefined && clienteIdFromToken !== null
+        ? Number(clienteIdFromToken)
+        : NaN;
 
     let obs$;
 
     if (rol === 'cliente') {
-      if (!clienteIdStr) {
+      if (Number.isNaN(clienteId) || clienteId <= 0) {
         console.warn(
-          'Cliente sin clienteId en localStorage, no se cargan cuentas.'
+          'Rol cliente pero sin clienteId válido en el token. No se cargan cuentas.'
         );
         this.cuentas = [];
+        this.mostrarToast(
+          'No se pudo identificar el cliente desde el token.',
+          'danger'
+        );
         return;
       }
 
-      const clienteId = Number(clienteIdStr);
-      if (isNaN(clienteId) || clienteId <= 0) {
-        console.warn('clienteId inválido, no se cargan cuentas.');
-        this.cuentas = [];
-        return;
-      }
-
+      // Cliente -> solo sus cuentas
       obs$ = this.api.getCuentas(clienteId);
     } else {
+      // Admin / Gestor -> todas
       obs$ = this.api.getCuentas();
     }
 
     obs$.subscribe({
       next: (data) => {
+        console.log('CUENTAS HISTORIAL:', data);
         this.cuentas = data;
+
+        // Si solo hay una cuenta, la preseleccionamos
+        if (this.cuentas.length === 1) {
+          this.cuentaSeleccionadaId = this.cuentas[0].id as any;
+        }
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error al cargar cuentas en historial:', err);
         this.mostrarToast('Error al cargar cuentas', 'danger');
       },
     });
   }
 
+  // =============== BUSCAR HISTORIAL =================
   buscar(): void {
     if (!this.cuentaSeleccionadaId) {
       this.mostrarToast('Seleccione una cuenta.');
       return;
     }
 
-    if (!this.fechaDesde || !this.fechaHasta) {
-      this.mostrarToast('Debe seleccionar el rango de fechas.');
-      return;
-    }
+    const desdeNormalizado = this.normalizarFecha(this.fechaDesde);
+    const hastaNormalizado = this.normalizarFecha(this.fechaHasta);
 
-    const filtros: HistorialFiltro = {
-      desde: this.fechaDesde,
-      hasta: this.fechaHasta,
-      tipo: this.tipoSeleccionado ? Number(this.tipoSeleccionado) : undefined,
+    const filtrosBase: HistorialFiltro = {
+      desde: desdeNormalizado,
+      hasta: hastaNormalizado,
+      // NO enviamos tipo; lo filtramos aquí
       estado: this.estadoCodigo ? Number(this.estadoCodigo) : undefined,
     };
+
+    const token = localStorage.getItem('token') || '';
+    const payload = token ? this.decodeToken(token) : null;
+    const clienteIdFromToken = payload?.clienteId;
+    const clienteId =
+      clienteIdFromToken !== undefined && clienteIdFromToken !== null
+        ? Number(clienteIdFromToken)
+        : NaN;
+
+    if (Number.isNaN(clienteId) || clienteId <= 0) {
+      this.mostrarToast(
+        'No se pudo identificar el cliente desde el token.',
+        'danger'
+      );
+      return;
+    }
 
     this.loading = true;
     this.movimientos = [];
 
-    const clienteIdStr = localStorage.getItem('clienteId');
-    const clienteId = clienteIdStr ? Number(clienteIdStr) : 0;
+    console.log('BUSCAR HISTORIAL → clienteId:', clienteId);
+    console.log('BUSCAR HISTORIAL → filtros (sin tipo):', filtrosBase);
+    console.log(
+      'BUSCAR HISTORIAL → cuentaId:',
+      this.cuentaSeleccionadaId || null
+    );
 
     this.api
       .getHistorialPorCliente(clienteId, {
-        ...filtros,
+        ...filtrosBase,
         cuentaId: this.cuentaSeleccionadaId || null,
       })
       .subscribe({
         next: (data) => {
           this.loading = false;
-          this.movimientos = data;
+          const rawData: any[] = data || [];
+          console.log('RESPUESTA HISTORIAL (RAW):', rawData);
+
+          // Para ver exactamente qué tipos llegan
+          const tiposUnicos = Array.from(
+            new Set(rawData.map((m) => (m.tipo || '').toString()))
+          );
+          console.log('TIPOS EN RESPUESTA HISTORIAL:', tiposUnicos);
+
+          let result = rawData;
+
+          // Filtro explícito en base al valor real del campo m.tipo
+          if (this.tipoSeleccionado === '1') {
+            // Solo transferencias
+            result = result.filter((m) => m.tipo === 'Transferencia');
+          } else if (this.tipoSeleccionado === '2') {
+            // Solo pagos de servicio
+            result = result.filter((m) => m.tipo === 'PagoServicio');
+          }
+
+          console.log('RESPUESTA HISTORIAL (filtrada por tipo):', result);
+          this.movimientos = result;
         },
         error: (err) => {
-          console.error(err);
+          console.error('Error al obtener historial:', err);
           this.loading = false;
           this.mostrarToast(
             err.error?.message ||

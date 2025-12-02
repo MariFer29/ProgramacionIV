@@ -9,6 +9,7 @@ import {
 import { IonicModule, ToastController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
+import { Cuenta } from 'src/app/models/banca.models';
 
 @Component({
   selector: 'app-transferencias',
@@ -19,7 +20,12 @@ import { Router } from '@angular/router';
 })
 export class TransferenciasPage implements OnInit {
   transferForm!: FormGroup;
-  cuentas: any[] = [];
+
+  cuentasOrigen: Cuenta[] = [];
+  cuentasDestino: Cuenta[] = [];
+
+  saldoDisponible: number | null = null;
+
   loading = false;
 
   constructor(
@@ -41,130 +47,57 @@ export class TransferenciasPage implements OnInit {
     this.cargarCuentas();
   }
 
+  private decodeToken(token: string): any | null {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(json);
+    } catch {
+      return null;
+    }
+  }
+
   cargarCuentas() {
     this.loading = true;
 
-    const token = localStorage.getItem('token');
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+    const token = localStorage.getItem('token') || '';
 
-    if (!token) {
-      console.error('No hay token en localStorage');
-      this.loading = false;
-      this.toastCtrl
-        .create({
-          message: 'No se encontró token de sesión.',
-          duration: 2000,
-          color: 'danger',
-        })
-        .then((t) => t.present());
-      return;
-    }
+    const payload = token ? this.decodeToken(token) : null;
+    const clienteIdFromToken = payload?.clienteId;
+    const clienteId =
+      clienteIdFromToken !== undefined && clienteIdFromToken !== null
+        ? Number(clienteIdFromToken)
+        : NaN;
 
-    let emailFromToken: string | null = null;
+    this.api.getCuentas().subscribe({
+      next: async (todasLasCuentas: any[]) => {
+        this.cuentasDestino = todasLasCuentas as any[];
 
-    try {
-      const payloadBase64 = token.split('.')[1];
-      const payloadJson = atob(payloadBase64);
-      const payload = JSON.parse(payloadJson);
-
-      emailFromToken =
-        payload[
-          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
-        ] ||
-        payload['email'] ||
-        null;
-
-      console.log('EMAIL DESDE JWT:', emailFromToken);
-    } catch (e) {
-      console.error('Error al decodificar el token JWT:', e);
-    }
-
-    if (!emailFromToken) {
-      console.warn(
-        'No se pudo obtener el email del token, cargando todas las cuentas'
-      );
-      this.api.getCuentas().subscribe({
-        next: (res) => {
-          console.log('CUENTAS (sin filtro por cliente):', res);
-          this.cuentas = res;
-          this.loading = false;
-        },
-        error: async (err) => {
-          console.error('ERROR AL CARGAR CUENTAS:', err);
-          this.loading = false;
-          const t = await this.toastCtrl.create({
-            message: 'Error al cargar las cuentas.',
-            duration: 2000,
-            color: 'danger',
-          });
-          t.present();
-        },
-      });
-      return;
-    }
-
-    this.api.getClientes().subscribe({
-      next: (clientes: any[]) => {
-        console.log('CLIENTES:', clientes);
-
-        const cliente = clientes.find(
-          (c) => c.correo === emailFromToken || c.email === emailFromToken
-        );
-
-        if (!cliente) {
-          console.warn(
-            'No se encontró cliente con ese correo, cargando todas las cuentas'
+        if (rol === 'cliente' && !Number.isNaN(clienteId) && clienteId > 0) {
+          this.cuentasOrigen = (todasLasCuentas as any[]).filter(
+            (c) => c.clientId === clienteId
           );
-          this.api.getCuentas().subscribe({
-            next: (res) => {
-              console.log('CUENTAS (fallback sin filtro):', res);
-              this.cuentas = res;
-              this.loading = false;
-            },
-            error: async (err) => {
-              console.error('ERROR AL CARGAR CUENTAS (fallback):', err);
-              this.loading = false;
-              const t = await this.toastCtrl.create({
-                message: 'Error al cargar las cuentas.',
-                duration: 2000,
-                color: 'danger',
-              });
-              t.present();
-            },
-          });
-          return;
+        } else {
+          this.cuentasOrigen = todasLasCuentas as any[];
         }
 
-        const clienteId = cliente.id || cliente.clienteId;
-        console.log(
-          'CLIENTE ENCONTRADO:',
-          cliente,
-          'clienteId usado:',
-          clienteId
-        );
+        if (this.cuentasOrigen.length === 1) {
+          const unica = this.cuentasOrigen[0];
+          this.transferForm.patchValue({ cuentaOrigenId: unica.id });
+          this.saldoDisponible =
+            typeof unica.balance === 'number' ? unica.balance : null;
+        } else {
+          this.saldoDisponible = null;
+        }
 
-        this.api.getCuentas(clienteId).subscribe({
-          next: (res) => {
-            console.log('CUENTAS FILTRADAS POR CLIENTE:', res);
-            this.cuentas = res;
-            this.loading = false;
-          },
-          error: async (err) => {
-            console.error('ERROR AL CARGAR CUENTAS FILTRADAS:', err);
-            this.loading = false;
-            const t = await this.toastCtrl.create({
-              message: 'Error al cargar las cuentas.',
-              duration: 2000,
-              color: 'danger',
-            });
-            t.present();
-          },
-        });
+        this.loading = false;
       },
       error: async (err) => {
-        console.error('ERROR AL OBTENER CLIENTES:', err);
+        console.error('Error al cargar cuentas:', err);
         this.loading = false;
         const t = await this.toastCtrl.create({
-          message: 'Error al cargar los datos del cliente.',
+          message: 'Error al cargar cuentas del cliente.',
           duration: 2000,
           color: 'danger',
         });
@@ -173,27 +106,62 @@ export class TransferenciasPage implements OnInit {
     });
   }
 
+  onCuentaOrigenChange(cuentaId: string) {
+    const c = this.cuentasOrigen.find((x: any) => x.id === cuentaId);
+
+    if (c && typeof c.balance === 'number') {
+      this.saldoDisponible = c.balance;
+    } else {
+      this.saldoDisponible = null;
+    }
+  }
+
   async enviarTransferencia() {
     if (this.transferForm.invalid) return;
 
     this.loading = true;
 
-    const body = this.transferForm.value;
+    const body = { ...this.transferForm.value };
 
     if (!body.idempotencyKey) {
       body.idempotencyKey = 'tx-' + Date.now();
     }
 
+    const montoNum = Number(this.transferForm.value.monto) || 0;
+    const cuentaOrigenId = this.transferForm.value.cuentaOrigenId as string;
+
     this.api.crearTransferencia(body).subscribe({
-      next: async (res) => {
+      next: async () => {
         this.loading = false;
+
+        const actualizarSaldoEnLista = (lista: Cuenta[]) => {
+          const cuenta = lista.find((c) => c.id === cuentaOrigenId);
+          if (cuenta && typeof cuenta.balance === 'number') {
+            const saldoActual = Number(cuenta.balance) || 0;
+            const nuevoSaldo = saldoActual - montoNum; // si hay comisión, réstala aquí también
+            cuenta.balance = nuevoSaldo;
+
+            if (lista === this.cuentasOrigen) {
+              this.saldoDisponible = nuevoSaldo;
+            }
+          }
+        };
+
+        actualizarSaldoEnLista(this.cuentasOrigen);
+        actualizarSaldoEnLista(this.cuentasDestino);
+
         const t = await this.toastCtrl.create({
           message: 'Transferencia registrada correctamente.',
           duration: 2000,
           color: 'success',
         });
         t.present();
-        this.transferForm.patchValue({ monto: 0 });
+
+        this.transferForm.patchValue({
+          monto: 0,
+          cuentaDestinoId: '',
+          idempotencyKey: '',
+        });
       },
       error: async (err) => {
         this.loading = false;
@@ -214,12 +182,11 @@ export class TransferenciasPage implements OnInit {
     const rol = localStorage.getItem('rol')?.toLowerCase() || '';
 
     if (['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rol)) {
-      // Redirigir a menú admin
       this.router.navigate(['/admin-menu']);
+    } else if (rol.includes('gestor')) {
+      this.router.navigate(['/menu-gestor']);
     } else {
-      // Si no es admin, asumimos cliente
       this.router.navigate(['/menu-cliente']);
     }
   }
-
 }

@@ -9,23 +9,38 @@
   <form [formGroup]="transferForm" (ngSubmit)="enviarTransferencia()">
     <ion-spinner *ngIf="loading"></ion-spinner>
 
-    <ion-item>
-      <ion-label position="stacked">Cuenta origen</ion-label>
-      <ion-select formControlName="cuentaOrigenId">
-        <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
-          {{ c.accountNumber }} • {{ c.currency }} • Saldo: {{ c.balance }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
+    <!-- Cuenta origen -->
+<ion-item>
+  <ion-label position="stacked">Cuenta origen</ion-label>
+  <ion-select
+    formControlName="cuentaOrigenId"
+    (ionChange)="onCuentaOrigenChange($event.detail.value)"
+  >
+    <ion-select-option *ngFor="let c of cuentasOrigen" [value]="c.id">
+      {{ c.accountNumber }} • {{ c.currency }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Cuenta destino</ion-label>
-      <ion-select formControlName="cuentaDestinoId">
-        <ion-select-option *ngFor="let c of cuentas" [value]="c.id">
-          {{ c.accountNumber }} • Cliente: {{ c.clientId }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
+<!-- Saldo disponible -->
+<ion-item>
+  <ion-label position="stacked">Saldo disponible</ion-label>
+  <ion-note slot="end">
+    {{ saldoDisponible !== null ? (saldoDisponible | number:'1.2-2') : '—' }}
+  </ion-note>
+</ion-item>
+
+<!-- Cuenta destino -->
+<ion-item>
+  <ion-label position="stacked">Cuenta destino</ion-label>
+  <ion-select formControlName="cuentaDestinoId">
+    <ion-select-option *ngFor="let c of cuentasDestino" [value]="c.id">
+      {{ c.accountNumber }} • {{ c.currency }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
+
+
 
     <ion-item>
       <ion-label position="floating">Monto</ion-label>
