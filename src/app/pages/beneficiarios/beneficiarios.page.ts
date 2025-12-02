@@ -18,19 +18,10 @@ import { ApiService } from 'src/app/services/api.service';
   imports: [CommonModule, ReactiveFormsModule, IonicModule],
 })
 export class BeneficiariosPage implements OnInit {
-  // Reactive form
   form!: FormGroup;
-
-  // Lista de beneficiarios
   beneficiarios: any[] = [];
-
-  // Estado de carga
   loading = false;
-
-  // Id del beneficiario que se está editando (null = creación)
   editingId: string | null = null;
-
-  // Mensajes mostrados arriba
   successMessage = '';
   errorMessage = '';
 
@@ -82,30 +73,42 @@ export class BeneficiariosPage implements OnInit {
   }
 
   private verificarClienteYcargar(): void {
-    const clienteId = this.getClienteId();
+    const rolRaw = localStorage.getItem('rol') || '';
+    const rol = rolRaw.toLowerCase();
 
-    if (!clienteId) {
+    if (rol === 'cliente') {
+      // Cliente → debe tener clienteId
+      const clienteId = this.getClienteId();
+
+      if (!clienteId) {
+        this.successMessage = '';
+        this.errorMessage =
+          'No se encontró el cliente actual. Inicia sesión de nuevo.';
+        return;
+      }
+
+      this.errorMessage = '';
+      this.cargarBeneficiarios(clienteId);
+    } else {
+      // Admin / Gestor → carga TODOS los beneficiarios
       this.successMessage = '';
-      this.errorMessage =
-        'No se encontró el cliente actual. Inicia sesión de nuevo.';
-      return;
+      this.errorMessage = '';
+      this.cargarBeneficiarios(); // sin clienteId → todos
     }
-
-    this.errorMessage = '';
-    this.cargarBeneficiarios(clienteId);
   }
 
   // ===============================
   //      CARGAR BENEFICIARIOS
   // ===============================
-  private cargarBeneficiarios(clienteId: number): void {
+  private cargarBeneficiarios(clienteId?: number): void {
     this.loading = true;
     this.beneficiarios = [];
 
     this.api.getBeneficiarios(clienteId).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.loading = false;
-        this.beneficiarios = data || [];
+        const body = data && data.body ? data.body : data;
+        this.beneficiarios = body || [];
       },
       error: (err) => {
         console.error('Error al cargar beneficiarios:', err);
@@ -129,28 +132,12 @@ export class BeneficiariosPage implements OnInit {
       return;
     }
 
-    this.loading = true;
-    this.successMessage = '';
-    this.errorMessage = '';
-
-    // 1) Obtener clienteId desde el token
-    const clienteId = this.getClienteId();
-    if (!clienteId) {
-      this.loading = false;
-      this.errorMessage =
-        'No se encontró el cliente actual. Inicia sesión de nuevo.';
-      return;
-    }
-
-    // 2) Valores del formulario
     const valores = this.form.value;
 
-    // 3) Armar body incluyendo clientId
     const body: any = {
-      clientId: clienteId, 
       alias: valores.alias,
       bank: valores.bank,
-      currency: Number(valores.currency), // "1"/"2" -> 1/2
+      currency: Number(valores.currency),
       accountNumber: valores.accountNumber,
       country: valores.country,
     };
@@ -159,7 +146,28 @@ export class BeneficiariosPage implements OnInit {
       body.id = this.editingId;
     }
 
-    // 4) Crear o actualizar según editingId
+    this.loading = true;
+    this.successMessage = '';
+    this.errorMessage = '';
+
+    const clienteId = this.getClienteId();
+    const rolRaw = localStorage.getItem('rol') || '';
+    const rol = rolRaw.toLowerCase();
+
+    if (rol === 'cliente') {
+      if (!clienteId) {
+        this.loading = false;
+        this.errorMessage =
+          'No se encontró el cliente actual. Inicia sesión de nuevo.';
+        return;
+      }
+    } else {
+      this.loading = false;
+      this.errorMessage =
+        'Solo los clientes pueden registrar beneficiarios desde esta pantalla.';
+      return;
+    }
+
     const peticion$ = this.editingId
       ? this.api.actualizarBeneficiario(body)
       : this.api.crearBeneficiario(body);
@@ -171,8 +179,8 @@ export class BeneficiariosPage implements OnInit {
           ? 'Beneficiario actualizado correctamente.'
           : 'Beneficiario creado correctamente.';
         this.errorMessage = '';
-        this.cancelarEdicion(false); // solo limpiar form
-        this.cargarBeneficiarios(clienteId);
+        this.cancelarEdicion(false);
+        this.cargarBeneficiarios(clienteId!);
       },
       error: (err) => {
         console.error('Error al guardar beneficiario:', err);
@@ -191,8 +199,6 @@ export class BeneficiariosPage implements OnInit {
   // ===============================
   seleccionarParaEditar(b: any): void {
     this.editingId = b.id;
-
-    // b.currency viene como 1 o 2 → lo pasamos a string
     const currencyValue = b.currency === 2 || b.currency === '2' ? '2' : '1';
 
     this.form.patchValue({
@@ -207,9 +213,6 @@ export class BeneficiariosPage implements OnInit {
     this.errorMessage = '';
   }
 
-  // ===============================
-  //      CANCELAR EDICIÓN
-  // ===============================
   cancelarEdicion(resetMessages: boolean = true): void {
     this.editingId = null;
     this.form.reset({
@@ -234,14 +237,8 @@ export class BeneficiariosPage implements OnInit {
       header: 'Confirmar',
       message: `¿Desea eliminar al beneficiario "${b.alias}"?`,
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          handler: () => this.eliminar(b.id),
-        },
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Eliminar', handler: () => this.eliminar(b.id) },
       ],
     });
 
@@ -257,10 +254,16 @@ export class BeneficiariosPage implements OnInit {
       next: () => {
         this.loading = false;
         this.successMessage = 'Beneficiario eliminado correctamente.';
+        const rolRaw = localStorage.getItem('rol') || '';
+        const rol = rolRaw.toLowerCase();
 
-        const clienteId = this.getClienteId();
-        if (clienteId) {
-          this.cargarBeneficiarios(clienteId);
+        if (rol === 'cliente') {
+          const clienteId = this.getClienteId();
+          if (clienteId) {
+            this.cargarBeneficiarios(clienteId);
+          }
+        } else {
+          this.cargarBeneficiarios(); // admin/gestor → recarga todos
         }
       },
       error: (err) => {

@@ -110,11 +110,16 @@ export class ApiService {
   //   BENEFICIARIOS / TERCEROS
   // ============================
 
-  getBeneficiarios(clientId: number) {
-    return this.http.get<any[]>(
-      `${this.baseUrl}/beneficiarios?clientId=${clientId}`,
-      this.getAuthHeaders()
-    );
+  getBeneficiarios(clientId?: number) {
+    const options: any = {
+      ...this.getAuthHeaders(),
+    };
+
+    if (clientId && clientId > 0) {
+      options.params = { clientId: clientId.toString() };
+    }
+
+    return this.http.get<any[]>(`${this.baseUrl}/beneficiarios`, options);
   }
 
   crearBeneficiario(body: any) {
@@ -125,7 +130,14 @@ export class ApiService {
     );
   }
 
-  actualizarBeneficiario(body: any) {
+  actualizarBeneficiario(body: {
+    id: string;
+    alias: string;
+    bank: string;
+    currency: number;
+    accountNumber: string;
+    country: string;
+  }) {
     return this.http.put(
       `${this.baseUrl}/beneficiarios`,
       body,
@@ -250,16 +262,7 @@ export class ApiService {
   // ==============================
   // HISTORIAL
   // ==============================
-  getHistorialPorCliente(
-    clienteId: number,
-    filtros: {
-      desde?: string;
-      hasta?: string;
-      tipo?: number | null;
-      estado?: number | null;
-      cuentaId?: string | null;
-    }
-  ): Observable<MovimientoHistorial[]> {
+  getHistorialPorCliente(clienteId: number, filtros: HistorialFiltro) {
     const params: any = {};
 
     if (filtros.desde) {
@@ -268,18 +271,43 @@ export class ApiService {
     if (filtros.hasta) {
       params.hasta = filtros.hasta;
     }
-    if (filtros.tipo != null) {
+    if (filtros.tipo !== undefined && filtros.tipo !== null) {
       params.tipo = filtros.tipo;
     }
-    if (filtros.estado != null) {
+    if (filtros.estado !== undefined && filtros.estado !== null) {
       params.estado = filtros.estado;
     }
     if (filtros.cuentaId) {
       params.cuentaId = filtros.cuentaId;
     }
 
-    return this.http.get<MovimientoHistorial[]>(
-      `${this.baseUrl}/Historial/cliente/${clienteId}`,
+    return this.http.get<any[]>(
+      `${this.baseUrl}/historial/cliente/${clienteId}`,
+      {
+        params,
+        ...this.getAuthHeaders(),
+      }
+    );
+  }
+
+  getHistorialPorCuenta(cuentaId: string, filtros: HistorialFiltro) {
+    const params: any = {};
+
+    if (filtros.desde) {
+      params.desde = filtros.desde;
+    }
+    if (filtros.hasta) {
+      params.hasta = filtros.hasta;
+    }
+    if (filtros.tipo !== undefined && filtros.tipo !== null) {
+      params.tipo = filtros.tipo;
+    }
+    if (filtros.estado !== undefined && filtros.estado !== null) {
+      params.estado = filtros.estado;
+    }
+
+    return this.http.get<any[]>(
+      `${this.baseUrl}/historial/cuenta/${cuentaId}`,
       {
         params,
         ...this.getAuthHeaders(),

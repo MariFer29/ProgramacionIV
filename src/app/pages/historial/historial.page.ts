@@ -141,7 +141,11 @@ export class HistorialPage implements OnInit {
 
   // =============== BUSCAR HISTORIAL =================
   buscar(): void {
-    if (!this.cuentaSeleccionadaId) {
+    const rolRaw = localStorage.getItem('rol') || '';
+    const rol = rolRaw.toLowerCase();
+
+    // Solo obligamos a elegir cuenta cuando NO es cliente (admin/gestor)
+    if (rol !== 'cliente' && !this.cuentaSeleccionadaId) {
       this.mostrarToast('Seleccione una cuenta.');
       return;
     }
@@ -152,78 +156,115 @@ export class HistorialPage implements OnInit {
     const filtrosBase: HistorialFiltro = {
       desde: desdeNormalizado,
       hasta: hastaNormalizado,
-      // NO enviamos tipo; lo filtramos aquí
       estado: this.estadoCodigo ? Number(this.estadoCodigo) : undefined,
     };
-
-    const token = localStorage.getItem('token') || '';
-    const payload = token ? this.decodeToken(token) : null;
-    const clienteIdFromToken = payload?.clienteId;
-    const clienteId =
-      clienteIdFromToken !== undefined && clienteIdFromToken !== null
-        ? Number(clienteIdFromToken)
-        : NaN;
-
-    if (Number.isNaN(clienteId) || clienteId <= 0) {
-      this.mostrarToast(
-        'No se pudo identificar el cliente desde el token.',
-        'danger'
-      );
-      return;
-    }
 
     this.loading = true;
     this.movimientos = [];
 
-    console.log('BUSCAR HISTORIAL → clienteId:', clienteId);
-    console.log('BUSCAR HISTORIAL → filtros (sin tipo):', filtrosBase);
-    console.log(
-      'BUSCAR HISTORIAL → cuentaId:',
-      this.cuentaSeleccionadaId || null
+    if (rol === 'cliente') {
+      // ===== CLIENTE → historial por cliente, cuenta opcional =====
+      const token = localStorage.getItem('token') || '';
+      const payload = token ? this.decodeToken(token) : null;
+      const clienteIdFromToken = payload?.clienteId;
+      const clienteId =
+        clienteIdFromToken !== undefined && clienteIdFromToken !== null
+          ? Number(clienteIdFromToken)
+          : NaN;
+
+      if (Number.isNaN(clienteId) || clienteId <= 0) {
+        this.loading = false;
+        this.mostrarToast(
+          'No se pudo identificar el cliente desde el token.',
+          'danger'
+        );
+        return;
+      }
+
+      console.log('BUSCAR HISTORIAL (CLIENTE) → clienteId:', clienteId);
+      console.log(
+        'BUSCAR HISTORIAL (CLIENTE) → filtros (sin tipo):',
+        filtrosBase
+      );
+      console.log(
+        'BUSCAR HISTORIAL (CLIENTE) → cuentaId:',
+        this.cuentaSeleccionadaId || null
+      );
+
+      this.api
+        .getHistorialPorCliente(clienteId, {
+          ...filtrosBase,
+          cuentaId: this.cuentaSeleccionadaId || null,
+        })
+        .subscribe({
+          next: (data) => {
+            this.procesarRespuestaHistorial(data);
+          },
+          error: (err) => {
+            console.error('Error al obtener historial (cliente):', err);
+            this.loading = false;
+            this.mostrarToast(
+              err.error?.message ||
+                err.error?.mensaje ||
+                'Error al obtener el historial.',
+              'danger'
+            );
+          },
+        });
+    } else {
+      // ===== ADMIN / GESTOR → historial por CUENTA OBLIGATORIA =====
+      console.log(
+        'BUSCAR HISTORIAL (CUENTA) → cuentaId:',
+        this.cuentaSeleccionadaId
+      );
+      console.log(
+        'BUSCAR HISTORIAL (CUENTA) → filtros (sin tipo):',
+        filtrosBase
+      );
+
+      this.api
+        .getHistorialPorCuenta(this.cuentaSeleccionadaId, filtrosBase)
+        .subscribe({
+          next: (data) => {
+            this.procesarRespuestaHistorial(data);
+          },
+          error: (err) => {
+            console.error('Error al obtener historial (cuenta):', err);
+            this.loading = false;
+            this.mostrarToast(
+              err.error?.message ||
+                err.error?.mensaje ||
+                'Error al obtener el historial.',
+              'danger'
+            );
+          },
+        });
+    }
+  }
+
+  // Procesa la respuesta y aplica el filtro por tipoSeleccionado
+  private procesarRespuestaHistorial(data: any): void {
+    this.loading = false;
+    const rawData: any[] = data || [];
+    console.log('RESPUESTA HISTORIAL (RAW):', rawData);
+
+    const tiposUnicos = Array.from(
+      new Set(rawData.map((m) => (m.tipo || '').toString()))
     );
+    console.log('TIPOS EN RESPUESTA HISTORIAL:', tiposUnicos);
 
-    this.api
-      .getHistorialPorCliente(clienteId, {
-        ...filtrosBase,
-        cuentaId: this.cuentaSeleccionadaId || null,
-      })
-      .subscribe({
-        next: (data) => {
-          this.loading = false;
-          const rawData: any[] = data || [];
-          console.log('RESPUESTA HISTORIAL (RAW):', rawData);
+    let result = rawData;
 
-          // Para ver exactamente qué tipos llegan
-          const tiposUnicos = Array.from(
-            new Set(rawData.map((m) => (m.tipo || '').toString()))
-          );
-          console.log('TIPOS EN RESPUESTA HISTORIAL:', tiposUnicos);
+    if (this.tipoSeleccionado === '1') {
+      // Solo transferencias
+      result = result.filter((m) => m.tipo === 'Transferencia');
+    } else if (this.tipoSeleccionado === '2') {
+      // Solo pagos de servicio
+      result = result.filter((m) => m.tipo === 'PagoServicio');
+    }
 
-          let result = rawData;
-
-          // Filtro explícito en base al valor real del campo m.tipo
-          if (this.tipoSeleccionado === '1') {
-            // Solo transferencias
-            result = result.filter((m) => m.tipo === 'Transferencia');
-          } else if (this.tipoSeleccionado === '2') {
-            // Solo pagos de servicio
-            result = result.filter((m) => m.tipo === 'PagoServicio');
-          }
-
-          console.log('RESPUESTA HISTORIAL (filtrada por tipo):', result);
-          this.movimientos = result;
-        },
-        error: (err) => {
-          console.error('Error al obtener historial:', err);
-          this.loading = false;
-          this.mostrarToast(
-            err.error?.message ||
-              err.error?.mensaje ||
-              'Error al obtener el historial.',
-            'danger'
-          );
-        },
-      });
+    console.log('RESPUESTA HISTORIAL (filtrada por tipo):', result);
+    this.movimientos = result;
   }
 
   limpiarFiltros(): void {
