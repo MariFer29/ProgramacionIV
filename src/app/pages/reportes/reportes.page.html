@@ -1,0 +1,200 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Reportes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Filtros comunes -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Filtros</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-grid>
+
+        <ion-row>
+          <ion-col size="12" size-md="4">
+            <ion-item>
+              <ion-label position="stacked">Desde</ion-label>
+              <ion-input type="date" [(ngModel)]="fechaDesde"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-md="4">
+            <ion-item>
+              <ion-label position="stacked">Hasta</ion-label>
+              <ion-input type="date" [(ngModel)]="fechaHasta"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-md="4" *ngIf="segment === 'top'">
+            <ion-item>
+              <ion-label position="stacked">Top</ion-label>
+              <ion-input type="number" [(ngModel)]="topCantidad"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-button
+              expand="block"
+              (click)="
+                segment === 'totales' && cargarTotales();
+                segment === 'top' && cargarTopClientes();
+                segment === 'volumen' && cargarVolumenDiario();
+              "
+            >
+              Buscar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Segment para cambiar reportes -->
+  <ion-segment
+    [value]="segment"
+    (ionChange)="cambiarSegment($event.detail.value)"
+  >
+    <ion-segment-button value="totales">
+      <ion-label>Totales</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="top">
+      <ion-label>Top clientes</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="volumen">
+      <ion-label>Volumen diario</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-spinner *ngIf="loading" class="loading-spinner"></ion-spinner>
+
+  <!-- ====================================================== -->
+  <!-- REPORTE: TOTALES -->
+  <!-- ====================================================== -->
+
+  <ng-container *ngIf="segment === 'totales'">
+    <ion-card *ngIf="reporteTotales">
+      <ion-card-header>
+        <ion-card-title>Resumen de totales</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <p><strong>Desde:</strong> {{ reporteTotales.desde }}</p>
+        <p><strong>Hasta:</strong> {{ reporteTotales.hasta }}</p>
+        <p><strong>Total operaciones:</strong> {{ reporteTotales.totalOperaciones }}</p>
+
+        <ion-button expand="block" (click)="exportarCsv('totales')">
+          Exportar a Excel (CSV)
+        </ion-button>
+
+        <ion-button expand="block" color="medium" (click)="exportarPdf()">
+          Exportar a PDF
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <!-- ====================================================== -->
+  <!-- REPORTE: TOP CLIENTES -->
+  <!-- ====================================================== -->
+
+  <ng-container *ngIf="segment === 'top'">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Top clientes</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-grid *ngIf="topClientes.length">
+          <ion-row class="tabla-header">
+            <ion-col size="3"><strong>ID</strong></ion-col>
+            <ion-col size="5"><strong>Cliente</strong></ion-col>
+            <ion-col size="4" class="ion-text-right"><strong>Monto total</strong></ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let c of topClientes">
+            <ion-col size="3">{{ c.clientId }}</ion-col>
+            <ion-col size="5">{{ c.nombreCliente }}</ion-col>
+            <ion-col size="4" class="ion-text-right">
+              {{ c.montoTotal | number:'1.2-2' }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-text *ngIf="!topClientes.length">
+          No hay datos para mostrar.
+        </ion-text>
+
+        <ion-button
+          expand="block"
+          (click)="exportarCsv('top')"
+          [disabled]="!topClientes.length"
+        >
+          Exportar a Excel (CSV)
+        </ion-button>
+
+        <ion-button expand="block" color="medium" (click)="exportarPdf()">
+          Exportar a PDF
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <!-- ====================================================== -->
+  <!-- REPORTE: VOLUMEN DIARIO -->
+  <!-- ====================================================== -->
+
+  <ng-container *ngIf="segment === 'volumen'">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Volumen diario</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-grid *ngIf="volumenDiario.length">
+          <ion-row class="tabla-header">
+            <ion-col size="6"><strong>Día</strong></ion-col>
+            <ion-col size="6" class="ion-text-right"><strong>Monto total</strong></ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let v of volumenDiario">
+            <ion-col size="6">{{ v.dia }}</ion-col>
+            <ion-col size="6" class="ion-text-right">
+              {{ v.montoTotal | number:'1.2-2' }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-text *ngIf="!volumenDiario.length">
+          No hay datos para mostrar.
+        </ion-text>
+
+        <ion-button
+          expand="block"
+          (click)="exportarCsv('volumen')"
+          [disabled]="!volumenDiario.length"
+        >
+          Exportar a Excel (CSV)
+        </ion-button>
+
+        <ion-button expand="block" color="medium" (click)="exportarPdf()">
+          Exportar a PDF
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+</ion-content>

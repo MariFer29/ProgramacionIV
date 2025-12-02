@@ -7,7 +7,16 @@ import {
   TransferenciaProgramada,
   PagoServicio,
   ProveedorServicio,
-  MovimientoHistorial, 
+  MovimientoHistorial,
+  
+  ExtractoMensual,
+  HistorialFiltro,
+  Cuenta,
+  
+  ReporteTotales,
+  ClienteTop,
+  VolumenDiario,
+  Auditoria,
 } from '../models/banca.models';
 
 @Injectable({ providedIn: 'root' })
@@ -286,4 +295,74 @@ export class ApiService {
       }
     );
   }
+
+  // ==============================
+  // MÓDULO G – REPORTES
+  // ==============================
+
+  getReporteTotales(desde: string, hasta: string): Observable<ReporteTotales> {
+    const params: any = { desde, hasta };
+
+    return this.http.get<ReporteTotales>(`${this.baseUrl}/reportes/totales`, {
+      params,
+      ...this.getAuthHeaders(),
+    });
+  }
+
+  getTopClientes(
+    desde: string,
+    hasta: string,
+    top: number
+  ): Observable<ClienteTop[]> {
+    const params: any = {
+      desde,
+      hasta,
+      top: top.toString(),
+    };
+
+    return this.http.get<ClienteTop[]>(`${this.baseUrl}/reportes/top-clientes`, {
+      params,
+      ...this.getAuthHeaders(),
+    });
+  }
+
+  getVolumenDiario(
+    desde: string,
+    hasta: string
+  ): Observable<VolumenDiario[]> {
+    const params: any = { desde, hasta };
+
+    return this.http.get<VolumenDiario[]>(
+      `${this.baseUrl}/reportes/volumen-diario`,
+      {
+        params,
+        ...this.getAuthHeaders(),
+      }
+    );
+  }
+
+  // ==============================
+  // MÓDULO G – AUDITORÍA
+  // ==============================
+
+  getAuditoria(
+    desde?: string,
+    hasta?: string,
+    usuarioId?: number | null,
+    tipoOperacion?: string | null
+  ): Observable<Auditoria[]> {
+    const params: any = {};
+
+    if (desde) params.desde = desde;
+    if (hasta) params.hasta = hasta;
+    if (usuarioId != null) params.usuarioId = usuarioId.toString();
+    if (tipoOperacion) params.tipoOperacion = tipoOperacion;
+
+    return this.http.get<Auditoria[]>(`${this.baseUrl}/auditoria`, {
+      params,
+      ...this.getAuthHeaders(),
+    });
+  }
+
+
 }

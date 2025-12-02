@@ -127,4 +127,15 @@ export const routes: Routes = [
       import('./pages/historial/historial.page').then((m) => m.HistorialPage),
   },
 
+  {
+    path: 'reportes',
+    loadComponent: () =>
+      import('./pages/reportes/reportes.page').then((m) => m.ReportesPage),
+  },
+  {
+    path: 'auditoria',
+    loadComponent: () =>
+      import('./pages/auditoria/auditoria.page').then((m) => m.AuditoriaPage),
+  },
+
 ];
