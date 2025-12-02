@@ -145,7 +145,7 @@ export class TransferenciasPage implements OnInit {
           const cuenta = lista.find((c) => c.id === cuentaOrigenId);
           if (cuenta && typeof cuenta.balance === 'number') {
             const saldoActual = Number(cuenta.balance) || 0;
-            const nuevoSaldo = saldoActual - montoNum; // si hay comisión, réstala aquí también
+            const nuevoSaldo = saldoActual - montoNum; 
             cuenta.balance = nuevoSaldo;
 
             if (lista === this.cuentasOrigen) {
