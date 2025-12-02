@@ -12,20 +12,19 @@ import {
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-historial',
-  templateUrl: './historial.page.html',
-  styleUrls: ['./historial.page.scss'],
+  selector: 'app-comprobantes',
+  templateUrl: './comprobantes.page.html',
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule],
 })
-export class HistorialPage implements OnInit {
+export class ComprobantesPage implements OnInit {
   cuentas: Cuenta[] = [];
-  movimientos: MovimientoHistorial[] = [];
+  comprobantes: MovimientoHistorial[] = [];
 
   cuentaSeleccionadaId: string = '';
   fechaDesde: string = '';
   fechaHasta: string = '';
-  tipoSeleccionado: string = ''; 
+  tipoSeleccionado: string = ''; // '' | '1' | '2'
   estadoCodigo: string = '';
 
   loading = false;
@@ -47,16 +46,18 @@ export class HistorialPage implements OnInit {
       const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
       return JSON.parse(json);
     } catch {
-      console.warn('No se pudo decodificar el token en Historial');
+      console.warn('No se pudo decodificar el token en Comprobantes');
       return null;
     }
   }
 
+  // Normaliza lo que venga a yyyy-MM-dd para el backend (.NET)
   private normalizarFecha(
     valor: string | null | undefined
   ): string | undefined {
     if (!valor) return undefined;
 
+    // Ya viene como yyyy-MM-dd
     if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
       return valor;
     }
@@ -70,6 +71,7 @@ export class HistorialPage implements OnInit {
       return `${y}-${mm}-${dd}`;
     }
 
+    // Cualquier otra cosa: último intento con Date
     const date = new Date(valor);
     if (!isNaN(date.getTime())) {
       const y = date.getFullYear();
@@ -78,7 +80,7 @@ export class HistorialPage implements OnInit {
       return `${y}-${m}-${d}`;
     }
 
-    console.warn('Fecha en formato no reconocido:', valor);
+    console.warn('Fecha en formato no reconocido (Comprobantes):', valor);
     return undefined;
   }
 
@@ -89,7 +91,7 @@ export class HistorialPage implements OnInit {
     const token = localStorage.getItem('token') || '';
 
     const payload = token ? this.decodeToken(token) : null;
-    console.log('PAYLOAD TOKEN (Historial):', payload);
+    console.log('PAYLOAD TOKEN (Comprobantes):', payload);
 
     const clienteIdFromToken = payload?.clienteId;
     const clienteId =
@@ -102,7 +104,7 @@ export class HistorialPage implements OnInit {
     if (rol === 'cliente') {
       if (Number.isNaN(clienteId) || clienteId <= 0) {
         console.warn(
-          'Rol cliente pero sin clienteId válido en el token. No se cargan cuentas.'
+          'Rol cliente pero sin clienteId válido en el token. No se cargan cuentas (Comprobantes).'
         );
         this.cuentas = [];
         this.mostrarToast(
@@ -121,7 +123,7 @@ export class HistorialPage implements OnInit {
 
     obs$.subscribe({
       next: (data) => {
-        console.log('CUENTAS HISTORIAL:', data);
+        console.log('CUENTAS COMPROBANTES:', data);
         this.cuentas = data;
 
         // Si solo hay una cuenta, la preseleccionamos
@@ -130,19 +132,15 @@ export class HistorialPage implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al cargar cuentas en historial:', err);
+        console.error('Error al cargar cuentas en Comprobantes:', err);
         this.mostrarToast('Error al cargar cuentas', 'danger');
       },
     });
   }
 
-  // =============== BUSCAR HISTORIAL =================
+  // =============== BUSCAR COMPROBANTES =================
   buscar(): void {
-    const rolRaw = localStorage.getItem('rol') || '';
-    const rol = rolRaw.toLowerCase();
-
-    // Solo obligamos a elegir cuenta cuando NO es cliente (admin/gestor)
-    if (rol !== 'cliente' && !this.cuentaSeleccionadaId) {
+    if (!this.cuentaSeleccionadaId) {
       this.mostrarToast('Seleccione una cuenta.');
       return;
     }
@@ -153,115 +151,76 @@ export class HistorialPage implements OnInit {
     const filtrosBase: HistorialFiltro = {
       desde: desdeNormalizado,
       hasta: hastaNormalizado,
+      // NO enviamos tipo; filtramos en front
       estado: this.estadoCodigo ? Number(this.estadoCodigo) : undefined,
     };
 
+    const token = localStorage.getItem('token') || '';
+    const payload = token ? this.decodeToken(token) : null;
+    const clienteIdFromToken = payload?.clienteId;
+    const clienteId =
+      clienteIdFromToken !== undefined && clienteIdFromToken !== null
+        ? Number(clienteIdFromToken)
+        : NaN;
+
+    if (Number.isNaN(clienteId) || clienteId <= 0) {
+      this.mostrarToast(
+        'No se pudo identificar el cliente desde el token.',
+        'danger'
+      );
+      return;
+    }
+
     this.loading = true;
-    this.movimientos = [];
+    this.comprobantes = [];
 
-    if (rol === 'cliente') {
-      // ===== CLIENTE → historial por cliente, cuenta opcional =====
-      const token = localStorage.getItem('token') || '';
-      const payload = token ? this.decodeToken(token) : null;
-      const clienteIdFromToken = payload?.clienteId;
-      const clienteId =
-        clienteIdFromToken !== undefined && clienteIdFromToken !== null
-          ? Number(clienteIdFromToken)
-          : NaN;
-
-      if (Number.isNaN(clienteId) || clienteId <= 0) {
-        this.loading = false;
-        this.mostrarToast(
-          'No se pudo identificar el cliente desde el token.',
-          'danger'
-        );
-        return;
-      }
-
-      console.log('BUSCAR HISTORIAL (CLIENTE) → clienteId:', clienteId);
-      console.log(
-        'BUSCAR HISTORIAL (CLIENTE) → filtros (sin tipo):',
-        filtrosBase
-      );
-      console.log(
-        'BUSCAR HISTORIAL (CLIENTE) → cuentaId:',
-        this.cuentaSeleccionadaId || null
-      );
-
-      this.api
-        .getHistorialPorCliente(clienteId, {
-          ...filtrosBase,
-          cuentaId: this.cuentaSeleccionadaId || null,
-        })
-        .subscribe({
-          next: (data) => {
-            this.procesarRespuestaHistorial(data);
-          },
-          error: (err) => {
-            console.error('Error al obtener historial (cliente):', err);
-            this.loading = false;
-            this.mostrarToast(
-              err.error?.message ||
-                err.error?.mensaje ||
-                'Error al obtener el historial.',
-              'danger'
-            );
-          },
-        });
-    } else {
-      // ===== ADMIN / GESTOR → historial por CUENTA OBLIGATORIA =====
-      console.log(
-        'BUSCAR HISTORIAL (CUENTA) → cuentaId:',
-        this.cuentaSeleccionadaId
-      );
-      console.log(
-        'BUSCAR HISTORIAL (CUENTA) → filtros (sin tipo):',
-        filtrosBase
-      );
-
-      this.api
-        .getHistorialPorCuenta(this.cuentaSeleccionadaId, filtrosBase)
-        .subscribe({
-          next: (data) => {
-            this.procesarRespuestaHistorial(data);
-          },
-          error: (err) => {
-            console.error('Error al obtener historial (cuenta):', err);
-            this.loading = false;
-            this.mostrarToast(
-              err.error?.message ||
-                err.error?.mensaje ||
-                'Error al obtener el historial.',
-              'danger'
-            );
-          },
-        });
-    }
-  }
-
-  // Procesa la respuesta y aplica el filtro por tipoSeleccionado
-  private procesarRespuestaHistorial(data: any): void {
-    this.loading = false;
-    const rawData: any[] = data || [];
-    console.log('RESPUESTA HISTORIAL (RAW):', rawData);
-
-    const tiposUnicos = Array.from(
-      new Set(rawData.map((m) => (m.tipo || '').toString()))
+    console.log('BUSCAR COMPROBANTES → clienteId:', clienteId);
+    console.log('BUSCAR COMPROBANTES → filtros (sin tipo):', filtrosBase);
+    console.log(
+      'BUSCAR COMPROBANTES → cuentaId:',
+      this.cuentaSeleccionadaId || null
     );
-    console.log('TIPOS EN RESPUESTA HISTORIAL:', tiposUnicos);
 
-    let result = rawData;
+    this.api
+      .getHistorialPorCliente(clienteId, {
+        ...filtrosBase,
+        cuentaId: this.cuentaSeleccionadaId || null,
+      })
+      .subscribe({
+        next: (data) => {
+          this.loading = false;
+          const rawData: any[] = data || [];
+          console.log('RESPUESTA COMPROBANTES (RAW):', rawData);
 
-    if (this.tipoSeleccionado === '1') {
-      // Solo transferencias
-      result = result.filter((m) => m.tipo === 'Transferencia');
-    } else if (this.tipoSeleccionado === '2') {
-      // Solo pagos de servicio
-      result = result.filter((m) => m.tipo === 'PagoServicio');
-    }
+          // Solo tomamos movimientos que puedan tener comprobante:
+          // Transferencia o PagoServicio con su respectivo Id
+          let result = rawData.filter(
+            (m) =>
+              (m.tipo === 'Transferencia' && m.transferenciaId) ||
+              (m.tipo === 'PagoServicio' && m.pagoServicioId)
+          );
 
-    console.log('RESPUESTA HISTORIAL (filtrada por tipo):', result);
-    this.movimientos = result;
+          // Filtro por tipo en front
+          if (this.tipoSeleccionado === '1') {
+            result = result.filter((m) => m.tipo === 'Transferencia');
+          } else if (this.tipoSeleccionado === '2') {
+            result = result.filter((m) => m.tipo === 'PagoServicio');
+          }
+
+          console.log('COMPROBANTES (filtrados):', result);
+          this.comprobantes = result;
+        },
+        error: (err) => {
+          console.error('Error al obtener comprobantes:', err);
+          this.loading = false;
+          this.mostrarToast(
+            err.error?.message ||
+              err.error?.mensaje ||
+              'Error al obtener los comprobantes.',
+            'danger'
+          );
+        },
+      });
   }
 
   limpiarFiltros(): void {
@@ -269,7 +228,7 @@ export class HistorialPage implements OnInit {
     this.fechaHasta = '';
     this.tipoSeleccionado = '';
     this.estadoCodigo = '';
-    this.movimientos = [];
+    this.comprobantes = [];
   }
 
   private async mostrarToast(message: string, color: string = 'medium') {

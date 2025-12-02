@@ -42,43 +42,6 @@ export class LoginPage {
     }
   }
 
-  private setClienteIdDesdeClientes(email: string, rolLower: string): void {
-    if (rolLower !== 'cliente') {
-      localStorage.removeItem('clienteId');
-      return;
-    }
-
-    this.api.getClientes().subscribe({
-      next: (clientes: any[]) => {
-        const correoLogin = email.toLowerCase();
-        const cliente = clientes.find((c: any) => {
-          const correo = (
-            c.correo ||
-            c.email ||
-            c.emailAddress ||
-            ''
-          ).toLowerCase();
-          return correo === correoLogin;
-        });
-
-        if (cliente && (cliente.id || cliente.Id)) {
-          const id = cliente.id ?? cliente.Id;
-          localStorage.setItem('clienteId', id.toString());
-          console.log('CLIENTE ID (desde getClientes) guardado:', id);
-        } else {
-          console.warn(
-            'No se encontró cliente con ese correo, limpiando clienteId'
-          );
-          localStorage.removeItem('clienteId');
-        }
-      },
-      error: (err) => {
-        console.error('Error al obtener clientes para clienteId:', err);
-        localStorage.removeItem('clienteId');
-      },
-    });
-  }
-
   submitLogin() {
     if (this.loginForm.invalid) {
       return;
@@ -93,41 +56,49 @@ export class LoginPage {
         const token = res.token;
         localStorage.setItem('token', token);
 
-        let rol: any = res.rol || res.role || res.Rol;
+        // ==============================
+        // Sacar datos desde el token
+        // ==============================
+        const data = this.decodeToken(token);
+        console.log('PAYLOAD TOKEN:', data);
 
-        // Intentar sacar el rol desde el token si no viene en la respuesta
-        if (!rol && token) {
-          const data = this.decodeToken(token);
-          console.log('PAYLOAD TOKEN:', data);
+        // === CLIENTE ID desde el token ===
+        if (data && data.clienteId) {
+          localStorage.setItem('clienteId', String(data.clienteId));
+          console.log('ClienteId desde token:', data.clienteId);
+        } else {
+          console.warn('Token no trae clienteId');
+          localStorage.removeItem('clienteId');
+        }
 
-          if (data) {
-            rol =
-              data.rol ||
+        // === ROL ===
+        let rol =
+          res.rol ||
+          res.role ||
+          res.Rol ||
+          (data
+            ? data.rol ||
               data.role ||
               data.Rol ||
               data[
                 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-              ];
-          }
-        }
+              ]
+            : null);
 
-        // Si sigue sin rol, usar "Cliente" por defecto
-        if (!rol) {
-          rol = 'Cliente';
-        }
+        if (!rol) rol = 'Cliente';
 
-        // Normalizar
         const rolLower = rol.toString().trim().toLowerCase();
         localStorage.setItem('rol', rolLower);
 
-        console.log('ROL recibido:', rol);
         console.log('ROL normalizado:', rolLower);
 
-        this.setClienteIdDesdeClientes(email, rolLower);
-
+        // Limpia error previo
         this.errorMessage = '';
 
-        // ======== DETECCIÓN DE ROLES =========
+        // ============================
+        // REDIRECCIONES SEGÚN ROL
+        // =============================
+        
         const esAdmin = [
           'admin',
           'administrador',
@@ -135,20 +106,19 @@ export class LoginPage {
           '1',
           'superadmin',
         ].includes(rolLower);
+
         const esGestor = ['gestor', 'manager', '2'].includes(rolLower);
+
         const esCliente = ['cliente', 'user', '3'].includes(rolLower);
 
         if (esAdmin) {
-          console.log('>> Redirigiendo a menú admin');
           this.router.navigate(['/admin-menu']);
         } else if (esGestor) {
-          console.log('>> Redirigiendo a menú gestor');
           this.router.navigate(['/menu-gestor']);
         } else if (esCliente) {
-          console.log('>> Redirigiendo a menú cliente');
           this.router.navigate(['/menu-cliente']);
         } else {
-          console.warn('Rol desconocido, redirigiendo a cliente por defecto');
+          console.warn('Rol desconocido → cliente por defecto');
           this.router.navigate(['/menu-cliente']);
         }
       },
@@ -158,3 +128,4 @@ export class LoginPage {
     });
   }
 }
+

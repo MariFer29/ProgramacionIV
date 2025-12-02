@@ -108,10 +108,9 @@ export const routes: Routes = [
     path: 'mis-cuentas',
     loadComponent: () =>
       import('./pages/mis-cuentas/mis-cuentas.page').then(
-        m => m.MisCuentasPage
+        (m) => m.MisCuentasPage
       ),
   },
-
 
   {
     path: 'menu-gestor',
@@ -137,5 +136,22 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/auditoria/auditoria.page').then((m) => m.AuditoriaPage),
   },
+
+  {
+    path: 'comprobantes',
+    loadComponent: () =>
+      import('./pages/comprobantes/comprobantes.page').then(
+        (m) => m.ComprobantesPage
+      ),
+  },
+
+  {
+    path: 'extractos',
+    loadComponent: () =>
+      import('./pages/extractos/extractos.page').then(
+        (m) => m.ExtractosPage
+      ),
+  },
+
 
 ];

@@ -154,11 +154,44 @@ export interface ExtractoMensual {
 
 // HistorialFiltroDTO
 export interface HistorialFiltro {
-  desde?: string; // DateTime? -> ISO string
-  hasta?: string; // DateTime? -> ISO string
-  tipo?: number | null; // int?
-  estado?: number | null; // int?
-  cuentaId?: string | null; // Guid?
+  desde?: string;
+  hasta?: string;
+  tipo?: number | null;
+  estado?: number | null;
+  cuentaId?: string | null;
+}
+// ComprobanteDTO
+export interface Comprobante {
+  id: string;
+  fecha: string;
+  tipo: string;
+  numeroReferencia: string;
+  cuentaOrigen: string;
+  cuentaDestino?: string;
+  monto: number;
+  estado: number;
+  urlPdf?: string;
+}
+
+export interface ComprobantesFiltro {
+  desde?: string;
+  hasta?: string;
+  tipo?: number;
+  referencia?: string;
+}
+
+export interface ExtractoMensual {
+  cuentaId: string;
+  numeroCuenta: string;
+
+  anio: number;
+  mes: number;
+
+  saldoInicial: number;
+  saldoFinal: number;
+  totalComisiones: number;
+
+  movimientos: MovimientoHistorial[];
 }
 
 // ======================
@@ -167,8 +200,8 @@ export interface HistorialFiltro {
 
 // ReporteTotalesDTO
 export interface ReporteTotales {
-  desde: string; // DateTime
-  hasta: string; // DateTime
+  desde: string;
+  hasta: string;
   totalOperaciones: number; // decimal
 }
 
@@ -176,11 +209,11 @@ export interface ReporteTotales {
 export interface ClienteTop {
   clientId: number;
   nombreCliente: string;
-  montoTotal: number; // decimal
+  montoTotal: number;
 }
 
 // VolumenDiarioDTO
 export interface VolumenDiario {
-  dia: string; // DateTime
-  montoTotal: number; // decimal
+  dia: string;
+  montoTotal: number;
 }

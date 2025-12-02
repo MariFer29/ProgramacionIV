@@ -15,7 +15,7 @@ export class MenuGestorPage {
   constructor(private router: Router) {}
 
   logout() {
-    this.router.navigate(['/login']); // ejemplo
+    this.router.navigate(['/login']); 
   }
 
   goTo(route: string) {

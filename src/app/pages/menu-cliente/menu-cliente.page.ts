@@ -15,7 +15,7 @@ export class MenuClientePage {
   constructor(private router: Router) {}
 
   logout() {
-    this.router.navigate(['/login']); // ejemplo
+    this.router.navigate(['/login']); 
   }
 
   goTo(route: string) {
@@ -25,6 +25,10 @@ export class MenuClientePage {
   irAMisCuentas() {
     this.router.navigate(['/mis-cuentas']);
   }
+
+  irAExtractos() {
+  this.router.navigate(['/extractos']);
+}
 
 }
 

@@ -64,10 +64,9 @@ export class AbrirCuentaPage implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    //5Leer valores del formulario
+    //Leer valores del formulario
     const { clientId, type, currency, initialBalance } = this.form.value;
 
-    // Mapear texto → enum (según el backend)
     const typeMap: Record<string, number> = {
       'Ahorros': 1,      // Savings
       'Corriente': 2,    // Checking

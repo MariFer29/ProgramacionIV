@@ -4,9 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
-import { Cuenta, TransferenciaProgramada } from '../../models/banca.models';
-
-
 
 @Component({
   selector: 'app-transferencias-programadas',
@@ -16,9 +13,14 @@ import { Cuenta, TransferenciaProgramada } from '../../models/banca.models';
   styleUrls: ['./transferencias-programadas.page.scss'],
 })
 export class TransferenciasProgramadasPage implements OnInit {
-  cuentas: Cuenta[] = [];
+  cuentasOrigen: any[] = [];
+  cuentasDestino: any[] = [];
+
   cuentaOrigen: string = '';
   cuentaDestino: string = '';
+
+  saldoDisponible: number | null = null;
+
   monto: number = 0;
   fechaEjecucion: string = '';
   detalle: string = '';
@@ -32,46 +34,57 @@ export class TransferenciasProgramadasPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const clienteIdStr = localStorage.getItem('clienteId');
-    console.log('clienteId en localStorage (TP):', clienteIdStr);
+    this.cargarCuentas();
+  }
 
-    let obs$;
-
-    if (clienteIdStr) {
-      const clienteId = Number(clienteIdStr);
-      if (!isNaN(clienteId) && clienteId > 0) {
-        obs$ = this.api.getCuentas(clienteId);
-      } else {
-        obs$ = this.api.getCuentas();
-      }
-    } else {
-      obs$ = this.api.getCuentas();
+  private decodeToken(token: string): any | null {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(json);
+    } catch {
+      return null;
     }
+  }
 
-    obs$.subscribe({
-      next: (res) => {
-        console.log('CUENTAS CARGADAS TP:', res);
-        this.cuentas = res;
+  cargarCuentas(): void {
+    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
+    const token = localStorage.getItem('token') || '';
+
+    const payload = token ? this.decodeToken(token) : null;
+    const clienteId = payload?.clienteId ? Number(payload.clienteId) : NaN;
+
+    this.api.getCuentas().subscribe({
+      next: (todas: any[]) => {
+        this.cuentasDestino = todas;
+
+        if (rol === 'cliente' && !isNaN(clienteId) && clienteId > 0) {
+          this.cuentasOrigen = todas.filter((c) => c.clientId === clienteId);
+        } else {
+          this.cuentasOrigen = todas;
+        }
+
+        if (this.cuentasOrigen.length === 1) {
+          const unica = this.cuentasOrigen[0];
+          this.cuentaOrigen = unica.id;
+          this.saldoDisponible = unica.balance;
+        } else {
+          this.saldoDisponible = null;
+        }
       },
       error: (err) => {
-        console.error('ERROR AL CARGAR CUENTAS TP:', err);
+        console.error('ERROR CUENTAS TP:', err);
         this.showToast('Error al cargar cuentas');
       },
     });
   }
 
+  onCuentaOrigenChange() {
+    const c = this.cuentasOrigen.find((x) => x.id === this.cuentaOrigen);
+    this.saldoDisponible = c ? c.balance : null;
+  }
+
   registrar(): void {
-    console.log('CLICK registrar()');
-
-    console.log('VALORES:', {
-      cuentaOrigen: this.cuentaOrigen,
-      cuentaDestino: this.cuentaDestino,
-      monto: this.monto,
-      moneda: this.moneda,
-      fechaEjecucion: this.fechaEjecucion,
-      detalle: this.detalle,
-    });
-
     if (
       !this.cuentaOrigen ||
       !this.cuentaDestino ||
@@ -88,20 +101,18 @@ export class TransferenciasProgramadasPage implements OnInit {
       monto: this.monto,
       moneda: this.moneda,
       fechaEjecucion: this.fechaEjecucion,
-      detalle: this.detalle, // el backend lo ignorará si la entidad no tiene esta propiedad
+      detalle: this.detalle,
     };
 
-    console.log('BODY A ENVIAR TP:', body);
-
     this.api.crearTransferenciaProgramada(body).subscribe({
-      next: async (resp) => {
-        console.log('RESPUESTA API TP:', resp);
+      next: async () => {
         const alert = await this.alertCtrl.create({
           header: 'Éxito',
           message: 'Transferencia programada registrada',
           buttons: ['OK'],
         });
-        await alert.present();
+        alert.present();
+
         this.resetForm();
       },
       error: (err) => {
@@ -112,7 +123,6 @@ export class TransferenciasProgramadasPage implements OnInit {
   }
 
   private resetForm() {
-    this.cuentaOrigen = '';
     this.cuentaDestino = '';
     this.monto = 0;
     this.fechaEjecucion = '';
@@ -126,25 +136,13 @@ export class TransferenciasProgramadasPage implements OnInit {
       duration: 2000,
       position: 'bottom',
     });
-    await toast.present();
+    toast.present();
   }
 
   goToMenu() {
     const rol = localStorage.getItem('rol')?.toLowerCase() || '';
 
     if (['admin', 'administrador', 'adm', '1', 'superadmin'].includes(rol)) {
-      // Redirigir a menú admin
-      this.router.navigate(['/admin-menu']);
-    } else {
-      // Si no es admin, asumimos cliente
-      this.router.navigate(['/menu-cliente']);
-    }
-  }
-
-  volver(): void {
-    const rol = localStorage.getItem('rol')?.toLowerCase() || '';
-
-    if (['admin', 'administrador', 'superadmin'].includes(rol)) {
       this.router.navigate(['/admin-menu']);
     } else if (rol.includes('gestor')) {
       this.router.navigate(['/menu-gestor']);

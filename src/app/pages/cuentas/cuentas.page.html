@@ -1,13 +1,10 @@
 <ion-header>
   <ion-toolbar>
-
-
-
     <ion-title>Cuentas</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="irAbrirCuenta()">
-        Abrir cuenta
+      <ion-button (click)="goToMenu()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -64,10 +61,6 @@
       <ion-button expand="block" (click)="cargarCuentas()">
         Buscar
       </ion-button>
-      <ion-button expand="block" color="medium" class="ion-margin-top" (click)="goToMenu()">
-        Volver al Menú
-      </ion-button>
-
     </ion-card-content>
   </ion-card>
 
@@ -83,14 +76,13 @@
       <ion-label>
         <h2>{{ c.accountNumber }} • {{ c.type }} • {{ c.currency }}</h2>
         <p>
-          Saldo: {{ c.balance | currency:'CRC':'symbol':'1.2-2' }}<br>
+          Saldo: {{ c.balance | number:'1.2-2' }}<br>
           Estado: {{ c.status }}<br>
           Cliente Id: {{ c.clientId }}<br>
           Creada: {{ c.createdAt | date:'short' }}
         </p>
       </ion-label>
-
-      
+   
       <!-- Botones de acciones: SOLO para administrador -->
       <ion-buttons slot="end" *ngIf="esAdmin">
 

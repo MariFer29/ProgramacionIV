@@ -1,6 +1,13 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Mis cuentas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="volverAlMenuCliente()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -18,7 +25,7 @@
       <ion-label>
         <h2>{{ c.accountNumber }} • {{ c.type }} • {{ c.currency }}</h2>
         <p>
-          Saldo: {{ c.balance | currency:c.currency:'symbol':'1.2-2' }}<br>
+          Saldo: {{ c.balance | number:'1.2-2' }}<br>
           Estado: {{ c.status }}<br>
           Creada: {{ c.createdAt | date:'short' }}
         </p>
@@ -29,9 +36,5 @@
   <ion-item *ngIf="!isLoading && cuentas.length === 0">
     <ion-label>No tienes cuentas creadas.</ion-label>
   </ion-item>
-
-  <ion-button expand="block" class="ion-margin-top" (click)="volverAlMenuCliente()">
-    Volver al menú
-  </ion-button>
 
 </ion-content>
