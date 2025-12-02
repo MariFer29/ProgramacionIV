@@ -43,7 +43,7 @@
       <ion-input type="tel" formControlName="telefono"></ion-input>
     </ion-item>
 
-    <!-- IDENTIFICACIÓN SOLO SI ES CLIENTE (sin destruir control) -->
+    <!-- IDENTIFICACIÓN SOLO SI ES CLIENTE -->
     <ion-item [hidden]="registerForm.value.rol !== 'Cliente'">
       <ion-label position="floating">Identificación</ion-label>
       <ion-input formControlName="identificacion"></ion-input>

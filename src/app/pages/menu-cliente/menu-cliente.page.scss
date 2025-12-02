@@ -1,7 +1,7 @@
 /* Grid de cards más compacto */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* más pequeño que antes */
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
   gap: 10px; /* reduce el espacio entre cards */
   justify-items: center;
   padding: 10px; /* reduce padding general */
@@ -13,7 +13,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   padding: 15px;
-  width: 120px; /* más compacto */
+  width: 120px;
   height: 120px;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
 }
 
 .card ion-icon {
-  font-size: 32px; /* un poco más pequeño */
+  font-size: 32px; 
   color: #2c3e50;
   margin-bottom: 8px;
 }

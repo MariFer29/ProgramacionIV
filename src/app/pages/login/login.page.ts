@@ -57,7 +57,7 @@ export class LoginPage {
         localStorage.setItem('token', token);
 
         // ==============================
-        // 1) Sacar datos desde el token
+        // Sacar datos desde el token
         // ==============================
         const data = this.decodeToken(token);
         console.log('PAYLOAD TOKEN:', data);

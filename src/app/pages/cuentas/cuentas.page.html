@@ -76,7 +76,7 @@
       <ion-label>
         <h2>{{ c.accountNumber }} • {{ c.type }} • {{ c.currency }}</h2>
         <p>
-          Saldo: {{ c.balance | currency:'CRC':'symbol':'1.2-2' }}<br>
+          Saldo: {{ c.balance | number:'1.2-2' }}<br>
           Estado: {{ c.status }}<br>
           Cliente Id: {{ c.clientId }}<br>
           Creada: {{ c.createdAt | date:'short' }}

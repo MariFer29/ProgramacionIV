@@ -25,7 +25,7 @@ export class HistorialPage implements OnInit {
   cuentaSeleccionadaId: string = '';
   fechaDesde: string = '';
   fechaHasta: string = '';
-  tipoSeleccionado: string = ''; // '' | '1' | '2'
+  tipoSeleccionado: string = ''; 
   estadoCodigo: string = '';
 
   loading = false;
@@ -52,13 +52,11 @@ export class HistorialPage implements OnInit {
     }
   }
 
-  // Normaliza lo que venga a yyyy-MM-dd para el backend (.NET)
   private normalizarFecha(
     valor: string | null | undefined
   ): string | undefined {
     if (!valor) return undefined;
 
-    // Ya viene como yyyy-MM-dd
     if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
       return valor;
     }
@@ -72,7 +70,6 @@ export class HistorialPage implements OnInit {
       return `${y}-${mm}-${dd}`;
     }
 
-    // Cualquier otra cosa: último intento con Date
     const date = new Date(valor);
     if (!isNaN(date.getTime())) {
       const y = date.getFullYear();

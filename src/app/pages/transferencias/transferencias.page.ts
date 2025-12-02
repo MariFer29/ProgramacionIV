@@ -33,7 +33,7 @@ export class TransferenciasPage implements OnInit {
     private api: ApiService,
     private toastCtrl: ToastController,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.transferForm = this.fb.group({
@@ -72,14 +72,20 @@ export class TransferenciasPage implements OnInit {
 
     this.api.getCuentas().subscribe({
       next: async (todasLasCuentas: any[]) => {
-        this.cuentasDestino = todasLasCuentas as any[];
+
+        const monedaMap: any = { 1: 'CRC', 2: 'USD' };
+
+        const cuentasMapeadas = todasLasCuentas.map(c => ({
+          ...c,
+          currency: monedaMap[c.currency] || 'CRC',
+        }));
+
+        this.cuentasDestino = cuentasMapeadas;
 
         if (rol === 'cliente' && !Number.isNaN(clienteId) && clienteId > 0) {
-          this.cuentasOrigen = (todasLasCuentas as any[]).filter(
-            (c) => c.clientId === clienteId
-          );
+          this.cuentasOrigen = cuentasMapeadas.filter(c => c.clientId === clienteId);
         } else {
-          this.cuentasOrigen = todasLasCuentas as any[];
+          this.cuentasOrigen = cuentasMapeadas;
         }
 
         if (this.cuentasOrigen.length === 1) {
@@ -105,6 +111,7 @@ export class TransferenciasPage implements OnInit {
       },
     });
   }
+
 
   onCuentaOrigenChange(cuentaId: string) {
     const c = this.cuentasOrigen.find((x: any) => x.id === cuentaId);
@@ -138,7 +145,7 @@ export class TransferenciasPage implements OnInit {
           const cuenta = lista.find((c) => c.id === cuentaOrigenId);
           if (cuenta && typeof cuenta.balance === 'number') {
             const saldoActual = Number(cuenta.balance) || 0;
-            const nuevoSaldo = saldoActual - montoNum; // si hay comisión, réstala aquí también
+            const nuevoSaldo = saldoActual - montoNum; 
             cuenta.balance = nuevoSaldo;
 
             if (lista === this.cuentasOrigen) {

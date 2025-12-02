@@ -22,6 +22,7 @@ import {
   templateUrl: './pagos-servicio.page.html',
   styleUrls: ['./pagos-servicio.page.scss'],
 })
+
 export class PagosServicioPage implements OnInit {
   form!: FormGroup;
 
@@ -38,7 +39,7 @@ export class PagosServicioPage implements OnInit {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -106,9 +107,18 @@ export class PagosServicioPage implements OnInit {
 
     this.api.getCuentas().subscribe({
       next: (todas: Cuenta[]) => {
+
+        // Mapear moneda y tipo de cuenta
+        const monedaMap: any = { 1: 'CRC', 2: 'USD' };
+
+        const cuentasMapeadas = todas.map(c => ({
+          ...c,
+          currency: monedaMap[Number(c.currency)] || 'CRC',
+
+        }));
         if (rol === 'cliente') {
           if (!Number.isNaN(clienteId) && clienteId > 0) {
-            this.cuentas = todas.filter((c: any) => c.clientId === clienteId);
+            this.cuentas = cuentasMapeadas.filter(c => c.clientId === clienteId);
           } else {
             console.warn(
               'Rol cliente pero token sin clienteId válido (PagosServicio). No se mostrarán cuentas.'
@@ -116,7 +126,7 @@ export class PagosServicioPage implements OnInit {
             this.cuentas = [];
           }
         } else {
-          this.cuentas = todas;
+          this.cuentas = cuentasMapeadas;
         }
 
         if (this.cuentas.length === 1) {
