@@ -35,3 +35,179 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+/* ================================
+   ESTILOS GENERALES
+================================ */
+ion-content {
+  --background: #f4f6f9;
+}
+
+ion-item {
+  --background: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Inputs flotantes */
+ion-label {
+  font-weight: 600;
+}
+
+/* Inputs */
+ion-input, ion-select {
+  font-size: 15px;
+}
+
+/* Tarjetas */
+ion-card {
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+/* ================================
+   BOTONES
+================================ */
+ion-button {
+  height: 48px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+ion-button[color="primary"] {
+  --background: #1a73e8;
+  --background-hover: #1666ce;
+  --background-activated: #165ec0;
+  --border-radius: 10px;
+}
+
+ion-button[color="medium"] {
+  --background: #cfd3d9;
+  --background-hover: #bfc3c8;
+  --border-radius: 10px;
+}
+
+ion-button[color="danger"] {
+  --background: #e84545;
+  --background-hover: #d43737;
+  --border-radius: 10px;
+}
+
+ion-button[color="success"] {
+  --background: #2ecc71;
+  --background-hover: #29b765;
+  --border-radius: 10px;
+}
+
+/* Botón pequeñito para lista */
+ion-item ion-button {
+  height: 36px;
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+/* ================================
+   ENCABEZADOS (HEADER)
+================================ */
+ion-header {
+  --background: #1a73e8;
+  color: white;
+}
+
+ion-toolbar {
+  --background: #1a73e8 !important;
+  --color: #ffffff !important;
+}
+
+ion-title {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* Botón volver */
+ion-buttons[slot="end"] ion-button {
+  --color: white;
+}
+
+/* ================================
+   MENSAJES
+================================ */
+.success {
+  background: #e8f9ef;
+  color: #1e8f4f;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border-left: 4px solid #2ecc71;
+  font-weight: 600;
+}
+
+.error {
+  background: #ffe8e8;
+  color: #d9534f;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border-left: 4px solid #e84545;
+  font-weight: 600;
+}
+
+/* ================================
+   LISTAS
+================================ */
+ion-list {
+  background: transparent;
+}
+
+ion-item h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+ion-item p {
+  font-size: 14px;
+  color: #555;
+}
+
+/* ================================
+   SEPARADORES
+================================ */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ================================
+   CARDS PERSONALIZADO
+================================ */
+ion-card-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+ion-card-content {
+  font-size: 15px;
+}
+
+/* ================================
+   MÓVIL (MEJOR RESPONSIVIDAD)
+================================ */
+@media (max-width: 480px) {
+  ion-title {
+    font-size: 18px;
+  }
+
+  ion-item {
+    margin-bottom: 10px;
+  }
+
+  ion-button {
+    height: 44px;
+  }
+}

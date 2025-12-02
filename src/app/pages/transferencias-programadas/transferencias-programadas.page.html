@@ -2,7 +2,9 @@
   <ion-toolbar color="primary">
     <ion-title>Transferencias programadas</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="light" (click)="goToMenu()">Volver</ion-button>
+      <ion-button (click)="goToMenu()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -52,7 +54,8 @@
 
     <ion-item>
       <ion-label position="stacked">Fecha de ejecución</ion-label>
-      <ion-datetime presentation="date-time" [(ngModel)]="fechaEjecucion"></ion-datetime>
+      <ion-input type="datetime-local" [(ngModel)]="fechaEjecucion">
+      </ion-input>
     </ion-item>
 
     <ion-item>
@@ -64,10 +67,6 @@
 
   <ion-button expand="block" color="primary" class="ion-margin-top" (click)="registrar()">
     Registrar transferencia programada
-  </ion-button>
-
-  <ion-button expand="block" fill="clear" color="medium" (click)="goToMenu()">
-    Volver al menú
   </ion-button>
 
 </ion-content>

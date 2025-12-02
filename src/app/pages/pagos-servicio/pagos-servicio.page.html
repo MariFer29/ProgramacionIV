@@ -40,12 +40,10 @@
     <ion-item>
       <ion-label position="floating">Número de contrato</ion-label>
       <ion-input type="text" formControlName="numeroContrato" maxlength="12"></ion-input>
-      <ion-input type="text" formControlName="numeroContrato" maxlength="12"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Monto</ion-label>
-      <ion-input type="number" formControlName="monto"></ion-input>
       <ion-input type="number" formControlName="monto"></ion-input>
     </ion-item>
 
@@ -59,15 +57,11 @@
 
     <ion-item>
       <ion-label position="stacked">Fecha programada (opcional)</ion-label>
-      <ion-datetime presentation="date" formControlName="fechaProgramada"></ion-datetime>
+      <ion-input type="date" formControlName="fechaProgramada"></ion-input>
     </ion-item>
 
     <ion-button expand="block" class="ion-margin-top" type="submit" [disabled]="form.invalid || loading">
       Registrar pago
-    </ion-button>
-
-    <ion-button expand="block" fill="clear" color="medium" (click)="volver()">
-      Volver al menú
     </ion-button>
 
     <ion-spinner *ngIf="loading" class="ion-margin-top"></ion-spinner>

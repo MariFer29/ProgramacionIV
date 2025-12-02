@@ -1,6 +1,12 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Transferencias</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="goToMenu()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -10,35 +16,32 @@
     <ion-spinner *ngIf="loading"></ion-spinner>
 
     <!-- Cuenta origen -->
-<ion-item>
-  <ion-label position="stacked">Cuenta origen</ion-label>
-  <ion-select
-    formControlName="cuentaOrigenId"
-    (ionChange)="onCuentaOrigenChange($event.detail.value)"
-  >
-    <ion-select-option *ngFor="let c of cuentasOrigen" [value]="c.id">
-      {{ c.accountNumber }} • {{ c.currency }}
-    </ion-select-option>
-  </ion-select>
-</ion-item>
+    <ion-item>
+      <ion-label position="stacked">Cuenta origen</ion-label>
+      <ion-select formControlName="cuentaOrigenId" (ionChange)="onCuentaOrigenChange($event.detail.value)">
+        <ion-select-option *ngFor="let c of cuentasOrigen" [value]="c.id">
+          {{ c.accountNumber }} • {{ c.currency }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
-<!-- Saldo disponible -->
-<ion-item>
-  <ion-label position="stacked">Saldo disponible</ion-label>
-  <ion-note slot="end">
-    {{ saldoDisponible !== null ? (saldoDisponible | number:'1.2-2') : '—' }}
-  </ion-note>
-</ion-item>
+    <!-- Saldo disponible -->
+    <ion-item>
+      <ion-label position="stacked">Saldo disponible</ion-label>
+      <ion-note slot="end">
+        {{ saldoDisponible !== null ? (saldoDisponible | number:'1.2-2') : '—' }}
+      </ion-note>
+    </ion-item>
 
-<!-- Cuenta destino -->
-<ion-item>
-  <ion-label position="stacked">Cuenta destino</ion-label>
-  <ion-select formControlName="cuentaDestinoId">
-    <ion-select-option *ngFor="let c of cuentasDestino" [value]="c.id">
-      {{ c.accountNumber }} • {{ c.currency }}
-    </ion-select-option>
-  </ion-select>
-</ion-item>
+    <!-- Cuenta destino -->
+    <ion-item>
+      <ion-label position="stacked">Cuenta destino</ion-label>
+      <ion-select formControlName="cuentaDestinoId">
+        <ion-select-option *ngFor="let c of cuentasDestino" [value]="c.id">
+          {{ c.accountNumber }} • {{ c.currency }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
 
 
@@ -62,10 +65,6 @@
 
     <ion-button expand="block" class="ion-margin-top" type="submit" [disabled]="transferForm.invalid || loading">
       Registrar transferencia
-    </ion-button>
-
-    <ion-button expand="block" color="medium" class="ion-margin-top" (click)="goToMenu()">
-      Volver al Menú
     </ion-button>
 
   </form>

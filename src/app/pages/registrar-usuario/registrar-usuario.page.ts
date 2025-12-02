@@ -3,10 +3,20 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+
 import { 
-  IonInput, IonItem, IonLabel, IonButton, 
-  IonSelect, IonSelectOption, IonContent, 
-  IonHeader, IonToolbar, IonTitle 
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonSelect,
+  IonSelectOption,
+  IonContent,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonIcon
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -24,11 +34,14 @@ import {
     IonInput,
     IonButton,
     IonSelect,
-    IonSelectOption
+    IonSelectOption,
+    IonButtons,   
+    IonIcon       
   ],
   templateUrl: './registrar-usuario.page.html',
   styleUrls: ['./registrar-usuario.page.scss']
 })
+
 export class RegistrarUsuarioPage implements OnInit {
 
   registerForm: FormGroup;

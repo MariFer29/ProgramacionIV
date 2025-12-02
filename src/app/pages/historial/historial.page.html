@@ -1,6 +1,13 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Historial de movimientos</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
   </ion-toolbar>
 </ion-header>
 
@@ -91,10 +98,5 @@
   <ion-text *ngIf="!loading && movimientos.length === 0">
     <p>No hay movimientos para los filtros seleccionados.</p>
   </ion-text>
-
-  <ion-button expand="block" class="ion-margin-top" (click)="volver()">
-    Volver al menú
-  </ion-button>
-
 
 </ion-content>
