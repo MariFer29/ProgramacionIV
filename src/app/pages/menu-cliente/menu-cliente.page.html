@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Menú Cliente</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Salir</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="grid">
+
+    <!-- Mis Cuentas -->
+    <div class="card" (click)="goTo('/mis-cuentas')">
+      <ion-icon name="card-outline"></ion-icon>
+      <span>Mis Cuentas</span>
+    </div>
+
+    <!-- Transferencias -->
+    <div class="card" (click)="goTo('/transferencias')">
+      <ion-icon name="swap-horizontal-outline"></ion-icon>
+      <span>Transferencias</span>
+    </div>
+
+    <div class="card" (click)="goTo('/transferencias-programadas')">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>Programadas</span>
+    </div>
+
+    <!-- Pagos de Servicios -->
+    <div class="card" (click)="goTo('/pagos-servicio')">
+      <ion-icon name="cash-outline"></ion-icon>
+      <span>Pagos</span>
+    </div>
+
+    <!-- Beneficiarios (terceros) -->
+    <div class="card" (click)="goTo('/beneficiarios')">
+      <ion-icon name="people-outline"></ion-icon>
+      <span>Beneficiarios</span>
+    </div>
+
+    <!-- Historial de movimientos -->
+    <div class="card" (click)="goTo('/historial')">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>Historial</span>
+    </div>
+
+    <!-- Descarga de comprobantes y extractos -->
+    <div class="card" (click)="goTo('/comprobantes')">
+      <ion-icon name="document-text-outline"></ion-icon>
+      <span>Comprobantes</span>
+    </div>
+
+  </div>
+
+</ion-content>

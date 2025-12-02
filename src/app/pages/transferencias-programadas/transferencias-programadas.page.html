@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Transferencias programadas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToMenu()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item *ngIf="saldoDisponible !== null">
+    <ion-label>
+      Saldo disponible: <strong>{{ saldoDisponible | number:'1.2-2' }}</strong>
+    </ion-label>
+  </ion-item>
+
+  <ion-list lines="full">
+
+    <!-- CUENTA ORIGEN -->
+    <ion-item>
+      <ion-label position="stacked">Cuenta origen</ion-label>
+      <ion-select [(ngModel)]="cuentaOrigen" (ionChange)="onCuentaOrigenChange()">
+        <ion-select-option *ngFor="let c of cuentasOrigen" [value]="c.id">
+          {{ c.accountNumber }} • {{ c.currency }} • {{ c.balance }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- CUENTA DESTINO -->
+    <ion-item>
+      <ion-label position="stacked">Cuenta destino</ion-label>
+      <ion-select [(ngModel)]="cuentaDestino">
+        <ion-select-option *ngFor="let c of cuentasDestino" [value]="c.id" [disabled]="c.id === cuentaOrigen">
+          {{ c.accountNumber }} • {{ c.currency }} • {{ c.balance }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Monto</ion-label>
+      <ion-input type="number" [(ngModel)]="monto"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Moneda</ion-label>
+      <ion-select [(ngModel)]="moneda">
+        <ion-select-option value="CRC">CRC</ion-select-option>
+        <ion-select-option value="USD">USD</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Fecha de ejecución</ion-label>
+      <ion-input type="datetime-local" [(ngModel)]="fechaEjecucion">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Detalle (opcional)</ion-label>
+      <ion-input type="text" [(ngModel)]="detalle"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-button expand="block" color="primary" class="ion-margin-top" (click)="registrar()">
+    Registrar transferencia programada
+  </ion-button>
+
+</ion-content>

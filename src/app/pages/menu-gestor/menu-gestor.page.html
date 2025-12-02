@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Menú Gestor</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Salir</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="grid">
+
+    <div class="card" (click)="goTo('/clientes')">
+      <ion-icon name="people-outline"></ion-icon>
+      <span>Clientes</span>
+    </div>
+
+    <div class="card" (click)="goTo('/cuentas')">
+      <ion-icon name="card-outline"></ion-icon>
+      <span>Cuentas</span>
+    </div>
+
+    <!-- Abrir cuentas -->
+    <div class="card" (click)="goTo('/abrir-cuenta')">
+      <ion-icon name="add-circle-outline"></ion-icon>
+      <span>Abrir Cuenta</span>
+    </div>
+
+    <!-- Consultar operaciones -->
+    <div class="card" (click)="goTo('/consultar-operaciones')">
+      <ion-icon name="document-text-outline"></ion-icon>
+      <span>Operaciones</span>
+    </div>
+
+    <div class="card" (click)="goTo('/historial')">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>Historial</span>
+    </div>
+
+  </div>
+
+</ion-content>

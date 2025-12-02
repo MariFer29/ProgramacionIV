@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Menú Administrador</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Salir</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+
+  <div class="grid">
+
+    <div class="card" (click)="goTo('/clientes')">
+      <ion-icon name="people-outline"></ion-icon>
+      <span>Clientes</span>
+    </div>
+
+    <div class="card" (click)="goTo('/beneficiarios')">
+      <ion-icon name="heart-outline"></ion-icon>
+      <span>Beneficiarios</span>
+    </div>
+
+    <div class="card" (click)="goTo('/abrir-cuenta')">
+      <ion-icon name="add-circle-outline"></ion-icon>
+      <span>Abrir Cuenta</span>
+    </div>
+
+    <div class="card" (click)="goTo('/cuentas')">
+      <ion-icon name="card-outline"></ion-icon>
+      <span>Cuentas</span>
+    </div>
+
+    <div class="card" (click)="goTo('/pagos-servicio')">
+      <ion-icon name="cash-outline"></ion-icon>
+      <span>Pagos</span>
+    </div>
+
+    <div class="card" (click)="goTo('/proveedores-servicio')">
+      <ion-icon name="business-outline"></ion-icon>
+      <span>Proveedores</span>
+    </div>
+
+    <div class="card" (click)="goTo('/registrar-usuario')">
+      <ion-icon name="person-add-outline"></ion-icon>
+      <span>Registrar Usuario</span>
+    </div>
+
+    <div class="card" (click)="goTo('/transferencias')">
+      <ion-icon name="swap-horizontal-outline"></ion-icon>
+      <span>Transferencias</span>
+    </div>
+
+    <div class="card" (click)="goTo('/transferencias-programadas')">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>Programadas</span>
+    </div>
+
+    <div class="card" (click)="goTo('/historial')">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>Historial</span>
+    </div>
+
+        <!-- Descarga de comprobantes y extractos -->
+    <div class="card" (click)="goTo('/comprobantes')">
+      <ion-icon name="document-text-outline"></ion-icon>
+      <span>Comprobantes</span>
+    </div>
+
+  </div>
+
+</ion-content>

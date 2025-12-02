@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cuentas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="goToMenu()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- CARD DE FILTROS -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Filtro</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <!-- Filtro por id de cliente -->
+      <ion-item>
+        <ion-label position="floating">Id Cliente (opcional)</ion-label>
+        <ion-input type="number" [(ngModel)]="clientIdFilter"></ion-input>
+      </ion-item>
+
+      <!-- Filtro por tipo de cuenta -->
+      <ion-item>
+        <ion-label position="stacked">Tipo</ion-label>
+        <ion-select [(ngModel)]="typeFilter">
+          <ion-select-option value="">Todos</ion-select-option>
+          <ion-select-option value="Ahorros">Ahorros</ion-select-option>
+          <ion-select-option value="Corriente">Corriente</ion-select-option>
+          <ion-select-option value="Plazo Fijo">Plazo Fijo</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Filtro por moneda -->
+      <ion-item>
+        <ion-label position="stacked">Moneda</ion-label>
+        <ion-select [(ngModel)]="currencyFilter">
+          <ion-select-option value="">Todas</ion-select-option>
+          <ion-select-option value="CRC">CRC</ion-select-option>
+          <ion-select-option value="USD">USD</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Filtro por estado -->
+      <ion-item>
+        <ion-label position="stacked">Estado</ion-label>
+        <ion-select [(ngModel)]="statusFilter">
+          <ion-select-option value="">Todos</ion-select-option>
+          <ion-select-option value="Activa">Activa</ion-select-option>
+          <ion-select-option value="Bloqueada">Bloqueada</ion-select-option>
+          <ion-select-option value="Cerrada">Cerrada</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button expand="block" (click)="cargarCuentas()">
+        Buscar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-spinner *ngIf="isLoading" name="crescent" class="ion-margin"></ion-spinner>
+
+  <ion-text color="danger" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </ion-text>
+
+  <!-- LISTADO -->
+  <ion-list *ngIf="!isLoading">
+    <ion-item *ngFor="let c of cuentasFiltradas">
+      <ion-label>
+        <h2>{{ c.accountNumber }} • {{ c.type }} • {{ c.currency }}</h2>
+        <p>
+          Saldo: {{ c.balance | currency:'CRC':'symbol':'1.2-2' }}<br>
+          Estado: {{ c.status }}<br>
+          Cliente Id: {{ c.clientId }}<br>
+          Creada: {{ c.createdAt | date:'short' }}
+        </p>
+      </ion-label>
+   
+      <!-- Botones de acciones: SOLO para administrador -->
+      <ion-buttons slot="end" *ngIf="esAdmin">
+
+        <ion-button
+          color="warning"
+          (click)="confirmarAccion(c.id, 'bloquear')"
+          [disabled]="c.status === 'Bloqueada' || c.status === 'Cerrada'">
+          Bloquear
+        </ion-button>
+
+        <ion-button
+          color="danger"
+          (click)="confirmarAccion(c.id, 'cerrar')"
+          [disabled]="c.status === 'Cerrada'">
+          Cerrar
+        </ion-button>
+
+      </ion-buttons>
+
+
+    </ion-item>
+
+    <ion-item *ngIf="!isLoading && cuentasFiltradas.length === 0">
+      <ion-label>No hay cuentas que coincidan con el filtro.</ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

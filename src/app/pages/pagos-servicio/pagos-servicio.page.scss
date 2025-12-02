@@ -1,0 +1,19 @@
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 32px;
+  height: 100%;
+  overflow-y: auto; /* permite scroll natural */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+

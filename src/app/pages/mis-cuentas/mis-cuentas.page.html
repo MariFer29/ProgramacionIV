@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mis cuentas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="volverAlMenuCliente()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-spinner *ngIf="isLoading" name="crescent" class="ion-margin"></ion-spinner>
+
+  <ion-text color="danger" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </ion-text>
+
+  <!-- Lista de cuentas del cliente -->
+  <ion-list *ngIf="!isLoading && cuentas.length > 0">
+    <ion-item *ngFor="let c of cuentas">
+      <ion-label>
+        <h2>{{ c.accountNumber }} • {{ c.type }} • {{ c.currency }}</h2>
+        <p>
+          Saldo: {{ c.balance | currency:c.currency:'symbol':'1.2-2' }}<br>
+          Estado: {{ c.status }}<br>
+          Creada: {{ c.createdAt | date:'short' }}
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-item *ngIf="!isLoading && cuentas.length === 0">
+    <ion-label>No tienes cuentas creadas.</ion-label>
+  </ion-item>
+
+</ion-content>

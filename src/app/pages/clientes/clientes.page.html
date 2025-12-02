@@ -1,6 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Clientes</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="goToMenu()">
+        <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,12 +19,7 @@
 
   <!-- Lista de clientes -->
   <ion-list>
-    <ion-item 
-      button 
-      detail
-      *ngFor="let c of clientes"
-      (click)="verDetalle(c)"
-    >
+    <ion-item button detail *ngFor="let c of clientes" (click)="verDetalle(c)">
       <ion-label>
         <h2>{{ c.nombreCompleto }}</h2>
         <p>{{ c.correo }}</p>
@@ -27,15 +28,4 @@
       </ion-label>
     </ion-item>
   </ion-list>
-
-  <!-- Botón para registrar nuevo cliente -->
-  <ion-button 
-    expand="full" 
-    color="primary" 
-    (click)="goToRegistrar()"
-    class="ion-margin-top"
-  >
-    Registrar Cliente
-  </ion-button>
-
 </ion-content>
