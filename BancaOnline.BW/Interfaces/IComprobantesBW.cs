@@ -10,5 +10,7 @@ namespace BancaOnline.BW.Interfaces
     {
         Task<byte[]> GenerarComprobanteTransferenciaAsync(Guid transferenciaId);
         Task<byte[]> GenerarComprobantePagoServicioAsync(Guid pagoServicioId);
+        Task<byte[]> GenerarComprobanteExtractoMensualAsync(Guid cuentaId, int anio, int mes);
+
     }
 }

@@ -16,15 +16,18 @@ namespace BancaOnline.BW.CU
         private readonly ITransferenciaDA _transferenciasDA;
         private readonly IPagoServicioDA _pagosDA;
         private readonly AppDbContext _db;
+        private readonly IHistorialBW _historialBW;
 
         public ComprobanteCU(
             ITransferenciaDA transferenciasDA,
             IPagoServicioDA pagosDA,
-            AppDbContext db)
+            AppDbContext db,
+            IHistorialBW historialBW)
         {
             _transferenciasDA = transferenciasDA;
             _pagosDA = pagosDA;
             _db = db;
+            _historialBW = historialBW;
         }
 
         public async Task<byte[]> GenerarComprobanteTransferenciaAsync(Guid transferenciaId)
@@ -128,5 +131,51 @@ namespace BancaOnline.BW.CU
 
             return pdf;
         }
+
+        public async Task<byte[]> GenerarComprobanteExtractoMensualAsync(Guid cuentaId, int anio, int mes)
+        {
+            // Reutiliza la lógica de HistorialCU
+            var extracto = await _historialBW.GenerarExtractoMensualAsync(cuentaId, anio, mes);
+
+            var pdf = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Margin(40);
+                    page.Header()
+                        .Text("Extracto Mensual")
+                        .FontSize(20)
+                        .Bold()
+                        .AlignCenter();
+
+                    page.Content().Column(col =>
+                    {
+                        col.Spacing(5);
+
+                        col.Item().Text($"Cuenta: {extracto.NumeroCuenta}");
+                        col.Item().Text($"Periodo: {extracto.Mes:00}/{extracto.Anio}");
+                        col.Item().Text($"Saldo inicial: {extracto.SaldoInicial:N2}");
+                        col.Item().Text($"Saldo final: {extracto.SaldoFinal:N2}");
+                        col.Item().Text($"Total comisiones: {extracto.TotalComisiones:N2}");
+
+                        col.Item().LineHorizontal(1f);
+
+                        foreach (var m in extracto.Movimientos)
+                        {
+                            col.Item().Text(
+                                $"{m.Fecha:dd/MM/yyyy HH:mm} - {m.Tipo} - Monto: {m.Monto:N2} - Comisión: {m.Comision:N2} - Estado: {m.Estado}");
+                        }
+                    });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Text("BancaOnline - Extracto generado automáticamente");
+                });
+            })
+            .GeneratePdf();
+
+            return pdf;
+        }
+
     }
 }

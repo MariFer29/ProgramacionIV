@@ -30,5 +30,16 @@ namespace BancaOnline.API.Controllers
             var fileName = $"comprobante-pago-{id}.pdf";
             return File(pdfBytes, "application/pdf", fileName);
         }
+
+        [HttpGet("extracto/{cuentaId:guid}")]
+        public async Task<IActionResult> GetExtractoMensualPdf(
+        Guid cuentaId,
+        [FromQuery] int anio,
+        [FromQuery] int mes)
+        {
+            var pdfBytes = await _comprobantesBW.GenerarComprobanteExtractoMensualAsync(cuentaId, anio, mes);
+            var fileName = $"extracto-{cuentaId}-{anio}-{mes:00}.pdf";
+            return File(pdfBytes, "application/pdf", fileName);
+        }
     }
 }
