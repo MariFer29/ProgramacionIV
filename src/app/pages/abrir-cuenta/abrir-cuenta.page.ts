@@ -104,8 +104,6 @@ export class AbrirCuentaPage implements OnInit {
           color: 'success',
         });
         await toast.present();
-
-        this.router.navigate(['/cuentas']);
       },
       error: async (err) => {
         console.error(err);

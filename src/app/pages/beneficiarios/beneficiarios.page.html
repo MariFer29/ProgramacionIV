@@ -1,7 +1,6 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Beneficiarios / Terceros</ion-title>
-
     <ion-buttons slot="end">
       <ion-button (click)="volver()">
         <ion-icon name="arrow-undo-outline" slot="icon-only"></ion-icon>
@@ -22,26 +21,19 @@
 
   <!-- ============================
        FORMULARIO DE BENEFICIARIO
-       Campos alineados con el DTO:
-       alias, bank, currency (int), accountNumber, country
   ================================= -->
   <form [formGroup]="form" (ngSubmit)="guardar()">
 
-    <!-- Alias del beneficiario -->
     <ion-item>
       <ion-label position="stacked">Alias</ion-label>
-      <ion-input formControlName="alias" placeholder="Ej: Mamá, Amigo, Empresa X">
-      </ion-input>
+      <ion-input formControlName="alias" placeholder="Ej: Mamá, Amigo, Empresa X"></ion-input>
     </ion-item>
 
-    <!-- Banco del beneficiario -->
     <ion-item>
       <ion-label position="stacked">Banco</ion-label>
-      <ion-input formControlName="bank" placeholder="Ej: BAC, BCR, Davivienda, etc.">
-      </ion-input>
+      <ion-input formControlName="bank" placeholder="Ej: BAC, BCR, Davivienda"></ion-input>
     </ion-item>
 
-    <!-- Moneda (1 = CRC, 2 = USD) -->
     <ion-item>
       <ion-label position="stacked">Moneda</ion-label>
       <ion-select formControlName="currency" placeholder="Seleccione moneda">
@@ -50,26 +42,20 @@
       </ion-select>
     </ion-item>
 
-    <!-- Número de cuenta -->
     <ion-item>
       <ion-label position="stacked">Número de cuenta</ion-label>
-      <ion-input formControlName="accountNumber" type="text" placeholder="Ej: 1234567890123456">
-      </ion-input>
+      <ion-input formControlName="accountNumber" type="text" placeholder="Ej: 1234567890123456"></ion-input>
     </ion-item>
 
-    <!-- País -->
     <ion-item>
       <ion-label position="stacked">País</ion-label>
-      <ion-input formControlName="country" placeholder="Ej: Costa Rica, Colombia, etc.">
-      </ion-input>
+      <ion-input formControlName="country" placeholder="Ej: Costa Rica, Colombia"></ion-input>
     </ion-item>
 
-    <!-- Botones de acción -->
     <div class="buttons ion-margin-top">
       <ion-button type="submit" expand="block" [disabled]="form.invalid || loading">
         {{ editingId == null ? 'GUARDAR' : 'ACTUALIZAR' }}
       </ion-button>
-
       <ion-button *ngIf="editingId != null" type="button" color="medium" expand="block" (click)="cancelarEdicion()">
         Cancelar edición
       </ion-button>
@@ -77,6 +63,14 @@
 
     <ion-spinner *ngIf="loading" class="ion-margin-top"></ion-spinner>
   </form>
+
+  <!-- ============================
+       FILTRO DE BÚSQUEDA
+  ================================= -->
+  <ion-item class="ion-margin-top">
+    <ion-label position="floating">Buscar por alias, banco o país</ion-label>
+    <ion-input [(ngModel)]="searchTerm" (ionInput)="filtrarBeneficiarios()"></ion-input>
+  </ion-item>
 
   <!-- ============================
        LISTA DE BENEFICIARIOS
@@ -88,8 +82,7 @@
 
     <ion-card-content>
       <ion-list>
-
-        <ion-item *ngFor="let b of beneficiarios">
+        <ion-item *ngFor="let b of beneficiariosFiltrados">
           <ion-label>
             <h2>{{ b.alias }} - {{ b.bank }}</h2>
             <p>
@@ -109,10 +102,9 @@
           </ion-buttons>
         </ion-item>
 
-        <ion-item *ngIf="!loading && beneficiarios.length === 0">
+        <ion-item *ngIf="!loading && beneficiariosFiltrados.length === 0">
           <ion-label>No hay beneficiarios registrados.</ion-label>
         </ion-item>
-
       </ion-list>
     </ion-card-content>
   </ion-card>

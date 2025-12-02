@@ -31,7 +31,7 @@ export class TransferenciasProgramadasPage implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarCuentas();
@@ -56,12 +56,21 @@ export class TransferenciasProgramadasPage implements OnInit {
 
     this.api.getCuentas().subscribe({
       next: (todas: any[]) => {
-        this.cuentasDestino = todas;
+        // Filtrar solo cuentas activas (status = 1)
+        const cuentasActivas = todas.filter(c => c.status === 1);
+
+        // Mapear currency numérico a texto
+        const cuentasMapeadas = cuentasActivas.map(c => ({
+          ...c,
+          currency: c.currency === 2 ? 'USD' : 'CRC', 
+        }));
+
+        this.cuentasDestino = cuentasMapeadas;
 
         if (rol === 'cliente' && !isNaN(clienteId) && clienteId > 0) {
-          this.cuentasOrigen = todas.filter((c) => c.clientId === clienteId);
+          this.cuentasOrigen = cuentasMapeadas.filter(c => c.clientId === clienteId);
         } else {
-          this.cuentasOrigen = todas;
+          this.cuentasOrigen = cuentasMapeadas;
         }
 
         if (this.cuentasOrigen.length === 1) {
