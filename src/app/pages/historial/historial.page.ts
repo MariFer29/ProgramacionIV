@@ -19,16 +19,26 @@ import { ApiService } from 'src/app/services/api.service';
   imports: [CommonModule, FormsModule, IonicModule],
 })
 export class HistorialPage implements OnInit {
+  // ======== LISTAS ========
   cuentas: Cuenta[] = [];
   movimientos: MovimientoHistorial[] = [];
 
+  // Para admin/gestor: listado de clientes
+  listaClientes: any[] = [];
+
+  // ======== FILTROS ========
   cuentaSeleccionadaId: string = '';
   fechaDesde: string = '';
   fechaHasta: string = '';
-  tipoSeleccionado: string = ''; 
+  tipoSeleccionado: string = ''; // '' | '1' | '2'
   estadoCodigo: string = '';
 
+  // Para admin/gestor: cliente seleccionado
+  clienteSeleccionadoId: string = '';
+
+  // Flags
   loading = false;
+  esAdminOGestor = false;
 
   constructor(
     private api: ApiService,
@@ -37,7 +47,22 @@ export class HistorialPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cargarCuentas();
+    const rolRaw = localStorage.getItem('rol') || '';
+    const rol = rolRaw.toLowerCase();
+
+    this.esAdminOGestor =
+      rol.includes('admin') ||
+      rol.includes('administrador') ||
+      rol.includes('gestor');
+
+    if (this.esAdminOGestor) {
+      // Admin / Gestor: primero lista de clientes.
+      this.cargarClientes();
+      this.cuentas = [];
+    } else {
+      // Cliente: carga directamente sus cuentas.
+      this.cargarCuentasClienteActual();
+    }
   }
 
   // =============== UTILIDAD TOKEN =================
@@ -57,6 +82,7 @@ export class HistorialPage implements OnInit {
   ): string | undefined {
     if (!valor) return undefined;
 
+    // Ya viene como yyyy-MM-dd
     if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
       return valor;
     }
@@ -82,12 +108,47 @@ export class HistorialPage implements OnInit {
     return undefined;
   }
 
-  // =============== CARGAR CUENTAS =================
-  cargarCuentas(): void {
-    const rolRaw = localStorage.getItem('rol') || '';
-    const rol = rolRaw.toLowerCase();
-    const token = localStorage.getItem('token') || '';
+  // =============== CARGAR CLIENTES (ADMIN / GESTOR) ==============
+  private cargarClientes(): void {
+    this.api.getClientes().subscribe({
+      next: (data) => {
+        this.listaClientes = data || [];
+      },
+      error: (err) => {
+        console.error('Error al cargar clientes para historial:', err);
+        this.mostrarToast('Error al cargar clientes', 'danger');
+      },
+    });
+  }
 
+  // Cuando admin/gestor cambia el cliente en el select
+  onClienteChange(): void {
+    this.cuentas = [];
+    this.cuentaSeleccionadaId = '';
+
+    if (!this.clienteSeleccionadoId) {
+      return;
+    }
+
+    const idNum = Number(this.clienteSeleccionadoId);
+    if (Number.isNaN(idNum) || idNum <= 0) {
+      return;
+    }
+
+    this.api.getCuentas(idNum).subscribe({
+      next: (data) => {
+        this.cuentas = data || [];
+      },
+      error: (err) => {
+        console.error('Error al cargar cuentas del cliente (admin):', err);
+        this.mostrarToast('Error al cargar cuentas del cliente', 'danger');
+      },
+    });
+  }
+
+  // =============== CARGAR CUENTAS (CLIENTE LOGGEADO) =============
+  private cargarCuentasClienteActual(): void {
+    const token = localStorage.getItem('token') || '';
     const payload = token ? this.decodeToken(token) : null;
     console.log('PAYLOAD TOKEN (Historial):', payload);
 
@@ -97,40 +158,29 @@ export class HistorialPage implements OnInit {
         ? Number(clienteIdFromToken)
         : NaN;
 
-    let obs$;
-
-    if (rol === 'cliente') {
-      if (Number.isNaN(clienteId) || clienteId <= 0) {
-        console.warn(
-          'Rol cliente pero sin clienteId válido en el token. No se cargan cuentas.'
-        );
-        this.cuentas = [];
-        this.mostrarToast(
-          'No se pudo identificar el cliente desde el token.',
-          'danger'
-        );
-        return;
-      }
-
-      // Cliente -> solo sus cuentas
-      obs$ = this.api.getCuentas(clienteId);
-    } else {
-      // Admin / Gestor -> todas
-      obs$ = this.api.getCuentas();
+    if (Number.isNaN(clienteId) || clienteId <= 0) {
+      console.warn(
+        'Historial → cliente loggeado pero sin clienteId válido en token'
+      );
+      this.cuentas = [];
+      this.mostrarToast(
+        'No se pudo identificar el cliente desde el token.',
+        'danger'
+      );
+      return;
     }
 
-    obs$.subscribe({
+    this.api.getCuentas(clienteId).subscribe({
       next: (data) => {
-        console.log('CUENTAS HISTORIAL:', data);
-        this.cuentas = data;
+        console.log('CUENTAS HISTORIAL (cliente):', data);
+        this.cuentas = data || [];
 
-        // Si solo hay una cuenta, la preseleccionamos
         if (this.cuentas.length === 1) {
           this.cuentaSeleccionadaId = this.cuentas[0].id as any;
         }
       },
       error: (err) => {
-        console.error('Error al cargar cuentas en historial:', err);
+        console.error('Error al cargar cuentas en historial (cliente):', err);
         this.mostrarToast('Error al cargar cuentas', 'danger');
       },
     });
@@ -138,29 +188,59 @@ export class HistorialPage implements OnInit {
 
   // =============== BUSCAR HISTORIAL =================
   buscar(): void {
-    const rolRaw = localStorage.getItem('rol') || '';
-    const rol = rolRaw.toLowerCase();
-
-    // Solo obligamos a elegir cuenta cuando NO es cliente (admin/gestor)
-    if (rol !== 'cliente' && !this.cuentaSeleccionadaId) {
-      this.mostrarToast('Seleccione una cuenta.');
-      return;
-    }
-
-    const desdeNormalizado = this.normalizarFecha(this.fechaDesde);
-    const hastaNormalizado = this.normalizarFecha(this.fechaHasta);
-
-    const filtrosBase: HistorialFiltro = {
-      desde: desdeNormalizado,
-      hasta: hastaNormalizado,
-      estado: this.estadoCodigo ? Number(this.estadoCodigo) : undefined,
-    };
-
     this.loading = true;
     this.movimientos = [];
 
-    if (rol === 'cliente') {
-      // ===== CLIENTE → historial por cliente, cuenta opcional =====
+    if (this.esAdminOGestor) {
+      // ===== ADMIN / GESTOR =====
+      if (!this.clienteSeleccionadoId) {
+        this.loading = false;
+        this.mostrarToast('Seleccione un cliente.', 'danger');
+        return;
+      }
+
+      if (!this.cuentaSeleccionadaId) {
+        this.loading = false;
+        this.mostrarToast('Seleccione una cuenta.', 'danger');
+        return;
+      }
+
+      // ADMIN: solo filtra por cuenta (sin fechas ni tipo)
+      const filtros: HistorialFiltro = {}; // sin desde/hasta/tipo/estado
+
+      console.log(
+        'BUSCAR HISTORIAL (ADMIN/GESTOR) → cuentaId:',
+        this.cuentaSeleccionadaId
+      );
+
+      this.api
+        .getHistorialPorCuenta(this.cuentaSeleccionadaId, filtros)
+        .subscribe({
+          next: (data) => {
+            this.procesarRespuestaHistorial(data);
+          },
+          error: (err) => {
+            console.error('Error al obtener historial (cuenta):', err);
+            this.loading = false;
+            this.mostrarToast(
+              err.error?.message ||
+                err.error?.mensaje ||
+                'Error al obtener el historial.',
+              'danger'
+            );
+          },
+        });
+    } else {
+      // ===== CLIENTE =====
+      const desdeNormalizado = this.normalizarFecha(this.fechaDesde);
+      const hastaNormalizado = this.normalizarFecha(this.fechaHasta);
+
+      const filtrosBase: HistorialFiltro = {
+        desde: desdeNormalizado,
+        hasta: hastaNormalizado,
+        estado: this.estadoCodigo ? Number(this.estadoCodigo) : undefined,
+      };
+
       const token = localStorage.getItem('token') || '';
       const payload = token ? this.decodeToken(token) : null;
       const clienteIdFromToken = payload?.clienteId;
@@ -191,6 +271,7 @@ export class HistorialPage implements OnInit {
       this.api
         .getHistorialPorCliente(clienteId, {
           ...filtrosBase,
+          // Para cliente: cuenta opcional ('' = todas)
           cuentaId: this.cuentaSeleccionadaId || null,
         })
         .subscribe({
@@ -199,34 +280,6 @@ export class HistorialPage implements OnInit {
           },
           error: (err) => {
             console.error('Error al obtener historial (cliente):', err);
-            this.loading = false;
-            this.mostrarToast(
-              err.error?.message ||
-                err.error?.mensaje ||
-                'Error al obtener el historial.',
-              'danger'
-            );
-          },
-        });
-    } else {
-      // ===== ADMIN / GESTOR → historial por CUENTA OBLIGATORIA =====
-      console.log(
-        'BUSCAR HISTORIAL (CUENTA) → cuentaId:',
-        this.cuentaSeleccionadaId
-      );
-      console.log(
-        'BUSCAR HISTORIAL (CUENTA) → filtros (sin tipo):',
-        filtrosBase
-      );
-
-      this.api
-        .getHistorialPorCuenta(this.cuentaSeleccionadaId, filtrosBase)
-        .subscribe({
-          next: (data) => {
-            this.procesarRespuestaHistorial(data);
-          },
-          error: (err) => {
-            console.error('Error al obtener historial (cuenta):', err);
             this.loading = false;
             this.mostrarToast(
               err.error?.message ||
@@ -252,6 +305,7 @@ export class HistorialPage implements OnInit {
 
     let result = rawData;
 
+    // El filtro por tipo se aplica sólo si el usuario lo usa (cliente).
     if (this.tipoSeleccionado === '1') {
       // Solo transferencias
       result = result.filter((m) => m.tipo === 'Transferencia');
@@ -270,6 +324,7 @@ export class HistorialPage implements OnInit {
     this.tipoSeleccionado = '';
     this.estadoCodigo = '';
     this.movimientos = [];
+    // Nota: no tocamos clienteSeleccionadoId ni cuentaSeleccionadaId
   }
 
   private async mostrarToast(message: string, color: string = 'medium') {

@@ -75,7 +75,12 @@ export class TransferenciasPage implements OnInit {
 
         const monedaMap: any = { 1: 'CRC', 2: 'USD' };
 
-        const cuentasMapeadas = todasLasCuentas.map(c => ({
+        // Filtrar solo cuentas activas (estado = 1)
+        const cuentasActivas = todasLasCuentas.filter(
+          (c: any) => c.status === 1
+        );
+
+        const cuentasMapeadas = cuentasActivas.map(c => ({
           ...c,
           currency: monedaMap[c.currency] || 'CRC',
         }));
@@ -145,7 +150,7 @@ export class TransferenciasPage implements OnInit {
           const cuenta = lista.find((c) => c.id === cuentaOrigenId);
           if (cuenta && typeof cuenta.balance === 'number') {
             const saldoActual = Number(cuenta.balance) || 0;
-            const nuevoSaldo = saldoActual - montoNum; 
+            const nuevoSaldo = saldoActual - montoNum;
             cuenta.balance = nuevoSaldo;
 
             if (lista === this.cuentasOrigen) {

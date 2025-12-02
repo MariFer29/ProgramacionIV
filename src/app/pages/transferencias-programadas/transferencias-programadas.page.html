@@ -24,7 +24,7 @@
       <ion-label position="stacked">Cuenta origen</ion-label>
       <ion-select [(ngModel)]="cuentaOrigen" (ionChange)="onCuentaOrigenChange()">
         <ion-select-option *ngFor="let c of cuentasOrigen" [value]="c.id">
-          {{ c.accountNumber }} • {{ c.currency }} • {{ c.balance }}
+          {{ c.accountNumber }} • {{ c.currency }} 
         </ion-select-option>
       </ion-select>
     </ion-item>

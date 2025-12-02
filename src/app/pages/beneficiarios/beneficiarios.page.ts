@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -15,15 +16,17 @@ import { ApiService } from 'src/app/services/api.service';
   templateUrl: './beneficiarios.page.html',
   styleUrls: ['./beneficiarios.page.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IonicModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, IonicModule],
 })
 export class BeneficiariosPage implements OnInit {
   form!: FormGroup;
   beneficiarios: any[] = [];
+  beneficiariosFiltrados: any[] = [];
   loading = false;
   editingId: string | null = null;
   successMessage = '';
   errorMessage = '';
+  searchTerm = '';
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +46,20 @@ export class BeneficiariosPage implements OnInit {
     });
 
     this.verificarClienteYcargar();
+  }
+
+  // ===============================
+  // FILTRO EN TIEMPO REAL
+  // ===============================
+  filtrarBeneficiarios(): void {
+    const term = this.searchTerm.toLowerCase();
+
+    this.beneficiariosFiltrados = this.beneficiarios.filter(
+      (b) =>
+        b.alias.toLowerCase().includes(term) ||
+        b.bank.toLowerCase().includes(term) ||
+        b.country.toLowerCase().includes(term)
+    );
   }
 
   // ===============================
@@ -77,7 +94,6 @@ export class BeneficiariosPage implements OnInit {
     const rol = rolRaw.toLowerCase();
 
     if (rol === 'cliente') {
-      // Cliente → debe tener clienteId
       const clienteId = this.getClienteId();
 
       if (!clienteId) {
@@ -90,10 +106,9 @@ export class BeneficiariosPage implements OnInit {
       this.errorMessage = '';
       this.cargarBeneficiarios(clienteId);
     } else {
-      // Admin / Gestor → carga TODOS los beneficiarios
       this.successMessage = '';
       this.errorMessage = '';
-      this.cargarBeneficiarios(); // sin clienteId → todos
+      this.cargarBeneficiarios();
     }
   }
 
@@ -109,6 +124,7 @@ export class BeneficiariosPage implements OnInit {
         this.loading = false;
         const body = data && data.body ? data.body : data;
         this.beneficiarios = body || [];
+        this.beneficiariosFiltrados = [...this.beneficiarios];
       },
       error: (err) => {
         console.error('Error al cargar beneficiarios:', err);
@@ -132,41 +148,35 @@ export class BeneficiariosPage implements OnInit {
       return;
     }
 
+    // 1. Obtener el clienteId desde el token
+    const clienteId = this.getClienteId();
+    if (!clienteId) {
+      this.loading = false;
+      this.errorMessage =
+        'No se encontró el cliente actual. Inicia sesión de nuevo.';
+      this.successMessage = '';
+      return;
+    }
+
     const valores = this.form.value;
 
+
     const body: any = {
+      clientId: clienteId, 
       alias: valores.alias,
       bank: valores.bank,
-      currency: Number(valores.currency),
+      currency: Number(valores.currency), 
       accountNumber: valores.accountNumber,
       country: valores.country,
     };
 
     if (this.editingId) {
-      body.id = this.editingId;
+      body.id = this.editingId; 
     }
 
     this.loading = true;
     this.successMessage = '';
     this.errorMessage = '';
-
-    const clienteId = this.getClienteId();
-    const rolRaw = localStorage.getItem('rol') || '';
-    const rol = rolRaw.toLowerCase();
-
-    if (rol === 'cliente') {
-      if (!clienteId) {
-        this.loading = false;
-        this.errorMessage =
-          'No se encontró el cliente actual. Inicia sesión de nuevo.';
-        return;
-      }
-    } else {
-      this.loading = false;
-      this.errorMessage =
-        'Solo los clientes pueden registrar beneficiarios desde esta pantalla.';
-      return;
-    }
 
     const peticion$ = this.editingId
       ? this.api.actualizarBeneficiario(body)
@@ -179,8 +189,13 @@ export class BeneficiariosPage implements OnInit {
           ? 'Beneficiario actualizado correctamente.'
           : 'Beneficiario creado correctamente.';
         this.errorMessage = '';
-        this.cancelarEdicion(false);
-        this.cargarBeneficiarios(clienteId!);
+        this.cancelarEdicion(false); 
+
+        // Recargar lista
+        const id = this.getClienteId();
+        if (id) {
+          this.cargarBeneficiarios(id);
+        }
       },
       error: (err) => {
         console.error('Error al guardar beneficiario:', err);

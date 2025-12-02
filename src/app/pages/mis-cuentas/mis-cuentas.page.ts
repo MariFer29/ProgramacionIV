@@ -31,24 +31,10 @@ export class MisCuentasPage implements OnInit {
     private api: ApiService,
     private toastCtrl: ToastController,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.cargarMisCuentas();
-  }
-
-  // ===============================
-  //      UTILIDAD: DECODIFICAR TOKEN
-  // ===============================
-  private decodeToken(token: string): any | null {
-    try {
-      const payload = token.split('.')[1];
-      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
-      return JSON.parse(json);
-    } catch {
-      console.warn('No se pudo decodificar el token en MisCuentas');
-      return null;
-    }
   }
 
   cargarMisCuentas(): void {
@@ -58,43 +44,35 @@ export class MisCuentasPage implements OnInit {
     const clienteIdStr = localStorage.getItem('clienteId');
     const clienteId = clienteIdStr ? Number(clienteIdStr) : null;
 
-    const clienteIdFromToken = payload?.clienteId;
-    const clienteId =
-      clienteIdFromToken !== undefined && clienteIdFromToken !== null
-        ? Number(clienteIdFromToken)
-        : NaN;
-
-    if (rol === 'cliente' && (Number.isNaN(clienteId) || clienteId <= 0)) {
+    if (!clienteId) {
       this.isLoading = false;
       this.errorMessage =
-        'No se pudo identificar el cliente desde el token. Inicia sesión de nuevo.';
+        'No se encontró el cliente actual. Inicia sesión de nuevo.';
       return;
     }
 
     this.api.getCuentas(clienteId).subscribe({
       next: (data: any[]) => {
-
         // Mapear moneda y tipo de cuenta
         const monedaMap: any = { 1: 'CRC', 2: 'USD' };
         const tipoMap: any = { 1: 'Ahorros', 2: 'Corriente', 4: 'Plazo Fijo' };
         const statusMap: any = {
           1: 'Activa',
           2: 'Bloqueada',
-          3: 'Cerrada'
+          3: 'Cerrada',
         };
 
-
-        this.cuentas = data.map(c => ({
+        this.cuentas = data.map((c) => ({
           ...c,
           currency: monedaMap[c.currency] || 'CRC',
           type: tipoMap[c.type] || 'Desconocido',
-          status: statusMap[c.status] || 'Desconocido'
+          status: statusMap[c.status] || 'Desconocido',
         }));
 
         this.isLoading = false;
       },
       error: async (err) => {
-        console.error('Error al cargar cuentas:', err);
+        console.error(err);
         this.errorMessage = 'Error al cargar tus cuentas.';
         this.isLoading = false;
 

@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractContro
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
-import { 
+import {
   IonInput,
   IonItem,
   IonLabel,
@@ -35,8 +35,8 @@ import {
     IonButton,
     IonSelect,
     IonSelectOption,
-    IonButtons,   
-    IonIcon       
+    IonButtons,
+    IonIcon
   ],
   templateUrl: './registrar-usuario.page.html',
   styleUrls: ['./registrar-usuario.page.scss']
@@ -73,7 +73,7 @@ export class RegistrarUsuarioPage implements OnInit {
         idControl?.setValidators([Validators.required]);
       } else {
         idControl?.clearValidators();
-        idControl?.setValue(''); // limpiar valor al cambiar de rol
+        idControl?.setValue('');
       }
 
       idControl?.updateValueAndValidity();
@@ -93,7 +93,7 @@ export class RegistrarUsuarioPage implements OnInit {
   }
 
   public goToMenu() {
-    this.router.navigate(['/admin-menu']); 
+    this.router.navigate(['/admin-menu']);
   }
 
   submitRegister() {
@@ -120,11 +120,8 @@ export class RegistrarUsuarioPage implements OnInit {
         this.successMessage = res?.mensaje || "Usuario registrado correctamente.";
         this.errorMessage = "";
 
-        if (formData.rol === 'Cliente') {
-          this.router.navigate(['/clientes']);
-        } else {
-          this.registerForm.reset({ rol: 'Cliente' });
-        }
+        this.registerForm.reset({ rol: 'Cliente' });
+
       },
       error: (err) => {
         this.errorMessage =
@@ -135,5 +132,6 @@ export class RegistrarUsuarioPage implements OnInit {
         this.successMessage = "";
       }
     });
+
   }
 }
